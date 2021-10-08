@@ -74,28 +74,28 @@ const BottomTab = () => {
       screenOptions={{
         tabBarActiveTintColor: "#0F5996",
         tabBarInactiveTintColor: "#ABB3BB",
-        bottomTab: { fontFamily: 'Montserrat-Regular' }
-      }}>
-      <Tab.Screen component={Home} name='Home'
+        tabBarStyle: { height: ms(70), paddingVertical: ms(10) },
+        tabBarLabelStyle: { paddingBottom: ms(12), fontFamily: 'Montserrat-Medium', fontSize: ms(10) }
+      }} >
+      < Tab.Screen component={Home} name='Home'
         options={{
           tabBarIcon: ({ color, size }) => {
             return <Feather name='home' size={size} color={color} />
           }
         }} />
-      <Tab.Screen component={MyBooking} name='My Booking'
+      < Tab.Screen component={MyBooking} name='My Booking'
         options={{
           tabBarIcon: ({ color, size }) => {
             return <MaterialCommunityIcons name='ticket-outline' size={size} color={color} style={{ transform: [{ rotate: '135deg' }] }} />
           }
-        }
-        } />
-      <Tab.Screen component={Notification} name='Notification' options={{
+        }} />
+      < Tab.Screen component={Notification} name='Notification' options={{
         tabBarIcon: ({ color, size }) => {
           return <MaterialIcons name='notifications-none' size={size} color={color} />
         }
       }
       } />
-      <Tab.Screen component={Profile} name='Profile'
+      < Tab.Screen component={Profile} name='Profile'
         options={{
           tabBarIcon: ({ color, size }) => {
             return <Feather name='user' size={size} color={color} />
