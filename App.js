@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
+import { ms } from 'react-native-size-matters'
+import Feather from 'react-native-vector-icons/Feather'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+
 // redux
 import { Provider } from "react-redux";
 import { Store } from "./src/Screen/Store/Store";
@@ -65,12 +70,38 @@ const Tab = createBottomTabNavigator();
 
 const BottomTab = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen component={Home} name='Home' />
-      <Tab.Screen component={MyBooking} name='My Booking' />
-      <Tab.Screen component={Notification} name='Notification' />
-      <Tab.Screen component={Profile} name='Profile' />
-    </Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: "#0F5996",
+        tabBarInactiveTintColor: "#ABB3BB",
+        bottomTab: { fontFamily: 'Montserrat-Regular' }
+      }}>
+      <Tab.Screen component={Home} name='Home'
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return <Feather name='home' size={size} color={color} />
+          }
+        }} />
+      <Tab.Screen component={MyBooking} name='My Booking'
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return <MaterialCommunityIcons name='ticket-outline' size={size} color={color} style={{ transform: [{ rotate: '135deg' }] }} />
+          }
+        }
+        } />
+      <Tab.Screen component={Notification} name='Notification' options={{
+        tabBarIcon: ({ color, size }) => {
+          return <MaterialIcons name='notifications-none' size={size} color={color} />
+        }
+      }
+      } />
+      <Tab.Screen component={Profile} name='Profile'
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return <Feather name='user' size={size} color={color} />
+          }
+        }} />
+    </Tab.Navigator >
   )
 }
 
