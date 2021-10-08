@@ -1,10 +1,11 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Button } from 'react-native'
 
 export default function SearchResult(props) {
+    const onLogin = () => {
+        props.navigation.navigate('Login')
+    }
     return (
-        <View>
-            <Text></Text>
-        </View>
+        <Button title="Login" onPress={onLogin} />
     )
 }

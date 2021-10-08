@@ -27,7 +27,7 @@ import MyBooking from './src/Screen/My Booking/MyBooking'
 import Notification from './src/Screen/Notification/Notification'
 import Profile from './src/Screen/Profile/Profile'
 
-// home stack
+// detail stack
 import SearchResult from './src/Screen/Home/SearchResult'
 import BusDetails from './src/Screen/Home/BusDetails'
 import AllPhotos from './src/Screen/Home/AllPhotos'
@@ -36,10 +36,9 @@ import PassengerDetail from './src/Screen/Home/PassengerDetail'
 import PaymentMethod from './src/Screen/Home/PaymentMethod'
 import PaymentDetails from './src/Screen/Home/PaymentDetails'
 import BookingDetails from './src/Screen/Home/BookingDetails'
-
-// profile stack
 import EditProfile from './src/Screen/Profile/EditProfile';
 import ChangePassword from './src/Screen/Profile/ChangePassword'
+import TicketDetails from './src/Screen/My Booking/TicketDetails'
 
 
 
@@ -57,8 +56,7 @@ const App = () => {
             <Stack.Screen component={Login} name='Login' />
             <Stack.Screen component={Register} name='Register' />
             <Stack.Screen component={BottomTab} name='Bottom Tab' />
-            <Stack.Screen component={HomeStack} name='Home Stack' />
-            <Stack.Screen component={ProfileStack} name='Profile Stack' />
+            <Stack.Screen component={DetailStack} name='Detail Stack' />
           </Stack.Navigator>
         </NavigationContainer>
       </PersistGate>
@@ -72,6 +70,16 @@ const BottomTab = () => {
   return (
     <Tab.Navigator
       screenOptions={{
+        headerStyle: {
+          backgroundColor: '#0F5996',
+          height: ms(70)
+        },
+        headerTitleStyle: {
+          fontFamily: 'Montserrat-Medium',
+          fontSize: ms(14)
+        },
+        headerTitleAlign: 'center',
+        headerTintColor: '#fff',
         tabBarActiveTintColor: "#0F5996",
         tabBarInactiveTintColor: "#ABB3BB",
         tabBarStyle: { height: ms(70), paddingVertical: ms(10) },
@@ -105,9 +113,20 @@ const BottomTab = () => {
   )
 }
 
-const HomeStack = () => {
+const DetailStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#0F5996',
+        height: ms(60)
+      },
+      headerTitleStyle: {
+        fontFamily: 'Montserrat-Medium',
+        fontSize: ms(14)
+      },
+      headerTitleAlign: 'center',
+      headerTintColor: '#fff',
+    }}>
       <Stack.Screen component={SearchResult} name='Search Result' />
       <Stack.Screen component={BusDetails} name='Bus Details' />
       <Stack.Screen component={AllPhotos} name='All Photos' />
@@ -116,16 +135,10 @@ const HomeStack = () => {
       <Stack.Screen component={PaymentMethod} name='Payment Method' />
       <Stack.Screen component={PaymentDetails} name='Payment Details' />
       <Stack.Screen component={BookingDetails} name='Booking Details' />
-    </Stack.Navigator>
-  )
-}
-
-const ProfileStack = () => {
-  return (
-    <Stack.Navigator>
+      <Stack.Screen component={TicketDetails} name='Ticket Details' />
       <Stack.Screen component={EditProfile} name='Edit Profile' />
       <Stack.Screen component={ChangePassword} name='ChangePassword' />
-    </Stack.Navigator>
+    </Stack.Navigator >
   )
 }
 
