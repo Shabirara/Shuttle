@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Dimensions } from 'react-native'
-import { Button, ButtonGroup, Divider } from 'react-native-elements'
+import { Button, CheckBox, Divider } from 'react-native-elements'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ms } from 'react-native-size-matters'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -97,26 +97,59 @@ export default function SearchResult(props) {
     const onLogin = () => {
         props.navigation.navigate('Login')
     };
+
     const [isChangeVisible, setChangeVisible] = useState(false);
-    const toggleModal = () => {
+    const toggleChangeModal = () => {
         setChangeVisible(!isChangeVisible);
     };
-    const deviceWidth = Dimensions.get("window").width;
-    const deviceHeight = Dimensions.get("window").height;
+
+    const [isSortVisible, setSortVisible] = useState(false);
+    const toggleSortModal = () => {
+        setSortVisible(!isSortVisible);
+    };
+
+    const [checked, setChecked] = useState(false);
+    const [activeCheck, setActiveCheck] = useState(0);
+
+    const checklist = ['Lowest price', 'Earliest departure time', 'Earliest arrival time', 'Shortest duration']
 
     const renderItem = ({ item }) => (
         <Item bus={item.bus} type={item.type} price={item.price} available={item.available} hourStart={item.hourStart} duration={item.duration} hourEnd={item.hourEnd} terminalStart={item.terminalStart} terminalEnd={item.terminalEnd} />
     );
 
-
     return (
         <>
-            <Modal isVisible={isChangeVisible} swipeDirection='down' onSwipeComplete={() => setChangeVisible(false)} deviceWidth={deviceWidth} deviceHeight={deviceHeight} style={{ margin: 0 }}>
+            <Modal isVisible={isChangeVisible} swipeDirection='down' onSwipeComplete={() => setChangeVisible(false)} style={{ margin: 0 }}>
                 <View style={styles.changeModal}>
                     <Divider orientation="horizontal" width={ms(8)} style={styles.holder} />
                     <Text style={styles.jalur}>Change Shuttle</Text>
                 </View>
-            </Modal >
+            </Modal>
+
+            <Modal isVisible={isSortVisible} swipeDirection='down' onSwipeComplete={() => setSortVisible(false)} style={{ marginHorizontal: 0, marginTop: '100%', marginBottom: 0 }}>
+                <View style={styles.sortModal}>
+                    <Divider orientation="horizontal" width={ms(8)} style={styles.holder} />
+                    <Text style={styles.jalur}>Sort By</Text>
+                    <View style={{ width: '100%' }}>
+                        {checklist.map((e, i) => {
+                            return (
+                                <CheckBox title={e}
+                                    checkedIcon='dot-circle-o'
+                                    uncheckedIcon='circle-o'
+                                    checkedColor='#0F5996'
+                                    uncheckedColor='#0F5996'
+                                    onPress={() => {
+                                        setActiveCheck(i);
+                                    }}
+                                    checked={activeCheck === i ? true : false}
+                                    containerStyle={{ backgroundColor: 'white', borderColor: 'white' }}
+                                    textStyle={styles.sortFont} key={i} />
+                            )
+                        })}
+                    </View>
+                </View>
+            </Modal>
+
             <SafeAreaView style={{ flex: 1 }}>
 
                 <View style={styles.jalurTanggal}>
@@ -127,7 +160,7 @@ export default function SearchResult(props) {
                         Sat, 9 Okt 2021
                     </Text>
                     <Button title='Change'
-                        onPress={toggleModal}
+                        onPress={toggleChangeModal}
                         titleStyle={styles.change}
                         buttonStyle={styles.buttonChange}
                     />
@@ -135,7 +168,7 @@ export default function SearchResult(props) {
 
                 <View style={styles.floatings}>
                     <View style={styles.button}>
-                        <TouchableOpacity style={styles.touchable}>
+                        <TouchableOpacity style={styles.touchable} onPress={toggleSortModal}>
                             <Image source={require('../../Assets/Images/Vector.png')} />
                             <Text style={styles.sort}>Sort</Text>
                         </TouchableOpacity>
@@ -251,5 +284,17 @@ const styles = StyleSheet.create({
         borderRadius: ms(10),
         marginTop: ms(20),
         marginBottom: ms(40)
+    },
+    sortModal: {
+        borderTopRightRadius: ms(40),
+        borderTopLeftRadius: ms(40),
+        backgroundColor: 'white',
+        alignItems: 'center',
+        flex: 1
+    },
+    sortFont: {
+        fontFamily: 'Montserrat-Regular',
+        fontSize: ms(14),
+        color: '#092C4C'
     }
 })
