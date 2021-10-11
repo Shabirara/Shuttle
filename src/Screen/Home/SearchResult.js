@@ -212,7 +212,7 @@ export default function SearchResult(props) {
                             })}
                         </View>
                         <View style={styles.filterHeader}>
-                            <Text style={styles.sort}>Departure Time</Text>
+                            <Text style={styles.sort}>Arrival Time</Text>
                             <TouchableOpacity>
                                 <Text style={styles.sort}>RESET</Text>
                             </TouchableOpacity>
@@ -236,7 +236,7 @@ export default function SearchResult(props) {
                             })}
                         </View>
                         <View style={styles.filterHeader}>
-                            <Text style={styles.sort}>Departure Time</Text>
+                            <Text style={styles.sort}>Bus Vendor</Text>
                             <TouchableOpacity>
                                 <Text style={styles.sort}>RESET</Text>
                             </TouchableOpacity>
