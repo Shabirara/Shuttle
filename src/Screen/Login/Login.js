@@ -1,123 +1,111 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {Input, Image, Button} from 'react-native-elements';
-import Vector from './../Assets/Image/Vector.png';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from 'react-native';
+import {Image, CheckBox, Button} from 'react-native-elements';
+import styles from './login-Sytyle';
+import logoShuttle from './../Assets/Image/shuttle-logo.png';
+import inToShuttle from './../Assets/Image/Group-179.png';
+import orOptional from './../Assets/Image/orOptional.png';
+import facebook from './../Assets/Image/facebook.png';
+import google from './../Assets/Image/google.png';
 
 export default function Login(props) {
   const onLogin = () => {
     props.navigation.navigate('Register');
+    this.state = {
+      check: false,
+    };
   };
 
+  // // checkBoxTest();
+  // {
+  //   this.setState({
+  //     check: !this.state.check,
+  //   });
+  // }
+
   return (
-    <View style={Styles.mainContainer}>
-      <View style={Styles.logoContainer}>
-        <Image resizeMode="contain" style={Styles.Image} source={Vector} />
-        <Text style={Styles.shuttleText}>Shuttle</Text>
-      </View>
-      <View style={Styles.subContainer}>
-        <View style={Styles.toShuttle}>
-          <Text>Sign In to Shuttle</Text>
+    <ScrollView>
+      <View style={styles.mainContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            resizeMode="contain"
+            style={styles.Image}
+            source={logoShuttle}
+          />
         </View>
-        <View>
-          <Text>Sign In to your</Text>
-        </View>
-        <View>
-          <Text>account to continue</Text>
-        </View>
-        <View>
-          <Input placeholder="Enter your email" style={Styles.input} />
-          <Input placeholder="Password" style={Styles.input} />
+        <View style={styles.subContainer}>
+          <View>
+            <View style={styles.intoContainer}>
+              <Image
+                resizeMode="contain"
+                style={styles.inToSHUTTLE}
+                source={inToShuttle}
+              />
+            </View>
+          </View>
+          <View>
+            <TextInput
+              placeholder="Enter your email"
+              style={styles.inputEmail}
+            />
+            <TextInput
+              secureTextEntry
+              placeholder="Enter your password"
+              style={styles.inputEmail}
+            />
+          </View>
+          <View style={styles.checkBox}>
+            <View style={styles.rememberMeBox}>
+              <View>
+                <CheckBox
+                  containerStyle={styles.checkStyle}
+                  // value={this.state.check}
+                  // onChange={() => this.checkBoxTest()}
+                />
+              </View>
+              <Text>Remember me</Text>
+            </View>
+            <View>
+              <Text style={styles.forgotText}>Forgot password?</Text>
+            </View>
+          </View>
+
+          {/* <View style={styles.passwordContainer}>
+            <Text style={styles.password}>Forgot your password?</Text>
+          </View> */}
+
+          <View style={styles.loginContainer}>
+            <TouchableOpacity style={styles.button} onPress={onLogin}>
+              <Text style={styles.buttonText}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View>
+            <Image source={google} />
+          </View>
         </View>
 
-        <View style={Styles.passwordContainer}>
-          <Text style={Styles.password}>Forgot your password?</Text>
+        <View style={styles.haveNoSignUpContainer}>
+          <View style={styles.noAccountContainer}>
+            <Text style={styles.haveNoAccountText}>Don't have an account?</Text>
+          </View>
+
+          <View>
+            <Text style={styles.signUp}>Sign Up</Text>
+          </View>
         </View>
 
-        <View style={Styles.loginContainer}>
-          <TouchableOpacity style={Styles.button} onPress={onLogin}>
-            <Text style={Styles.buttonText}>SIGN IN</Text>
-          </TouchableOpacity>
+        <View>
+          <Text style={styles.skipText}>Skip for now</Text>
         </View>
       </View>
-      <View>
-        <Text style={Styles.signUp}>Don't have an account? Sign Up?</Text>
-      </View>
-      <View>
-        <Text style={Styles.skipText}>Skip for now</Text>
-      </View>
-    </View>
+    </ScrollView>
   );
 }
-
-const Styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    backgroundColor: 'grey',
-    paddingHorizontal: 24,
-    // paddingVertical: 120,
-  },
-  subContainer: {
-    flex: 1,
-    backgroundColor: 'white',
-    paddingHorizontal: 40,
-    borderRadius: 12,
-  },
-  toShuttle: {
-    paddingTop: 20,
-  },
-  logoContainer: {
-    paddingTop: 34,
-  },
-  Image: {
-    width: 200,
-    height: 50,
-  },
-  shuttleText: {
-    color: 'white',
-    // marginBottom: 65,
-    fontFamily: 'robboto',
-  },
-  input: {
-    paddingTop: 8,
-  },
-  passwordContainer: {
-    paddingBottom: 20,
-    alignItems: 'flex-end',
-    paddingRight: 12,
-  },
-  password: {
-    color: 'white',
-  },
-  button: {
-    backgroundColor: '#2154BC',
-    paddingTop: 4,
-    paddingVertical: 14,
-    paddingHorizontal: 10,
-    borderRadius: 10,
-    alignItems: 'center',
-    paddingBottom: 6,
-    width: 300,
-    height: 44,
-    justifyContent: 'center',
-    color: 'white',
-  },
-  buttonText: {
-    color: 'white',
-  },
-  loginContainer: {
-    alignItems: 'center',
-    paddingBottom: 20,
-  },
-  signUp: {
-    color: 'blue',
-    alignSelf: 'center',
-    paddingTop: 34,
-    paddingBottom: 36,
-  },
-  skipText: {
-    color: 'blue',
-    alignSelf: 'center',
-    paddingTop: 24,
-    paddingBottom: 12,
-  },
-});
