@@ -137,9 +137,27 @@ export default function SearchResult(props) {
         <Item bus={item.bus} type={item.type} price={item.price} available={item.available} hourStart={item.hourStart} duration={item.duration} hourEnd={item.hourEnd} terminalStart={item.terminalStart} terminalEnd={item.terminalEnd} />
     );
 
-    const filterDeparture = ['00.00 - 16.00', '06.00 - 12.00', '12.00 - 18.00', '18.00 - 00.00']
-    const filterArrival = ['00.00 - 16.00', '06.00 - 12.00', '12.00 - 18.00', '18.00 - 00.00']
-    const busVendor = ['KYM Trans', 'PT Sumber Bahagia', 'DAMRI', 'Harapan Jaya', 'KYM Trans', 'PT Sumber Bahagia', 'Harapan Jaya']
+    const [filterDeparture, setFilterDeparture] = useState([
+        { title: '00:00 - 16:00', active: false },
+        { title: '06:00 - 12:00', active: false },
+        { title: '12:00 - 18:00', active: false },
+        { title: '18:00 - 00:00', active: false }
+    ])
+    const [filterArrival, setFilterArrival] = useState([
+        { title: '00:00 - 16:00', active: false },
+        { title: '06:00 - 12:00', active: false },
+        { title: '12:00 - 18:00', active: false },
+        { title: '18:00 - 00:00', active: false }
+    ])
+    const [busVendor, setBusVendor] = useState([
+        { title: 'KYM Trans', active: false },
+        { title: 'PT Sumber Bahagia', active: false },
+        { title: 'DAMRI', active: false },
+        { title: 'Harapan Jaya', active: false },
+        { title: 'KYM Trans', active: false },
+        { title: 'PT Sumber Bahagia', active: false },
+        { title: 'Harapan Jaya', active: false }
+    ])
 
 
     return (
@@ -189,23 +207,34 @@ export default function SearchResult(props) {
                         <Text style={styles.jalur}>Filter By</Text>
                         <View style={styles.filterHeader}>
                             <Text style={styles.sort}>Departure Time</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    filterDeparture.map((e, i) => {
+                                        setFilterDeparture((prevState) => {
+                                            prevState[i].active = false;
+                                            return [...prevState]
+                                        })
+                                    })
+                                }}>
                                 <Text style={styles.sort}>RESET</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ width: '100%' }}>
                             {filterDeparture.map((e, i) => {
                                 return (
-                                    <CheckBox title={e}
+                                    <CheckBox title={e.title}
                                         iconType='MaterialIcons'
                                         checkedIcon='check-box'
                                         uncheckedIcon='check-box-outline-blank'
                                         checkedColor='#0F5996'
                                         uncheckedColor='#0F5996'
                                         onPress={() => {
-                                            setActiveCheck(i);
+                                            setFilterDeparture((prevState) => {
+                                                prevState[i].active = !prevState[i].active
+                                                return [...prevState]
+                                            });
                                         }}
-                                        checked={activeCheck === i ? true : false}
+                                        checked={e.active}
                                         containerStyle={{ backgroundColor: 'white', borderColor: 'white' }}
                                         textStyle={styles.sortFont} key={i} />
                                 )
@@ -213,23 +242,33 @@ export default function SearchResult(props) {
                         </View>
                         <View style={styles.filterHeader}>
                             <Text style={styles.sort}>Arrival Time</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                filterArrival.map((e, i) => {
+                                    setFilterArrival((prevState) => {
+                                        prevState[i].active = false;
+                                        return [...prevState]
+                                    })
+                                })
+                            }}>
                                 <Text style={styles.sort}>RESET</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ width: '100%' }}>
                             {filterArrival.map((e, i) => {
                                 return (
-                                    <CheckBox title={e}
+                                    <CheckBox title={e.title}
                                         iconType='MaterialIcons'
                                         checkedIcon='check-box'
                                         uncheckedIcon='check-box-outline-blank'
                                         checkedColor='#0F5996'
                                         uncheckedColor='#0F5996'
                                         onPress={() => {
-                                            setActiveCheck(i);
+                                            setFilterArrival((prevState) => {
+                                                prevState[i].active = !prevState[i].active
+                                                return [...prevState]
+                                            });
                                         }}
-                                        checked={activeCheck === i ? true : false}
+                                        checked={e.active}
                                         containerStyle={{ backgroundColor: 'white', borderColor: 'white' }}
                                         textStyle={styles.sortFont} key={i} />
                                 )
@@ -237,23 +276,33 @@ export default function SearchResult(props) {
                         </View>
                         <View style={styles.filterHeader}>
                             <Text style={styles.sort}>Bus Vendor</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                busVendor.map((e, i) => {
+                                    setBusVendor((prevState) => {
+                                        prevState[i].active = false;
+                                        return [...prevState]
+                                    })
+                                })
+                            }}>
                                 <Text style={styles.sort}>RESET</Text>
                             </TouchableOpacity>
                         </View>
                         <View style={{ width: '100%' }}>
                             {busVendor.map((e, i) => {
                                 return (
-                                    <CheckBox title={e}
+                                    <CheckBox title={e.title}
                                         iconType='MaterialIcons'
                                         checkedIcon='check-box'
                                         uncheckedIcon='check-box-outline-blank'
                                         checkedColor='#0F5996'
                                         uncheckedColor='#0F5996'
                                         onPress={() => {
-                                            setActiveCheck(i);
+                                            setBusVendor((prevState) => {
+                                                prevState[i].active = !prevState[i].active
+                                                return [...prevState]
+                                            });
                                         }}
-                                        checked={activeCheck === i ? true : false}
+                                        checked={e.active}
                                         containerStyle={{ backgroundColor: 'white', borderColor: 'white' }}
                                         textStyle={styles.sortFont} key={i} />
                                 )
