@@ -1,53 +1,122 @@
 import {StyleSheet} from 'react-native';
+import {ms} from 'react-native-size-matters';
 
 export default StyleSheet.create({
+  logoContainer: {
+    justifyContent: 'center',
+    paddingTop: ms(10),
+    paddingBottom: ms(6),
+    alignItems: 'center',
+  },
   mainContainer: {
     flex: 1,
-    backgroundColor: '#000000',
-    paddingHorizontal: 4,
-    paddingVertical: 4,
+    backgroundColor: '#E5E5E5',
+    paddingHorizontal: ms(16),
   },
-  imgContainer: {
-    height: '30%',
+  subContainer: {
+    flex: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: ms(16),
+    borderRadius: ms(12),
+    paddingBottom: ms(20),
+  },
+  intoContainer: {
+    paddingVertical: ms(17),
+    alignItems: 'center',
+  },
+  inToSHUTTLE: {
+    height: ms(100),
+    width: ms(200),
+  },
+  borderLess: {
+    borderWidth: 0,
+    borderColor: 'transparent',
+    marginBottom: ms(-24),
+  },
+  inputEmail: {
+    borderWidth: ms(0.2),
+    borderColor: '#777',
+    marginBottom: ms(16),
+    borderRadius: ms(2),
+  },
+  // eyeOff: {
+  //   flexDirection: 'row',
+  //   justifyContent: 'center',
+  // },
+  Image: {
+    width: ms(200),
+    height: ms(50),
+    alignItems: 'center',
+  },
+
+  passwordContainer: {
+    paddingBottom: ms(20),
+    alignItems: 'flex-end',
+    paddingRight: ms(12),
+  },
+  password: {
+    color: 'white',
+  },
+  button: {
+    backgroundColor: '#0F5996',
+    paddingTop: ms(4),
+    paddingVertical: ms(14),
+    paddingHorizontal: ms(10),
+    borderRadius: ms(10),
+    alignItems: 'center',
+    paddingBottom: ms(6),
+    width: ms(280),
+    height: ms(48),
+    justifyContent: 'center',
+    color: 'white',
+  },
+  buttonText: {
+    color: 'white',
+  },
+  orOptionalIcon: {
+    height: ms(40),
+  },
+  sosmedContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  pencil: {
-    backgroundColor: 'blue',
-    width: 14,
-    position: 'absolute',
+  googleContainer: {
+    paddingRight: ms(8),
+    // height: ms(60),
   },
-  image: {
-    paddingBottom: 65,
-    height: 120,
-    width: 120,
+  medIcon: {
+    height: ms(80),
+    width: ms(140),
   },
-  input: {
-    paddingTop: 8,
-    color: 'white',
+  facebookContainer: {
+    paddingLeft: ms(8),
   },
-  signUpContainer: {
-    alignItems: 'center',
-    paddingBottom: 20,
-  },
-  buttonUp: {
-    backgroundColor: '#2154BC',
-    paddingTop: 4,
-    paddingVertical: 14,
-    paddingHorizontal: 10,
-    borderRadius: 30,
-    alignItems: 'center',
-    paddingBottom: 6,
-    width: 120,
-    height: 44,
+  haveNoSignUpContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
-    color: 'white',
+    alignItems: 'center',
   },
-  signUpText: {
-    color: 'white',
+
+  loginContainer: {
+    alignItems: 'center',
+    paddingBottom: ms(20),
   },
-  already: {
-    color: 'white',
+  haveNoAccountText: {
+    paddingRight: ms(4),
+  },
+  signUp: {
+    color: 'blue',
     alignSelf: 'center',
+    paddingTop: ms(37),
+    paddingBottom: ms(36),
+    paddingLeft: ms(4),
+    fontWeight: 'bold',
+  },
+  skipText: {
+    color: 'blue',
+    alignSelf: 'center',
+    paddingTop: ms(12),
+    marginBottom: ms(20),
   },
 });
