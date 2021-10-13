@@ -70,7 +70,7 @@ export default function Login(props) {
                   // onChange={() => this.checkBoxTest()}
                 />
               </View>
-              <Text>Remember me</Text>
+              <Text style={styles.rememberText}>Remember me</Text>
             </View>
             <View>
               <Text style={styles.forgotText}>Forgot password?</Text>
@@ -88,12 +88,34 @@ export default function Login(props) {
           </View>
 
           <View>
-            <Image source={google} />
+            <Image
+              source={orOptional}
+              resizeMode="contain"
+              style={styles.orOptionalIcon}
+            />
+          </View>
+
+          <View style={styles.sosmedContainer}>
+            <View style={styles.googleContainer}>
+              <Image
+                resizeMode="contain"
+                style={styles.medIcon}
+                source={google}
+              />
+            </View>
+
+            <View style={styles.facebookContainer}>
+              <Image
+                resizeMode="contain"
+                style={styles.medIcon}
+                source={facebook}
+              />
+            </View>
           </View>
         </View>
 
         <View style={styles.haveNoSignUpContainer}>
-          <View style={styles.noAccountContainer}>
+          <View>
             <Text style={styles.haveNoAccountText}>Don't have an account?</Text>
           </View>
 
