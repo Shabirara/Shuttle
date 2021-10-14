@@ -9,6 +9,7 @@ import facebook from './../Assets/Image/facebook.png';
 import google from './../Assets/Image/google.png';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Feather from 'react-native-vector-icons/Feather';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
 
 export default function Login(props) {
@@ -70,6 +71,7 @@ export default function Login(props) {
               onPressIn={showDatePicker}
               value={selectedDate}
               inputContainerStyle={styles.borderLess}
+              rightIcon={<AntDesign name="calendar" />}
             />
             <Input
               placeholder="Enter your email"
@@ -96,6 +98,11 @@ export default function Login(props) {
               secureTextEntry
               containerStyle={styles.inputEmail}
               inputContainerStyle={styles.borderLess}
+              rightIcon={
+                <TouchableOpacity onPress={showPassword}>
+                  <Feather name={isShowPassword === true ? 'eye' : 'eye-off'} />
+                </TouchableOpacity>
+              }
             />
           </View>
 

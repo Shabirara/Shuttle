@@ -6,13 +6,14 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import {Image, CheckBox, Button} from 'react-native-elements';
+import {Image, CheckBox, Input, Button} from 'react-native-elements';
 import styles from './login-Sytyle';
 import logoShuttle from './../Assets/Image/shuttle-logo.png';
 import inToShuttle from './../Assets/Image/Group-179.png';
 import orOptional from './../Assets/Image/orOptional.png';
 import facebook from './../Assets/Image/facebook.png';
 import google from './../Assets/Image/google.png';
+import Feather from 'react-native-vector-icons/Feather';
 
 export default function Login(props) {
   const onLogin = () => {
@@ -20,6 +21,10 @@ export default function Login(props) {
     this.state = {
       check: false,
     };
+  };
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const showPassword = () => {
+    setIsShowPassword(!isShowPassword);
   };
 
   // // checkBoxTest();
@@ -54,11 +59,21 @@ export default function Login(props) {
               placeholder="Enter your email"
               style={styles.inputEmail}
             />
-            <TextInput
-              secureTextEntry
-              placeholder="Enter your password"
-              style={styles.inputEmail}
-            />
+            <View style={styles.eyeOff}>
+              <Input
+                placeholder="Enter your password"
+                secureTextEntry={!isShowPassword}
+                containerStyle={styles.inputEmail}
+                inputContainerStyle={styles.borderLess}
+                rightIcon={
+                  <TouchableOpacity onPress={showPassword}>
+                    <Feather
+                      name={isShowPassword === true ? 'eye' : 'eye-off'}
+                    />
+                  </TouchableOpacity>
+                }
+              />
+            </View>
           </View>
           <View style={styles.checkBox}>
             <View style={styles.rememberMeBox}>
