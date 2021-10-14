@@ -6,23 +6,23 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Gallery from 'react-native-image-gallery';
 import { ms } from 'react-native-size-matters';
 import Carousel from 'react-native-snap-carousel';
-
+import FastImage from 'react-native-fast-image'
 
 const data = [
     {
-        imgUrl: "https://picsum.photos/id/11/200/300"
+        imgUrl: "https://www.bigbluebus.com/uploadedImages/Content/Newsroom/Press_Kit/IMG_6759.jpg?n=1794"
     },
     {
-        imgUrl: "https://picsum.photos/id/10/200/300"
+        imgUrl: "https://i.pinimg.com/originals/2c/be/eb/2cbeebbd5b7a55e14b744a737a1d6f33.jpg"
     },
     {
-        imgUrl: "https://picsum.photos/id/12/200/300"
+        imgUrl: "https://smmirror-enki-v5.s3.amazonaws.com/wp-content/uploads/2019/08/Courtesy-of-Big-Blue-Bus-_Battery-Electric-Bus-3-1.jpg"
     },
     {
-        imgUrl: "https://picsum.photos/id/11/200/300"
+        imgUrl: "https://www.sustainable-bus.com/wp-content/uploads/2021/01/Bluebus-12-meters-RATP-and-IDF-Mobilit%C3%A9s.jpg"
     },
     {
-        imgUrl: "https://picsum.photos/id/10/200/300"
+        imgUrl: "https://media.suara.com/pictures/653x366/2019/11/14/63532-bus.jpg"
     }
 ]
 
@@ -43,10 +43,8 @@ export default function AllPhotos() {
     }
     return (
         <View style={{ backgroundColor: '#232323', flex: 1, justifyContent: 'center' }}>
-            <View style={{ width: '100%' }}>
-                <Image source={{ uri: data[indexGambar].imgUrl }} style={{
-                    width: '100%', height: undefined, aspectRatio: 16 / 9
-                }} />
+            <View>
+                <FastImage source={{ uri: data[indexGambar].imgUrl }} resizeMode='contain' style={{ height: '100%' }} />
             </View>
 
 

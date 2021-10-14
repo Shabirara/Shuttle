@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,11 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
-import {ms} from 'react-native-size-matters';
-import {Card, Divider, Image} from 'react-native-elements';
+import { ms } from 'react-native-size-matters';
+import { Card, Divider, Image } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
 
 const REVIEW = [
   {
@@ -29,9 +30,24 @@ const REVIEW = [
     comment:
       'Bisnya nyaman dan bersih, tempat duduknya enak perjalanan jauh serasa dekat karna tidak terasa capek',
   },
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bd',
+    reviewer: 'Irham Raziqony',
+    review: '5/5 (Very Good)',
+    comment:
+      '"Bisnya nyaman dan bersih, tempat duduknya enak perjalanan jauh serasa dekat karna tidak terasa capek"',
+  },
+  {
+    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28be',
+    reviewer: 'Ozie Irham',
+    review: '4/5 (Good)',
+    comment:
+      'Bisnya nyaman dan bersih, tempat duduknya enak perjalanan jauh serasa dekat karna tidak terasa capek',
+  },
 ];
 
 export default function BusDetails(props) {
+  const [isSeeAll, setIsSeeAll] = useState(false)
   const onAllPhotos = () => {
     props.navigation.navigate('All Photos');
   };
@@ -40,7 +56,7 @@ export default function BusDetails(props) {
     props.navigation.navigate('Select Seat');
   };
 
-  const Item = ({reviewer, review, comment}) => (
+  const Item = ({ reviewer, review, comment }) => (
     <View style={styles.reviewContainer}>
       <View style={styles.reviewHeader}>
         <Text style={styles.fontReviewer}>{reviewer}</Text>
@@ -51,13 +67,14 @@ export default function BusDetails(props) {
     </View>
   );
 
-  const renderReview = ({item}) => (
+  const renderReview = ({ item }) => (
     <Item
       reviewer={item.reviewer}
       review={item.review}
       comment={item.comment}
     />
   );
+
 
   return (
     <ScrollView>
@@ -66,7 +83,7 @@ export default function BusDetails(props) {
           <Text style={styles.fontBiru}>PT Sinar Jaya Group</Text>
           <Text style={styles.fontKecil}>Executive</Text>
         </View>
-        <View style={[styles.columnEven, {alignItems: 'flex-end'}]}>
+        <View style={[styles.columnEven, { alignItems: 'flex-end' }]}>
           <View style={styles.rowBawah}>
             <Text style={styles.fontBiru}>IDR 300.000</Text>
             <Text style={styles.fontKecil}>/seat</Text>
@@ -107,69 +124,69 @@ export default function BusDetails(props) {
             <Text style={styles.fontMini}>Sat, 21 Aug</Text>
           </View>
         </View>
-        <View style={{flexDirection: 'column'}}>
-          <View style={{flexDirection: 'row'}}>
-            <View style={{alignItems: 'center'}}>
+        <View style={{ flexDirection: 'column' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ alignItems: 'center' }}>
               <MaterialCommunityIcons
                 name="circle-outline"
                 color="#0F5996"
                 size={ms(20)}
-                style={{marginVertical: ms(-5)}}
+                style={{ marginVertical: ms(-5) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{marginBottom: ms(-3), width: ms(1)}}
+                style={{ marginBottom: ms(-3), width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{width: ms(1)}}
+                style={{ width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{marginVertical: ms(-4), width: ms(1)}}
+                style={{ marginVertical: ms(-4), width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{width: ms(1)}}
+                style={{ width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{marginVertical: ms(-4), width: ms(1)}}
+                style={{ marginVertical: ms(-4), width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{width: ms(1)}}
+                style={{ width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{marginVertical: ms(-4), width: ms(1)}}
+                style={{ marginVertical: ms(-4), width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{width: ms(1)}}
+                style={{ width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{marginVertical: ms(-4), width: ms(1)}}
+                style={{ marginVertical: ms(-4), width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{width: ms(1)}}
+                style={{ width: ms(1) }}
               />
               <FontAwesome
                 name="ellipsis-v"
                 color="#0F5996"
-                style={{marginVertical: ms(-4), width: ms(1)}}
+                style={{ marginVertical: ms(-4), width: ms(1) }}
               />
               <MaterialCommunityIcons
                 name="record-circle-outline"
@@ -207,44 +224,44 @@ export default function BusDetails(props) {
       </View>
 
       <View style={styles.contentContainer}>
-        <View style={[styles.columnCenter, {width: '20%'}]}>
+        <View style={[styles.columnCenter, { width: '20%' }]}>
           <Image
             source={require('../../Assets/Images/iconoir_air-conditioner.png')}
             PlaceholderContent={<ActivityIndicator />}
             style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, {textAlign: 'center'}]}>
+          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
             Air Conditioner
           </Text>
         </View>
-        <View style={[styles.columnCenter, {width: '20%'}]}>
+        <View style={[styles.columnCenter, { width: '20%' }]}>
           <Image
             source={require('../../Assets/Images/map_toilet.png')}
             PlaceholderContent={<ActivityIndicator />}
             style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, {textAlign: 'center'}]}>Toilet</Text>
+          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Toilet</Text>
         </View>
-        <View style={[styles.columnCenter, {width: '20%'}]}>
+        <View style={[styles.columnCenter, { width: '20%' }]}>
           <Image
             source={require('../../Assets/Images/fluent_food-24-filled.png')}
             PlaceholderContent={<ActivityIndicator />}
             style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, {textAlign: 'center'}]}>
+          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
             Free Meal
           </Text>
         </View>
-        <View style={[styles.columnCenter, {width: '20%'}]}>
+        <View style={[styles.columnCenter, { width: '20%' }]}>
           <Image
             source={require('../../Assets/Images/iconoir_ev-charge.png')}
             PlaceholderContent={<ActivityIndicator />}
             style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, {textAlign: 'center'}]}>Charger</Text>
+          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Charger</Text>
         </View>
-        <View style={[styles.columnCenter, {width: '20%'}]}>
+        <View style={[styles.columnCenter, { width: '20%' }]}>
           <Image
             source={require('../../Assets/Images/icon-park-outline_baby-car-seat.png')}
             PlaceholderContent={<ActivityIndicator />}
             style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, {textAlign: 'center'}]}>
+          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
             Comfortable Seat
           </Text>
         </View>
@@ -255,7 +272,7 @@ export default function BusDetails(props) {
         <View
           style={[
             styles.rowBawah,
-            {width: ms(58), justifyContent: 'space-between'},
+            { width: ms(58), justifyContent: 'space-between' },
           ]}>
           <FontAwesome name="star" color="#0F5996" size={ms(17)} />
           <View style={styles.rowBawah}>
@@ -267,15 +284,15 @@ export default function BusDetails(props) {
 
       <View style={styles.passengerReview}>
         <FlatList
-          data={REVIEW}
+          data={REVIEW.slice(0, isSeeAll ? REVIEW.length + 1 : 2)}
           renderItem={renderReview}
           keyExtractor={item => item.id}
           ItemSeparatorComponent={Divider}
         />
       </View>
 
-      <TouchableOpacity style={styles.allReviews}>
-        <Text style={styles.fontBiru}>SEE ALL REVIEW</Text>
+      <TouchableOpacity style={styles.allReviews} onPress={() => setIsSeeAll(!isSeeAll)}>
+        <Text style={styles.fontBiru}>{isSeeAll ? 'SEE LESS' : 'SEE ALL REVIEW'}</Text>
       </TouchableOpacity>
 
       <Card containerStyle={styles.card}>
