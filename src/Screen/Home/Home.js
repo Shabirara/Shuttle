@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -53,7 +53,7 @@ export default function Home(props) {
 
   return (
     <>
-      <View style={{padding: 20}}>
+      <View style={{ padding: 20 }}>
         <View>
           <View
             style={{
@@ -75,7 +75,7 @@ export default function Home(props) {
               </TouchableOpacity>
             ))}
           </View>
-          <View style={{padding: 20}}>
+          <View style={{ padding: 20 }}>
             {active === 0 ? <OneWay /> : <RoundTrip />}
           </View>
         </View>
@@ -87,24 +87,24 @@ export default function Home(props) {
 const OneWay = () => {
   return (
     <View>
-      <Text style={{color: '#092C4C'}}>From</Text>
+      <Text style={{ color: '#092C4C' }}>From</Text>
       <SearchableDropdown
         placeholder="Search place"
         placeholderTextColor="#ABB3BB"
-        containerStyle={{borderRadius: 10}}
-        itemStyle={{borderColor: 'red'}}
+        containerStyle={{ borderRadius: 10, borderColor: 'red' }}
+        itemStyle={{ borderColor: 'red' }}
       />
-      <Text style={{color: '#092C4C'}}>To</Text>
-      <SearchableDropdown
-        placeholder="Search place"
-        placeholderTextColor="#ABB3BB"
-      />
-      <Text style={{color: '#092C4C'}}>Departure Date</Text>
+      <Text style={{ color: '#092C4C' }}>To</Text>
       <SearchableDropdown
         placeholder="Search place"
         placeholderTextColor="#ABB3BB"
       />
-      <Text style={{color: '#092C4C'}}>Passenger</Text>
+      <Text style={{ color: '#092C4C' }}>Departure Date</Text>
+      <SearchableDropdown
+        placeholder="Search place"
+        placeholderTextColor="#ABB3BB"
+      />
+      <Text style={{ color: '#092C4C' }}>Passenger</Text>
       <SearchableDropdown
         placeholder="Search place"
         placeholderTextColor="#ABB3BB"
@@ -116,27 +116,27 @@ const OneWay = () => {
 const RoundTrip = () => {
   return (
     <View>
-      <Text style={{color: '#092C4C'}}>From</Text>
+      <Text style={{ color: '#092C4C' }}>From</Text>
       <SearchableDropdown
         placeholder="Search place"
         placeholderTextColor="#ABB3BB"
       />
-      <Text style={{color: '#092C4C'}}>To</Text>
+      <Text style={{ color: '#092C4C' }}>To</Text>
       <SearchableDropdown
         placeholder="Search place"
         placeholderTextColor="#ABB3BB"
       />
-      <Text style={{color: '#092C4C'}}>Departure Date</Text>
+      <Text style={{ color: '#092C4C' }}>Departure Date</Text>
       <SearchableDropdown
         placeholder="Search place"
         placeholderTextColor="#ABB3BB"
       />
-      <Text style={{color: '#092C4C'}}>Return Date</Text>
+      <Text style={{ color: '#092C4C' }}>Return Date</Text>
       <SearchableDropdown
         placeholder="Search place"
         placeholderTextColor="#ABB3BB"
       />
-      <Text style={{color: '#092C4C'}}>Passenger</Text>
+      <Text style={{ color: '#092C4C' }}>Passenger</Text>
       <SearchableDropdown
         placeholder="Search place"
         placeholderTextColor="#ABB3BB"
