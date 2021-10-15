@@ -147,7 +147,9 @@ export default function Login(props) {
           </View>
 
           <View>
-            <Text style={styles.signUp}>Sign In</Text>
+            <TouchableOpacity onPress={onLogin}>
+              <Text style={styles.signUp}>Sign In</Text>
+            </TouchableOpacity>
           </View>
         </View>
 

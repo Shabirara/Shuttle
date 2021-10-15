@@ -18,21 +18,11 @@ import Feather from 'react-native-vector-icons/Feather';
 export default function Login(props) {
   const onLogin = () => {
     props.navigation.navigate('Register');
-    this.state = {
-      check: false,
-    };
   };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
   };
-
-  // // checkBoxTest();
-  // {
-  //   this.setState({
-  //     check: !this.state.check,
-  //   });
-  // }
 
   return (
     <ScrollView>
@@ -134,7 +124,9 @@ export default function Login(props) {
           </View>
 
           <View>
-            <Text style={styles.signUp}>Sign Up</Text>
+            <TouchableOpacity onPress={onLogin}>
+              <Text style={styles.signUp}>Sign Up</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
