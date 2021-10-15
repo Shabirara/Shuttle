@@ -28,6 +28,11 @@ export default StyleSheet.create({
     height: ms(100),
     width: ms(200),
   },
+  borderLess: {
+    borderWidth: 0,
+    borderColor: 'transparent',
+    marginBottom: ms(-24),
+  },
   inputEmail: {
     paddingHorizontal: ms(12),
     borderWidth: ms(0.2),
