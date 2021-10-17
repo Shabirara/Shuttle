@@ -23,6 +23,9 @@ export default function Login(props) {
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
   };
+  const onSkip = () => {
+    props.navigation.navigate('Bottom Tab');
+  };
 
   return (
     <ScrollView>
@@ -81,10 +84,6 @@ export default function Login(props) {
             </View>
           </View>
 
-          {/* <View style={styles.passwordContainer}>
-            <Text style={styles.password}>Forgot your password?</Text>
-          </View> */}
-
           <View style={styles.loginContainer}>
             <TouchableOpacity style={styles.button} onPress={onLogin}>
               <Text style={styles.buttonText}>Sign In</Text>
@@ -131,7 +130,9 @@ export default function Login(props) {
         </View>
 
         <View>
-          <Text style={styles.skipText}>Skip for now</Text>
+          <Text onPress={onSkip} style={styles.skipText}>
+            Skip for now
+          </Text>
         </View>
       </View>
     </ScrollView>

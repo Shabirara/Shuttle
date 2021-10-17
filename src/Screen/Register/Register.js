@@ -39,6 +39,10 @@ export default function Login(props) {
     setIsShowPassword(!isShowPassword);
   };
 
+  const onSkip = () => {
+    props.navigation.navigate('Bottom Tab');
+  };
+
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
@@ -154,7 +158,9 @@ export default function Login(props) {
         </View>
 
         <View>
-          <Text style={styles.skipText}>Skip for now</Text>
+          <Text onPress={onSkip} style={styles.skipText}>
+            Skip for now
+          </Text>
         </View>
 
         <View>
