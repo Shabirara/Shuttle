@@ -58,7 +58,7 @@ export default function Home(props) {
     },
   ];
 
-  const place = [
+  const item = [
     {
       id: 1,
       name: 'All Terminal Jakarta',
@@ -101,6 +101,7 @@ export default function Home(props) {
                   height: hp(5),
                   flex: ms(1),
                   alignItems: 'center',
+                  fontFamily: 'Montserrat-Medium',
                 }}>
                 <Text style={{color: '#0F5996'}}>{e.title}</Text>
               </TouchableOpacity>
@@ -110,6 +111,7 @@ export default function Home(props) {
             style={{
               padding: ms(20),
               height: hp(100),
+              fontFamily: 'Montserrat-Medium',
             }}>
             {active === 0 ? <OneWay /> : <RoundTrip />}
           </View>
@@ -128,7 +130,13 @@ const OneWay = () => {
         paddingHorizontal: ms(12),
       }}>
       {/* select from place */}
-      <Text style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+      <Text
+        style={{
+          color: '#092C4C',
+          marginBottom: ms(12),
+          marginTop: ms(20),
+          fontFamily: 'Montserrat-Medium',
+        }}>
         From
       </Text>
       <View
@@ -157,7 +165,12 @@ const OneWay = () => {
           justifyContent: 'space-between',
         }}>
         <Text
-          style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+          style={{
+            color: '#092C4C',
+            marginBottom: ms(12),
+            marginTop: ms(20),
+            fontFamily: 'Montserrat-Medium',
+          }}>
           To
         </Text>
         <Image
@@ -188,7 +201,13 @@ const OneWay = () => {
       {/* end of destination */}
 
       {/* select departure date */}
-      <Text style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+      <Text
+        style={{
+          color: '#092C4C',
+          marginBottom: ms(12),
+          marginTop: ms(20),
+          fontFamily: 'Montserrat-Medium',
+        }}>
         Departure Date
       </Text>
       <View
@@ -209,7 +228,13 @@ const OneWay = () => {
       {/* end of select departure date */}
 
       {/* select passenger */}
-      <Text style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+      <Text
+        style={{
+          color: '#092C4C',
+          marginBottom: ms(12),
+          marginTop: ms(20),
+          fontFamily: 'Montserrat-Medium',
+        }}>
         Passenger
       </Text>
       <View
@@ -239,7 +264,7 @@ const OneWay = () => {
           marginTop: ms(24),
           marginBottom: ms(24),
         }}>
-        <Text>Search</Text>
+        <Text style={{fontFamily: 'Montserrat-Medium'}}>Search</Text>
       </TouchableOpacity>
       {/* end button search */}
     </View>
@@ -255,7 +280,13 @@ const RoundTrip = () => {
         paddingHorizontal: ms(12),
       }}>
       {/* select from place */}
-      <Text style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+      <Text
+        style={{
+          color: '#092C4C',
+          marginBottom: ms(12),
+          marginTop: ms(20),
+          fontFamily: 'Montserrat-Medium',
+        }}>
         From
       </Text>
       <View
@@ -284,7 +315,12 @@ const RoundTrip = () => {
           justifyContent: 'space-between',
         }}>
         <Text
-          style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+          style={{
+            color: '#092C4C',
+            marginBottom: ms(12),
+            marginTop: ms(20),
+            fontFamily: 'Montserrat-Medium',
+          }}>
           To
         </Text>
         <Image
@@ -315,7 +351,13 @@ const RoundTrip = () => {
       {/* end of destination */}
 
       {/* select departure date */}
-      <Text style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+      <Text
+        style={{
+          color: '#092C4C',
+          marginBottom: ms(12),
+          marginTop: ms(20),
+          fontFamily: 'Montserrat-Medium',
+        }}>
         Departure Date
       </Text>
       <View
@@ -336,7 +378,13 @@ const RoundTrip = () => {
       {/* end of select departure date */}
 
       {/* select return date */}
-      <Text style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+      <Text
+        style={{
+          color: '#092C4C',
+          marginBottom: ms(12),
+          marginTop: ms(20),
+          fontFamily: 'Montserrat-Medium',
+        }}>
         Return Date
       </Text>
       <View
@@ -357,7 +405,13 @@ const RoundTrip = () => {
       {/* end of select return date */}
 
       {/* select passenger */}
-      <Text style={{color: '#092C4C', marginBottom: ms(12), marginTop: ms(20)}}>
+      <Text
+        style={{
+          color: '#092C4C',
+          marginBottom: ms(12),
+          marginTop: ms(20),
+          fontFamily: 'Montserrat-Medium',
+        }}>
         Passenger
       </Text>
       <View
@@ -387,7 +441,7 @@ const RoundTrip = () => {
           marginTop: ms(24),
           marginBottom: ms(24),
         }}>
-        <Text>Search</Text>
+        <Text style={{fontFamily: 'Montserrat-Medium'}}>Search</Text>
       </TouchableOpacity>
       {/* end button search */}
     </View>

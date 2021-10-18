@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
-import {Image, Button, Input} from 'react-native-elements';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { Image, Button, Input } from 'react-native-elements';
 import styles from './register-Style';
-import logoShuttle from './../Assets/Image/shuttle-logo.png';
-import signup from './../Assets/Image/signup.png';
-import orOptional from './../Assets/Image/orOptional.png';
-import facebook from './../Assets/Image/facebook.png';
-import google from './../Assets/Image/google.png';
+import logoShuttle from '../../Assets/Images/shuttle-logo.png';
+import signup from '../../Assets/Images/signup.png';
+import orOptional from '../../Assets/Images/orOptional.png';
+import facebook from '../../Assets/Images/facebook.png';
+import google from '../../Assets/Images/google.png';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -37,6 +37,10 @@ export default function Login(props) {
 
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
+  };
+
+  const onSkip = () => {
+    props.navigation.navigate('Bottom Tab');
   };
 
   return (
@@ -147,12 +151,16 @@ export default function Login(props) {
           </View>
 
           <View>
-            <Text style={styles.signUp}>Sign In</Text>
+            <TouchableOpacity onPress={onLogin}>
+              <Text style={styles.signUp}>Sign In</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
         <View>
-          <Text style={styles.skipText}>Skip for now</Text>
+          <Text onPress={onSkip} style={styles.skipText}>
+            Skip for now
+          </Text>
         </View>
 
         <View>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,33 +6,26 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import {Image, CheckBox, Input, Button} from 'react-native-elements';
+import { Image, CheckBox, Input, Button } from 'react-native-elements';
 import styles from './login-Sytyle';
-import logoShuttle from './../Assets/Image/shuttle-logo.png';
-import inToShuttle from './../Assets/Image/Group-179.png';
-import orOptional from './../Assets/Image/orOptional.png';
-import facebook from './../Assets/Image/facebook.png';
-import google from './../Assets/Image/google.png';
+import logoShuttle from '../../Assets/Images/shuttle-logo.png';
+import inToShuttle from '../../Assets/Images/Group-179.png';
+import orOptional from '../../Assets/Images/orOptional.png';
+import facebook from '../../Assets/Images/facebook.png';
+import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
 
 export default function Login(props) {
   const onLogin = () => {
     props.navigation.navigate('Register');
-    this.state = {
-      check: false,
-    };
   };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
   };
-
-  // // checkBoxTest();
-  // {
-  //   this.setState({
-  //     check: !this.state.check,
-  //   });
-  // }
+  const onSkip = () => {
+    props.navigation.navigate('Bottom Tab');
+  };
 
   return (
     <ScrollView>
@@ -80,8 +73,8 @@ export default function Login(props) {
               <View>
                 <CheckBox
                   containerStyle={styles.checkStyle}
-                  // value={this.state.check}
-                  // onChange={() => this.checkBoxTest()}
+                // value={this.state.check}
+                // onChange={() => this.checkBoxTest()}
                 />
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
@@ -90,10 +83,6 @@ export default function Login(props) {
               <Text style={styles.forgotText}>Forgot password?</Text>
             </View>
           </View>
-
-          {/* <View style={styles.passwordContainer}>
-            <Text style={styles.password}>Forgot your password?</Text>
-          </View> */}
 
           <View style={styles.loginContainer}>
             <TouchableOpacity style={styles.button} onPress={onLogin}>
@@ -134,12 +123,16 @@ export default function Login(props) {
           </View>
 
           <View>
-            <Text style={styles.signUp}>Sign Up</Text>
+            <TouchableOpacity onPress={onLogin}>
+              <Text style={styles.signUp}>Sign Up</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
         <View>
-          <Text style={styles.skipText}>Skip for now</Text>
+          <Text onPress={onSkip} style={styles.skipText}>
+            Skip for now
+          </Text>
         </View>
       </View>
     </ScrollView>
