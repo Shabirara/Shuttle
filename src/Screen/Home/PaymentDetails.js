@@ -76,10 +76,10 @@ export default function PaymentDetails(props) {
                         <Text style={styles.fontMedium}>How to Pay</Text>
                         <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center' }}
                             onPress={() => setShow(!show)}>
-                            <Text style={styles.fontShow}>{show ? 'Show' : 'Hide'}</Text>
+                            <Text style={styles.fontShow}>{show ? 'Hide' : 'Show'}</Text>
                             {show ?
-                                <AntDesign name='caretdown' style={{ color: '#0F5996', margin: ms(5) }} /> :
-                                <AntDesign name='caretup' style={{ color: '#0F5996', margin: ms(5) }} />
+                                <AntDesign name='caretup' style={{ color: '#0F5996', margin: ms(5) }} /> :
+                                <AntDesign name='caretdown' style={{ color: '#0F5996', margin: ms(5) }} />
                             }
                         </TouchableOpacity>
                     </View>
