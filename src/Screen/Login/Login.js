@@ -71,11 +71,7 @@ export default function Login(props) {
           <View style={styles.checkBox}>
             <View style={styles.rememberMeBox}>
               <View>
-                <CheckBox
-                  containerStyle={styles.checkStyle}
-                  // value={this.state.check}
-                  // onChange={() => this.checkBoxTest()}
-                />
+                <CheckBox containerStyle={styles.checkStyle} />
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
             </View>
@@ -85,7 +81,7 @@ export default function Login(props) {
           </View>
 
           <View style={styles.loginContainer}>
-            <TouchableOpacity style={styles.button} onPress={onLogin}>
+            <TouchableOpacity style={styles.button} onPress={onSkip}>
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
           </View>

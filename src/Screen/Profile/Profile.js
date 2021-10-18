@@ -35,6 +35,15 @@ export default function Profile(props) {
   const onLogin = () => {
     props.navigation.navigate('Login');
   };
+
+  const editProf = () => {
+    props.navigation.navigate('Detail Stack', {screen: 'Edit Profile'});
+  };
+
+  const editPassword = () => {
+    props.navigation.navigate('Detail Stack', {screen: 'Change Password'});
+  };
+
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
@@ -66,22 +75,19 @@ export default function Profile(props) {
             <Text>Di sini email user</Text>
           </View>
         </View>
-        <View>
-          <Input
-            placeholder="Edit profile"
-            containerStyle={styles.input}
-            inputContainerStyle={styles.borderLess}
-          />
-        </View>
-        <View>
-          <Input
-            placeholder="Change password"
-            containerStyle={styles.input}
-            inputContainerStyle={styles.borderLess}
-          />
+        <View style={styles.inputContainer}>
+          <TouchableOpacity style={styles.editProfile} onPress={editProf}>
+            <Text style={styles.profileText}>Edit Profile</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.signUpContainer}>
+        <View style={styles.inputContainer}>
+          <TouchableOpacity style={styles.editProfile} onPress={editPassword}>
+            <Text style={styles.profileText}>Change Password</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.signOutContainer}>
           <TouchableOpacity style={styles.buttonUp} onPress={onLogin}>
             <Text style={styles.signUpText}>Sign Out</Text>
           </TouchableOpacity>

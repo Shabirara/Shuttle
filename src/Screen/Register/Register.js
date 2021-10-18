@@ -164,7 +164,6 @@ export default function Login(props) {
         </View>
 
         <View>
-          {/* <Button title="Show Date Picker" onPress={showDatePicker} /> */}
           <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="date"

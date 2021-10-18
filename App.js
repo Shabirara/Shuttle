@@ -166,7 +166,7 @@ const DetailStack = () => {
       <Stack.Screen component={BookingDetails} name="Booking Details" />
       <Stack.Screen component={TicketDetails} name="Ticket Details" />
       <Stack.Screen component={EditProfile} name="Edit Profile" />
-      <Stack.Screen component={ChangePassword} name="ChangePassword" />
+      <Stack.Screen component={ChangePassword} name="Change Password" />
     </Stack.Navigator>
   );
 };

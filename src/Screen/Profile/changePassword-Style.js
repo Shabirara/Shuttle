@@ -4,39 +4,22 @@ import {ms} from 'react-native-size-matters';
 export default StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
+    backgroundColor: 'white',
     paddingHorizontal: ms(16),
     paddingBottom: ms(20),
+    paddingTop: ms(16),
   },
+  inputEmail: {
+    paddingHorizontal: ms(12),
+    borderWidth: ms(0.2),
+    borderColor: '#777',
+    marginBottom: ms(16),
 
-  image: {
-    paddingBottom: ms(65),
-    height: ms(100),
-    width: ms(100),
-  },
-  avatarContainer: {
-    // height: ms(100),
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingTop: ms(10),
-    paddingBottom: ms(10),
-  },
-  namaUser: {
-    alignItems: 'center',
-  },
-  telpDanUserContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    paddingVertical: ms(10),
-  },
-  // titikAsingContainer: {
-  //   // marginTop: ms(10),
-  // },
-  titikAsing: {
-    fontSize: ms(40),
+    borderRadius: ms(2),
   },
   inputContainer: {
     paddingBottom: ms(4),
+    paddingHorizontal: ms(12),
   },
 
   borderLess: {
@@ -57,7 +40,7 @@ export default StyleSheet.create({
     borderRadius: ms(6),
     alignItems: 'center',
     paddingBottom: ms(6),
-    width: ms(330),
+    width: ms(308),
     height: ms(44),
     justifyContent: 'center',
     color: 'white',
@@ -66,12 +49,7 @@ export default StyleSheet.create({
   signUpText: {
     color: 'white',
   },
-  inputan: {
-    paddingHorizontal: 20,
-    backgroundColor: '#F6F6F6',
-    marginBottom: 16,
-    borderRadius: 8,
-  },
+
   editProfile: {
     backgroundColor: 'white',
     paddingTop: ms(4),
@@ -84,8 +62,5 @@ export default StyleSheet.create({
     height: ms(52),
     justifyContent: 'center',
     color: 'blue',
-  },
-  profileText: {
-    color: 'black',
   },
 });
