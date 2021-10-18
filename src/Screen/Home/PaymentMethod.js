@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react
 import { Card, Divider } from 'react-native-elements'
 import { ms } from 'react-native-size-matters'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Modal from "react-native-modal";
 
 export default function PaymentMethod(props) {
     const [banks, setBanks] = useState([
@@ -10,10 +11,20 @@ export default function PaymentMethod(props) {
         { name: 'Mandiri', imgUri: require('../../Assets/Images/mandiri.png'), selected: false },
         { name: 'BNI', imgUri: require('../../Assets/Images/bni.png'), selected: false }
     ])
+
+    const [isVisible, setIsVisible] = useState(false);
+
+    const [bookActive, setBookActive] = useState(false)
+
     const listIndex = [0, 1, 2]
+
     const onBook = () => {
         props.navigation.navigate('Payment Details')
     }
+
+    const toggleModal = () => {
+        setIsVisible(!isVisible);
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -48,6 +59,7 @@ export default function PaymentMethod(props) {
                                     })
                                     return [...prevState]
                                 });
+                                setBookActive(true);
                             }}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Image source={e.imgUri} style={{ width: ms(40), height: ms(30), resizeMode: 'contain', margin: ms(15) }} />
@@ -64,10 +76,28 @@ export default function PaymentMethod(props) {
                 })}
             </Card>
             <Card containerStyle={styles.book}>
-                <TouchableOpacity onPress={onBook} style={styles.next}>
-                    <Text style={styles.fontButton}>Book</Text>
-                </TouchableOpacity>
+                {bookActive ?
+                    <TouchableOpacity onPress={toggleModal} style={styles.next}>
+                        <Text style={styles.fontButton}>Book</Text>
+                    </TouchableOpacity> :
+                    <TouchableOpacity style={styles.nextDisabled} disabled>
+                        <Text style={styles.fontButton}>Book</Text>
+                    </TouchableOpacity>
+                }
             </Card>
+            <Modal isVisible={isVisible} onBackdropPress={toggleModal}>
+                <View style={styles.modal}>
+                    <Text style={styles.fontJudul}>Are You Sure You Want to Book This?</Text>
+                    <Text style={styles.fontModal}>You cannot change your booking after
+                        continue to payment</Text>
+                    <TouchableOpacity onPress={onBook} style={styles.next}>
+                        <Text style={styles.fontButton}>Yes, Continue to Payment</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={toggleModal} style={styles.cancel}>
+                        <Text style={styles.fontCancel}>Cancel</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
         </View >
     )
 }
@@ -118,11 +148,45 @@ const styles = StyleSheet.create({
         width: ms(310),
         alignItems: 'center',
     },
+    nextDisabled: {
+        backgroundColor: '#0F599650',
+        borderRadius: ms(10),
+        paddingVertical: ms(15),
+        width: ms(310),
+        alignItems: 'center',
+    },
     fontButton: {
         fontFamily: 'Montserrat-SemiBold',
         fontSize: ms(14),
         color: 'white',
     },
+    modal: {
+        backgroundColor: 'white',
+        padding: ms(20),
+        borderRadius: ms(10),
+        height: ms(280),
+        justifyContent: 'space-evenly',
+    },
+    fontModal: {
+        fontFamily: 'Montserrat-Regular',
+        fontSize: ms(14),
+        color: '#092C4C',
+        marginBottom: ms(20)
+    },
+    cancel: {
+        backgroundColor: 'white',
+        borderColor: '#0F5996',
+        borderWidth: ms(1),
+        borderRadius: ms(10),
+        paddingVertical: ms(15),
+        width: ms(310),
+        alignItems: 'center',
+    },
+    fontCancel: {
+        fontFamily: 'Montserrat-SemiBold',
+        fontSize: ms(14),
+        color: '#0F5996',
+    }
 })
 
 //     < FlatList
