@@ -6,10 +6,15 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Clipboard from '@react-native-clipboard/clipboard';
-
+import Modal from 'react-native-modal'
 
 export default function PaymentDetails(props) {
     const [show, setShow] = useState(false)
+    const [isVisible, setIsVisible] = useState(false);
+
+    const toggleModal = () => {
+        setIsVisible(!isVisible);
+    };
     const onBookingDetails = () => {
         props.navigation.navigate('Booking Details')
     }
@@ -50,7 +55,7 @@ export default function PaymentDetails(props) {
                                 </View>
                                 <View style={styles.rekening}>
                                     <Text style={styles.fontMedium}>123 456 7890</Text>
-                                    <TouchableOpacity onPress={() => Clipboard.setString('123 456 7890')}>
+                                    <TouchableOpacity onPress={() => { Clipboard.setString('123 456 7890') }, toggleModal}>
                                         <Text style={styles.fontBiru}>Copy</Text>
                                     </TouchableOpacity>
 
@@ -58,7 +63,7 @@ export default function PaymentDetails(props) {
                                 <Text style={styles.fontKecil}>Amount to Pay</Text>
                                 <View style={styles.rekening}>
                                     <Text style={styles.fontMedium}>Rp. 450.000</Text>
-                                    <TouchableOpacity onPress={() => Clipboard.setString('Rp. 450.000')}>
+                                    <TouchableOpacity onPress={() => { Clipboard.setString('Rp. 450.000') }, toggleModal}>
                                         <Text style={styles.fontBiru}>Copy</Text>
                                     </TouchableOpacity>
                                 </View>
@@ -117,6 +122,11 @@ export default function PaymentDetails(props) {
                     <Text style={styles.fontButton}>Go To Booking Detail</Text>
                 </TouchableOpacity>
             </Card>
+            <Modal isVisible={isVisible} onBackdropPress={toggleModal} onModalShow={() => setTimeout(() => { setIsVisible(false) }, 300)}>
+                <View style={styles.modal}>
+                    <Text style={styles.fontKecil}>Copied!</Text>
+                </View>
+            </Modal>
         </>
     )
 }
@@ -183,5 +193,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-SemiBold',
         fontSize: ms(14),
         color: 'white',
+    },
+    modal: {
+        backgroundColor: 'white',
+        padding: ms(20),
+        borderRadius: ms(10),
+        justifyContent: 'space-evenly',
+        width: ms(100),
+        alignSelf: 'center',
+        marginTop: '150%'
     },
 })
