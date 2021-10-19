@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import {Image, CheckBox, Input, Button} from 'react-native-elements';
 import styles from './login-Sytyle';
-import logoShuttle from './../Assets/Image/shuttle-logo.png';
-import inToShuttle from './../Assets/Image/Group-179.png';
-import orOptional from './../Assets/Image/orOptional.png';
-import facebook from './../Assets/Image/facebook.png';
-import google from './../Assets/Image/google.png';
+import logoShuttle from '../../Assets/Images/shuttle-logo.png';
+import inToShuttle from '../../Assets/Images/Group-179.png';
+import orOptional from '../../Assets/Images/orOptional.png';
+import facebook from '../../Assets/Images/facebook.png';
+import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
 
 export default function Login(props) {
@@ -72,6 +72,13 @@ export default function Login(props) {
             <View style={styles.rememberMeBox}>
               <View>
                 <CheckBox containerStyle={styles.checkStyle} />
+                =======
+                <CheckBox
+                  containerStyle={styles.checkStyle}
+                  // value={this.state.check}
+                  // onChange={() => this.checkBoxTest()}
+                />
+                >>>>>>> c154af1f8d652cad5a5b105557e8aa84302a6b2c
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
             </View>
