@@ -122,7 +122,7 @@ export default function PaymentDetails(props) {
                     <Text style={styles.fontButton}>Go To Booking Detail</Text>
                 </TouchableOpacity>
             </Card>
-            <Modal isVisible={isVisible} onBackdropPress={toggleModal} onModalShow={() => setTimeout(() => { setIsVisible(false) }, 300)}>
+            <Modal isVisible={isVisible} onBackdropPress={() => setIsVisible(false)} onModalShow={() => setTimeout(() => { setIsVisible(false) }, 300)}>
                 <View style={styles.modal}>
                     <Text style={styles.fontKecil}>Copied!</Text>
                 </View>
