@@ -19,8 +19,8 @@ export default function Notification() {
           <Image source={Info} />
         </View>
         <View>
-          <Text style={styles.NotificationText}>Booking Success!</Text>
-          <Text style={styles.NotificationText}>
+          <Text style={styles.NotificationText1}>Booking Success!</Text>
+          <Text style={styles.NotificationText2}>
             New booking success and now waiting for your payment
           </Text>
           <Text style={styles.dateTimeText}>3 hours ago</Text>
@@ -38,12 +38,12 @@ export default function Notification() {
           <Image source={Info} />
         </View>
         <View>
-          <Text style={styles.NotificationText}>Payment Success!</Text>
-          <Text style={styles.NotificationText}>
+          <Text style={styles.NotificationText1}>Payment Success!</Text>
+          <Text style={styles.NotificationText2}>
             Your payment success and know you're ready to experience journey
             with us!
           </Text>
-          <Text style={styles.dateTimeText}>3 hours ago</Text>
+          <Text style={styles.dateTimeText}>fri,20 Aug 2021 10:31</Text>
         </View>
       </View>
     </View>
@@ -52,16 +52,24 @@ export default function Notification() {
 
 const styles = StyleSheet.create({
   infoIcon: {
-    marginRight: ms(10),
+    marginRight: ms(20),
+    paddingTop: ms(2),
   },
-  NotificationText: {
+  NotificationText1: {
+    fontSize: ms(16),
     fontFamily: 'Montserrat-Medium',
     color: '#092C4C',
-    paddingBottom: ms(4),
+    paddingBottom: ms(10),
+  },
+  NotificationText2: {
+    fontFamily: 'Montserrat-Medium',
+    color: '#092C4C',
+    paddingBottom: ms(16),
   },
   dateTimeText: {
     fontFamily: 'Montserrat-Medium',
     color: '#ABB3BB',
-    marginBottom: ms(10),
+    marginBottom: ms(20),
+    fontSize: ms(10),
   },
 });
