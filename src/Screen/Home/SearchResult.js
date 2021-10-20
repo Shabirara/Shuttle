@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,12 +8,14 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
-import {Button, CheckBox, Divider} from 'react-native-elements';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ms} from 'react-native-size-matters';
+import { Button, CheckBox, Divider } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ms } from 'react-native-size-matters';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
+import OneWay from './OneWay'
+import RoundTrip from './RoundTrip'
 
 const DATA = [
   {
@@ -71,26 +73,32 @@ const DATA = [
 ];
 
 export default function SearchResult(props) {
+  const [isChangeVisible, setChangeVisible] = useState(false);
+  const [isSortVisible, setSortVisible] = useState(false);
+  const [isFilterVisible, setFilterVisible] = useState(false);
+  const [activeCheck, setActiveCheck] = useState(0);
+
   const onBusDetails = () => {
     props.navigation.navigate('Bus Details');
   };
-  const [isChangeVisible, setChangeVisible] = useState(false);
   const toggleChangeModal = () => {
     setChangeVisible(!isChangeVisible);
   };
-
-  const [isSortVisible, setSortVisible] = useState(false);
   const toggleSortModal = () => {
     setSortVisible(!isSortVisible);
   };
-
-  const [isFilterVisible, setFilterVisible] = useState(false);
   const toggleFilterModal = () => {
     setFilterVisible(!isFilterVisible);
   };
-
-  const [activeCheck, setActiveCheck] = useState(0);
-
+  const [active, setActive] = useState(0)
+  const dataTab = [
+    {
+      title: 'One Way'
+    },
+    {
+      title: 'Round Trip'
+    }
+  ]
   const Item = ({
     bus,
     type,
@@ -112,13 +120,13 @@ export default function SearchResult(props) {
         }}>
         <Image
           source={require('../../Assets/Images/bx_bx-bus.png')}
-          style={{height: ms(40), width: ms(40)}}
+          style={{ height: ms(40), width: ms(40) }}
         />
         <Text style={styles.hour}>{hourStart}</Text>
         <Text style={styles.duration}>{duration}</Text>
         <Text style={styles.hour}>{hourEnd}</Text>
       </View>
-      <View style={{flexDirection: 'column', marginTop: ms(10)}}>
+      <View style={{ flexDirection: 'column', marginTop: ms(10) }}>
         <View
           style={{
             flexDirection: 'row',
@@ -133,7 +141,7 @@ export default function SearchResult(props) {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <View style={{flexShrink: 1, width: ms(120)}}>
+            <View style={{ flexShrink: 1, width: ms(120) }}>
               <Text style={styles.tanggal} numberOfLines={1}>
                 {bus}
               </Text>
@@ -142,7 +150,7 @@ export default function SearchResult(props) {
           </View>
 
           <View>
-            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
               <Text style={styles.change}>IDR {price}/</Text>
               <Text style={styles.type}>seat</Text>
             </View>
@@ -150,8 +158,8 @@ export default function SearchResult(props) {
           </View>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
-          <View style={{alignItems: 'center', marginTop: ms(5)}}>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ alignItems: 'center', marginTop: ms(5) }}>
             <MaterialCommunityIcons
               name="circle-outline"
               color="#0F5996"
@@ -160,17 +168,17 @@ export default function SearchResult(props) {
             <FontAwesome
               name="ellipsis-v"
               color="#0F5996"
-              style={{marginVertical: ms(-3), width: ms(1)}}
+              style={{ marginVertical: ms(-3), width: ms(1) }}
             />
             <FontAwesome
               name="ellipsis-v"
               color="#0F5996"
-              style={{width: ms(1)}}
+              style={{ width: ms(1) }}
             />
             <FontAwesome
               name="ellipsis-v"
               color="#0F5996"
-              style={{marginVertical: ms(-4), width: ms(1)}}
+              style={{ marginVertical: ms(-4), width: ms(1) }}
             />
             <MaterialCommunityIcons
               name="record-circle-outline"
@@ -200,7 +208,7 @@ export default function SearchResult(props) {
     'Shortest duration',
   ];
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <Item
       bus={item.bus}
       type={item.type}
@@ -215,25 +223,25 @@ export default function SearchResult(props) {
   );
 
   const [filterDeparture, setFilterDeparture] = useState([
-    {title: '00:00 - 16:00', active: false},
-    {title: '06:00 - 12:00', active: false},
-    {title: '12:00 - 18:00', active: false},
-    {title: '18:00 - 00:00', active: false},
+    { title: '00:00 - 16:00', active: false },
+    { title: '06:00 - 12:00', active: false },
+    { title: '12:00 - 18:00', active: false },
+    { title: '18:00 - 00:00', active: false },
   ]);
   const [filterArrival, setFilterArrival] = useState([
-    {title: '00:00 - 16:00', active: false},
-    {title: '06:00 - 12:00', active: false},
-    {title: '12:00 - 18:00', active: false},
-    {title: '18:00 - 00:00', active: false},
+    { title: '00:00 - 16:00', active: false },
+    { title: '06:00 - 12:00', active: false },
+    { title: '12:00 - 18:00', active: false },
+    { title: '18:00 - 00:00', active: false },
   ]);
   const [busVendor, setBusVendor] = useState([
-    {title: 'KYM Trans', active: false},
-    {title: 'PT Sumber Bahagia', active: false},
-    {title: 'DAMRI', active: false},
-    {title: 'Harapan Jaya', active: false},
-    {title: 'KYM Trans', active: false},
-    {title: 'PT Sumber Bahagia', active: false},
-    {title: 'Harapan Jaya', active: false},
+    { title: 'KYM Trans', active: false },
+    { title: 'PT Sumber Bahagia', active: false },
+    { title: 'DAMRI', active: false },
+    { title: 'Harapan Jaya', active: false },
+    { title: 'KYM Trans', active: false },
+    { title: 'PT Sumber Bahagia', active: false },
+    { title: 'Harapan Jaya', active: false },
   ]);
 
   return (
@@ -242,7 +250,7 @@ export default function SearchResult(props) {
         isVisible={isChangeVisible}
         swipeDirection="down"
         onSwipeComplete={() => setChangeVisible(false)}
-        style={{margin: 0}}>
+        style={{ margin: 0 }}>
         <View style={styles.changeModal}>
           <Divider
             orientation="horizontal"
@@ -250,6 +258,22 @@ export default function SearchResult(props) {
             style={styles.holder}
           />
           <Text style={styles.jalur}>Change Shuttle</Text>
+          <View style={styles.extension}>
+            <View style={styles.top}>
+              {dataTab.map((e, i) => (
+                <TouchableOpacity
+                  onPress={() => setActive(i)}
+                  style={[{
+                    backgroundColor: active === i ? '#fff' : '#EDEDED', width: '50%',
+                  }, styles.topTab]}>
+                  <Text style={active === i ? styles.fontButton : styles.fontMedium}>{e.title}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+          <ScrollView style={{ width: '95%' }}>
+            {active === 0 ? <OneWay /> : <RoundTrip />}
+          </ScrollView>
         </View>
       </Modal>
 
@@ -258,7 +282,7 @@ export default function SearchResult(props) {
         swipeDirection="down"
         onSwipeComplete={() => setSortVisible(false)}
         onBackdropPress={() => setSortVisible(false)}
-        style={{marginHorizontal: 0, marginTop: '100%', marginBottom: 0}}>
+        style={{ marginHorizontal: 0, marginTop: '100%', marginBottom: 0 }}>
         <View style={styles.sortModal}>
           <Divider
             orientation="horizontal"
@@ -266,7 +290,7 @@ export default function SearchResult(props) {
             style={styles.holder}
           />
           <Text style={styles.jalur}>Sort By</Text>
-          <View style={{width: '100%'}}>
+          <View style={{ width: '100%' }}>
             {checklist.map((e, i) => {
               return (
                 <CheckBox
@@ -302,7 +326,7 @@ export default function SearchResult(props) {
         isVisible={isFilterVisible}
         swipeDirection="down"
         onSwipeComplete={() => setFilterVisible(false)}
-        style={{marginHorizontal: 0, marginBottom: 0}}>
+        style={{ marginHorizontal: 0, marginBottom: 0 }}>
         <ScrollView>
           <View style={styles.changeModal}>
             <Divider
@@ -325,7 +349,7 @@ export default function SearchResult(props) {
                 <Text style={styles.sort}>RESET</Text>
               </TouchableOpacity>
             </View>
-            <View style={{width: '100%'}}>
+            <View style={{ width: '100%' }}>
               {filterDeparture.map((e, i) => {
                 return (
                   <CheckBox
@@ -366,7 +390,7 @@ export default function SearchResult(props) {
                 <Text style={styles.sort}>RESET</Text>
               </TouchableOpacity>
             </View>
-            <View style={{width: '100%'}}>
+            <View style={{ width: '100%' }}>
               {filterArrival.map((e, i) => {
                 return (
                   <CheckBox
@@ -407,7 +431,7 @@ export default function SearchResult(props) {
                 <Text style={styles.sort}>RESET</Text>
               </TouchableOpacity>
             </View>
-            <View style={{width: '100%'}}>
+            <View style={{ width: '100%' }}>
               {busVendor.map((e, i) => {
                 return (
                   <CheckBox
@@ -444,7 +468,7 @@ export default function SearchResult(props) {
         </ScrollView>
       </Modal>
 
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.jalurTanggal}>
           <Text style={styles.jalur}>Jakarta ➜ Surabaya</Text>
           <Text style={styles.tanggal}>Sat, 9 Okt 2021</Text>
@@ -615,4 +639,78 @@ const styles = StyleSheet.create({
     marginVertical: ms(15),
     width: '100%',
   },
+  fontMedium: {
+    color: '#092C4C',
+    fontFamily: 'Montserrat-Medium',
+    fontSize: ms(14)
+  },
+  inputContainer: {
+    borderWidth: ms(1),
+    borderColor: '#D0D0D0',
+    borderRadius: ms(5),
+    paddingHorizontal: ms(10),
+  },
+  input: {
+    fontFamily: 'Montserrat-Regular',
+    fontSize: ms(14),
+  },
+  dropdown: {
+    borderWidth: ms(1),
+    borderColor: '#D0D0D0',
+    borderRadius: ms(5),
+    marginTop: ms(-26),
+    marginHorizontal: ms(9),
+  },
+  searchResultContainer: {
+    paddingHorizontal: ms(15),
+    marginBottom: ms(10),
+    marginTop: ms(-10)
+  },
+  searchResult: {
+    padding: ms(15)
+  },
+  searchResultSelected: {
+    padding: ms(15),
+    backgroundColor: '#CBFFCA',
+  },
+  switch: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+    marginTop: ms(-25)
+  },
+  next: {
+    backgroundColor: '#0F5996',
+    borderRadius: ms(10),
+    paddingVertical: ms(15),
+    marginHorizontal: ms(10),
+    alignItems: 'center',
+  },
+  fontButton: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: ms(14),
+    color: '#0F5996',
+  },
+  top: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  topTab: {
+    padding: ms(20),
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: ms(5),
+    marginHorizontal: ms(-5),
+    shadowColor: 'grey',
+    shadowOffset: { width: 0, height: ms(2) },
+    shadowRadius: ms(2),
+    elevation: ms(5)
+  },
+  extension: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: ms(20),
+    justifyContent: 'center',
+  }
 });
