@@ -75,8 +75,8 @@ const OnGoingBooking = props => {
   const [expired, setExpired] = useState(false);
   const navigation = useNavigation();
 
-  const onSearch = () => {
-    navigation.navigate('Detail Stack', {screen: 'Search'});
+  const onBookingDetail = () => {
+    navigation.navigate('Detail Stack', {screen: 'Booking Details'});
   };
   return (
     <View style={styles.ticketContaint}>
@@ -153,7 +153,9 @@ const OnGoingBooking = props => {
         </View>
       </View>
       <Divider />
-      <TouchableOpacity style={styles.buttonBookingDetail} onPress={onSearch}>
+      <TouchableOpacity
+        style={styles.buttonBookingDetail}
+        onPress={onBookingDetail}>
         <Image source={bookingButton} />
       </TouchableOpacity>
     </View>
