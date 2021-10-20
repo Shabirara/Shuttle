@@ -16,11 +16,9 @@ import noTicket from '../../Assets/Images/NoTicket.png';
 import {Divider} from 'react-native-elements/dist/divider/Divider';
 import bookingButton from '../../Assets/Images/BookingButton.png';
 import {Icon} from 'react-native-vector-icons/AntDesign';
+import {useNavigation} from '@react-navigation/native';
 
 export default function MyBooking(props) {
-  const onSearch = () => {
-    props.navigation.navigate('Detail Stack', {screen: 'Search'});
-  };
   const [active, setActive] = useState(0);
 
   const dataTab = [
@@ -33,7 +31,6 @@ export default function MyBooking(props) {
   ];
 
   return (
-    // <Button title="Search" onPress={onSearch} />
     <>
       <View>
         <View>
@@ -73,7 +70,14 @@ export default function MyBooking(props) {
   );
 }
 
-const OnGoingBooking = () => {
+const OnGoingBooking = props => {
+  const [paid, setPaid] = useState(false);
+  const [expired, setExpired] = useState(false);
+  const navigation = useNavigation();
+
+  const onSearch = () => {
+    navigation.navigate('Detail Stack', {screen: 'Search'});
+  };
   return (
     <View style={styles.ticketContaint}>
       <View style={styles.orderID}>
@@ -91,19 +95,15 @@ const OnGoingBooking = () => {
       <Divider />
       <View style={styles.paymentContainer}>
         <View
-          style={{
-            backgroundColor: '#E2B928',
-            borderRadius: ms(20),
-            alignItems: 'center',
-            padding: ms(10),
-          }}>
-          <Text
-            style={{
-              color: '#FFFFFF',
-              fontFamily: 'Montserrat-SemiBold',
-              fontSize: ms(14),
-            }}>
-            Status Payment : Pending
+          style={
+            expired
+              ? styles.expiredWrapper
+              : paid
+              ? styles.successWrapper
+              : styles.pendingWrapper
+          }>
+          <Text style={styles.fontButton}>
+            Status Payment: {expired ? 'Expired' : paid ? 'Success' : 'Pending'}
           </Text>
         </View>
       </View>
@@ -153,9 +153,9 @@ const OnGoingBooking = () => {
         </View>
       </View>
       <Divider />
-      <View style={styles.buttonBookingDetail}>
+      <TouchableOpacity style={styles.buttonBookingDetail} onPress={onSearch}>
         <Image source={bookingButton} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -198,5 +198,31 @@ const styles = StyleSheet.create({
   buttonBookingDetail: {
     alignItems: 'center',
     paddingVertical: ms(15),
+  },
+  pendingWrapper: {
+    padding: ms(10),
+    margin: ms(20),
+    alignItems: 'center',
+    borderRadius: ms(30),
+    backgroundColor: '#E2B928',
+  },
+  successWrapper: {
+    padding: ms(10),
+    margin: ms(20),
+    alignItems: 'center',
+    borderRadius: ms(30),
+    backgroundColor: '#3BB44A',
+  },
+  expiredWrapper: {
+    padding: ms(10),
+    margin: ms(20),
+    alignItems: 'center',
+    borderRadius: ms(30),
+    backgroundColor: '#EB584E',
+  },
+  fontButton: {
+    fontFamily: 'Montserrat-SemiBold',
+    fontSize: ms(14),
+    color: 'white',
   },
 });
