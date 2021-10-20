@@ -80,11 +80,11 @@ const OnGoingBooking = () => {
         <Text
           style={{
             color: '#092C4C',
-            fontFamily: 'Montserrat-Regular',
+            fontFamily: 'Montserrat-SemiBold',
           }}>
           Order ID
         </Text>
-        <Text style={{color: '#092C4C', fontFamily: 'Montserrat-Regular'}}>
+        <Text style={{color: '#092C4C', fontFamily: 'Montserrat-SemiBold'}}>
           BDTR2108187
         </Text>
       </View>
@@ -100,7 +100,7 @@ const OnGoingBooking = () => {
           <Text
             style={{
               color: '#FFFFFF',
-              fontFamily: 'Montserrat-Regular',
+              fontFamily: 'Montserrat-SemiBold',
               fontSize: ms(14),
             }}>
             Status Payment : Pending
@@ -126,7 +126,7 @@ const OnGoingBooking = () => {
           <Text
             style={{
               color: '#092C4C',
-              fontFamily: 'Montserrat-Regular',
+              fontFamily: 'Montserrat-SemiBold',
               fontSize: ms(14),
             }}>
             IDR 450.000
@@ -145,7 +145,7 @@ const OnGoingBooking = () => {
           <Text
             style={{
               color: '#092C4C',
-              fontFamily: 'Montserrat-Regular',
+              fontFamily: 'Montserrat-SemiBold',
               fontSize: ms(14),
             }}>
             Jakarta - Surabaya (Roundtrip)
