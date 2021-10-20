@@ -52,8 +52,8 @@ const App = () => {
           <Stack.Navigator
             initialRouteName="Login"
             screenOptions={{headerShown: false}}>
-            {/* <Stack.Screen component={Login} name="Login" />
-            <Stack.Screen component={Register} name="Register" /> */}
+            <Stack.Screen component={Login} name="Login" />
+            <Stack.Screen component={Register} name="Register" />
             <Stack.Screen component={BottomTab} name="Bottom Tab" />
             <Stack.Screen component={DetailStack} name="Detail Stack" />
           </Stack.Navigator>
