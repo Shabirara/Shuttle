@@ -7,7 +7,7 @@ import Feather from 'react-native-vector-icons/Feather'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useNavigation } from '@react-navigation/native'
 
-const OneWay = (props) => {
+const RoundTrip = (props) => {
     const [pressed, setPressed] = useState(false)
     const [pressedA, setPressedA] = useState(false)
     const [searchResult, setSearchResult] = useState([]);
@@ -19,10 +19,17 @@ const OneWay = (props) => {
     const [passengerValue, setPassengerValue] = useState("")
 
     const [dateVisible, setDateVisible] = useState(false);
+    const [dateVisibleA, setDateVisibleA] = useState(false);
     const [datePicked, setDatePicked] = useState("")
+    const [datePickedA, setDatePickedA] = useState("")
+
+    const navigation = useNavigation()
 
     const toggleDate = () => {
         setDateVisible(!dateVisible)
+    }
+    const toggleDateA = () => {
+        setDateVisibleA(!dateVisibleA)
     }
 
     const handleDate = (date) => {
@@ -31,11 +38,11 @@ const OneWay = (props) => {
         setDateVisible(false);
     }
 
-    const navigation = useNavigation()
-
-    const onSearch = () => {
-        navigation.navigate('Detail Stack', { screen: 'Search' })
-    };
+    const handleDateA = (date) => {
+        const datestring = date.toDateString()
+        setDatePickedA(datestring);
+        setDateVisibleA(false);
+    }
 
     const passenger = [1, 2, 3, 4]
     const item = [
@@ -60,6 +67,10 @@ const OneWay = (props) => {
             name: 'All Terminal Surabaya'
         },
     ];
+
+    const onSearch = () => {
+        navigation.navigate('Detail Stack', { screen: 'Search' })
+    };
 
     const findData = (searchString) => {
         setValueSearch(searchString);
@@ -228,6 +239,23 @@ const OneWay = (props) => {
                 onCancel={() => setDateVisible(false)}
             />
 
+            <Text style={styles.from}>Return Date</Text>
+            <Input placeholder="Select date"
+                leftIcon={
+                    <Image source={require('../../Assets/Images/Kalender.png')} />
+                }
+                style={styles.input}
+                inputContainerStyle={styles.inputContainer}
+                onFocus={toggleDateA}
+                value={datePickedA}
+            />
+            <DateTimePickerModal
+                mode='date'
+                isVisible={dateVisibleA}
+                onConfirm={handleDateA}
+                onCancel={() => setDateVisibleA(false)}
+            />
+
             <Text style={styles.from}>Passenger</Text>
             <Input placeholder="Select passenger"
                 leftIcon={
@@ -341,4 +369,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default OneWay
+export default RoundTrip

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import {Image, CheckBox, Input, Button} from 'react-native-elements';
+import { Image, CheckBox, Input, Button } from 'react-native-elements';
 import styles from './login-Sytyle';
 import logoShuttle from '../../Assets/Images/shuttle-logo.png';
 import inToShuttle from '../../Assets/Images/Group-179.png';
@@ -72,6 +72,14 @@ export default function Login(props) {
             <View style={styles.rememberMeBox}>
               <View>
                 <CheckBox containerStyle={styles.checkStyle} />
+<<<<<<< HEAD
+=======
+                <CheckBox
+                  containerStyle={styles.checkStyle}
+                // value={this.state.check}
+                // onChange={() => this.checkBoxTest()}
+                />
+>>>>>>> 97266c1a4f1aac8fe84f5b63d8a5d79b3cecb03d
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
             </View>
