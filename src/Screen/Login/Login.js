@@ -72,14 +72,6 @@ export default function Login(props) {
             <View style={styles.rememberMeBox}>
               <View>
                 <CheckBox containerStyle={styles.checkStyle} />
-<<<<<<< HEAD
-=======
-                <CheckBox
-                  containerStyle={styles.checkStyle}
-                // value={this.state.check}
-                // onChange={() => this.checkBoxTest()}
-                />
->>>>>>> 97266c1a4f1aac8fe84f5b63d8a5d79b3cecb03d
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
             </View>
