@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from 'react-redux'
 // others
 import { ms } from 'react-native-size-matters';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { useNavigation } from '@react-navigation/native'
 import moment from 'moment';
 
 const OneWay = (props) => {
@@ -56,8 +55,6 @@ const OneWay = (props) => {
         setDateVisible(false);
     }
 
-    const navigation = useNavigation()
-
     const onSearch = () => {
         dispatch(getSearchLocationData({
             departure_shuttle_id: terminalStartId,
@@ -69,7 +66,6 @@ const OneWay = (props) => {
             time: "",
             r_time: ""
         }))
-        console.log('depart', terminalStartId, 'arrive', terminalEndId, 'depart date', departureDate, 'passenger', passengerValue)
     };
 
     const passenger = [1, 2, 3, 4]
