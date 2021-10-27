@@ -1,29 +1,43 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native'
 import { Card, Input } from 'react-native-elements';
 import { ms } from 'react-native-size-matters';
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import Feather from 'react-native-vector-icons/Feather'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { useNavigation } from '@react-navigation/native'
+import moment from 'moment'
+
+// redux
+import { getSearchLocationData, getTerminalData } from '../Home/Redux/HomeAction'
+import { useDispatch, useSelector } from 'react-redux'
 
 const RoundTrip = (props) => {
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getTerminalData())
+    }, [])
+    const terminalData = useSelector((state) => {
+        return state.HomeReducer.terminalData
+    })
+
     const [pressed, setPressed] = useState(false)
     const [pressedA, setPressedA] = useState(false)
     const [searchResult, setSearchResult] = useState([]);
     const [searchResultA, setSearchResultA] = useState([]);
     const [valueSearch, setValueSearch] = useState("");
     const [valueSearchA, setValueSearchA] = useState("");
+    const [terminalStartId, setTerminalStartId] = useState("");
+    const [terminalEndId, setTerminalEndId] = useState("");
 
     const [showPassenger, setShowPassenger] = useState(false);
-    const [passengerValue, setPassengerValue] = useState("")
+    const [passengerValue, setPassengerValue] = useState(1)
 
     const [dateVisible, setDateVisible] = useState(false);
     const [dateVisibleA, setDateVisibleA] = useState(false);
     const [datePicked, setDatePicked] = useState("")
     const [datePickedA, setDatePickedA] = useState("")
-
-    const navigation = useNavigation()
+    const [departureDate, setDepartureDate] = useState("")
+    const [arrivalDate, setArrivalDate] = useState("")
 
     const toggleDate = () => {
         setDateVisible(!dateVisible)
@@ -33,43 +47,34 @@ const RoundTrip = (props) => {
     }
 
     const handleDate = (date) => {
-        const datestring = date.toDateString()
+        const datestring = moment(date).format("dddd, DD MMM YYYY")
+        const datenum = moment(date).format('YYYY-MM-DD')
         setDatePicked(datestring);
+        setDepartureDate(datenum);
         setDateVisible(false);
     }
 
     const handleDateA = (date) => {
-        const datestring = date.toDateString()
+        const datestring = moment(date).format("dddd, DD MMM YYYY")
+        const datenum = moment(date).format('YYYY-MM-DD')
         setDatePickedA(datestring);
+        setArrivalDate(datenum);
         setDateVisibleA(false);
     }
 
     const passenger = [1, 2, 3, 4]
-    const item = [
-        {
-            id: 1,
-            name: 'All Terminal Jakarta'
-        },
-        {
-            id: 2,
-            name: 'All Terminal Bandung'
-        },
-        {
-            id: 3,
-            name: 'All Terminal Yogyakarta'
-        },
-        {
-            id: 4,
-            name: 'All Terminal Semarang'
-        },
-        {
-            id: 5,
-            name: 'All Terminal Surabaya'
-        },
-    ];
 
     const onSearch = () => {
-        navigation.navigate('Detail Stack', { screen: 'Search' })
+        dispatch(getSearchLocationData({
+            departure_shuttle_id: terminalStartId,
+            arrival_shuttle_id: terminalEndId,
+            departure_date: departureDate,
+            return_date: arrivalDate,
+            passenger: passengerValue,
+            order_type: "RoundTrip",
+            time: "",
+            r_time: ""
+        }))
     };
 
     const findData = (searchString) => {
@@ -143,14 +148,15 @@ const RoundTrip = (props) => {
                                     <Text style={styles.fontKecil}>{e.name}</Text>
                                 </TouchableOpacity>
                             )) :
-                            item.map((e) => (
+                            terminalData.map((e) => (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        setValueSearch(e.name);
+                                        setValueSearch(e.shuttle_name);
+                                        setTerminalStartId(e.id)
                                         setPressed(false)
                                     }}
                                     style={styles.searchResult}>
-                                    <Text style={styles.fontKecil}>{e.name}</Text>
+                                    <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
                                 </TouchableOpacity>
                             ))
                         }
@@ -207,14 +213,15 @@ const RoundTrip = (props) => {
                                     <Text style={styles.fontKecil}>{e.name}</Text>
                                 </TouchableOpacity>
                             )) :
-                            item.map((e) => (
+                            terminalData.map((e) => (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        setValueSearchA(e.name);
+                                        setValueSearchA(e.shuttle_name);
                                         setPressedA(false)
+                                        setTerminalEndId(e.id)
                                     }}
                                     style={styles.searchResult}>
-                                    <Text style={styles.fontKecil}>{e.name}</Text>
+                                    <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
                                 </TouchableOpacity>
                             ))
                         }
@@ -264,15 +271,15 @@ const RoundTrip = (props) => {
                 style={styles.input}
                 inputContainerStyle={styles.inputContainer}
                 onFocus={() => setShowPassenger(true)}
-                value={passengerValue}
+                value={`${passengerValue} Passenger`}
             />
 
             <View style={showPassenger ? styles.dropdown : null}>
                 {showPassenger ?
                     passenger.map((e) => (
                         <TouchableOpacity
-                            style={passengerValue === `${e} Passenger` ? styles.searchResultSelected : styles.searchResult}
-                            onPress={() => { setPassengerValue(`${e} Passenger`); setShowPassenger(false) }}
+                            style={passengerValue === e ? styles.searchResultSelected : styles.searchResult}
+                            onPress={() => { setPassengerValue(e); setShowPassenger(false) }}
                         >
                             <Text style={styles.fontKecil}>{e} Passenger</Text>
                         </TouchableOpacity>

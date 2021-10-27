@@ -1,0 +1,1 @@
+export const baseUrl = 'https://final-project-shuttle.herokuapp.com'
