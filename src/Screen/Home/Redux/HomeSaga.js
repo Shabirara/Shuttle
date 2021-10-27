@@ -1,10 +1,17 @@
+import {all} from 'redux-saga/effects';
 import {put, takeLatest} from 'redux-saga/effects';
 import axios from 'axios';
 import {baseUrl} from '../../../Utils/Config';
-
 import {navigate} from '../../../Utils/Navigate';
-
 import {setTerminalData, setSearchResultBus} from './HomeAction';
+
+function* SagaOneTrip() {
+  console.log('OneTrip');
+}
+
+function* SagaRoundTrip() {
+  console.log('RoundTrip');
+}
 
 function* fetchLocationData(action) {
   console.log(action.payload, 'coba INI');
@@ -30,6 +37,9 @@ function* fetchTerminalData(action) {
   }
 }
 
+export function* SagaHomeWorker() {
+  yield all([SagaOneTrip(), SagaRoundTrip()]);
+}
 export function* SagaHomeWorker() {
   yield takeLatest('GET_SEARCH_LOCATION_DATA', fetchLocationData);
   yield takeLatest('GET_TERMINAL_DATA', fetchTerminalData);
