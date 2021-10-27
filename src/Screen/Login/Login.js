@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,8 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import { Image, CheckBox, Input, Button } from 'react-native-elements';
+
+import {Image, CheckBox, Input, Button} from 'react-native-elements';
 import styles from './login-Sytyle';
 import logoShuttle from '../../Assets/Images/shuttle-logo.png';
 import inToShuttle from '../../Assets/Images/Group-179.png';
@@ -14,17 +15,28 @@ import orOptional from '../../Assets/Images/orOptional.png';
 import facebook from '../../Assets/Images/facebook.png';
 import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
+import {setLoading} from '../Store/globalAction';
+import {useDispatch} from 'react-redux';
+import {PostLogin} from './Redux/LoginAction';
 
 export default function Login(props) {
   const onLogin = () => {
     props.navigation.navigate('Register');
   };
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
   };
   const onSkip = () => {
     props.navigation.navigate('Bottom Tab');
+  };
+
+  const dispatch = useDispatch();
+
+  const actionLogin = () => {
+    dispatch(PostLogin({email: userEmail, password: userPassword}));
   };
 
   return (
@@ -51,11 +63,17 @@ export default function Login(props) {
             <TextInput
               placeholder="Enter your email"
               style={styles.inputEmail}
+              onChangeText={text => {
+                setUserEmail(text);
+              }}
             />
             <View style={styles.eyeOff}>
               <Input
                 placeholder="Enter your password"
                 secureTextEntry={!isShowPassword}
+                onChangeText={text => {
+                  setUserPassword(text);
+                }}
                 containerStyle={styles.inputEmail}
                 inputContainerStyle={styles.borderLess}
                 rightIcon={
@@ -72,14 +90,6 @@ export default function Login(props) {
             <View style={styles.rememberMeBox}>
               <View>
                 <CheckBox containerStyle={styles.checkStyle} />
-<<<<<<< HEAD
-=======
-                <CheckBox
-                  containerStyle={styles.checkStyle}
-                // value={this.state.check}
-                // onChange={() => this.checkBoxTest()}
-                />
->>>>>>> 97266c1a4f1aac8fe84f5b63d8a5d79b3cecb03d
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
             </View>
@@ -89,7 +99,7 @@ export default function Login(props) {
           </View>
 
           <View style={styles.loginContainer}>
-            <TouchableOpacity style={styles.button} onPress={onSkip}>
+            <TouchableOpacity style={styles.button} onPress={actionLogin}>
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
           </View>
