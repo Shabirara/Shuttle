@@ -1,9 +1,9 @@
-import {all} from 'redux-saga/effects';
-import {put, takeLatest} from 'redux-saga/effects';
+import { all } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
-import {baseUrl} from '../../../Utils/Config';
-import {navigate} from '../../../Utils/Navigate';
-import {setTerminalData, setSearchResultBus} from './HomeAction';
+import { baseUrl } from '../../../Utils/Config';
+import { navigate } from '../../../Utils/Navigate';
+import { setTerminalData, setSearchResultBus } from './HomeAction';
 
 function* SagaOneTrip() {
   console.log('OneTrip');
@@ -21,7 +21,7 @@ function* fetchLocationData(action) {
     );
     yield put(setSearchResultBus(res.data.departure));
     console.log(res, 'Location Data');
-    yield navigate('Detail Stack', {screen: 'Search Result'});
+    yield navigate('Detail Stack', { screen: 'Search Result' });
   } catch (error) {
     console.log(error.toJSON());
   }
@@ -39,8 +39,6 @@ function* fetchTerminalData(action) {
 
 export function* SagaHomeWorker() {
   yield all([SagaOneTrip(), SagaRoundTrip()]);
-}
-export function* SagaHomeWorker() {
   yield takeLatest('GET_SEARCH_LOCATION_DATA', fetchLocationData);
   yield takeLatest('GET_TERMINAL_DATA', fetchTerminalData);
 }
