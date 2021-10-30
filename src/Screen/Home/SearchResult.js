@@ -14,65 +14,15 @@ import { ms } from 'react-native-size-matters';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
-import OneWay from './OneWay'
-import RoundTrip from './RoundTrip'
-
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'First Item',
-    bus: 'KYM Trans',
-    type: 'Executive',
-    hourStart: '13.10',
-    duration: '8hr 20mnt',
-    hourEnd: '21.00',
-    price: '250.000',
-    available: '20',
-    terminalStart: 'Terminal Kampung Rambutan Jakarta',
-    terminalEnd: 'Terminal Purabaya Bungurasih',
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'Second Item',
-    bus: 'PT Sumber Bahari',
-    type: 'Executive',
-    hourStart: '07.00',
-    duration: '8hr 00mnt',
-    hourEnd: '15.00',
-    price: '200.000',
-    available: '20',
-    terminalStart: 'Terminal Lebak Bulus',
-    terminalEnd: 'Terminal Purabaya Bungurasih',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'Third Item',
-    bus: 'Jaya Sentosa',
-    type: 'Executive',
-    hourStart: '07.00',
-    duration: '8hr 00mnt',
-    hourEnd: '15.00',
-    price: '300.000',
-    available: '20',
-    terminalStart: 'Terminal Lebak Bulus',
-    terminalEnd: 'Terminal Bratang Surabaya',
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d73',
-    title: 'Fourth Item',
-    bus: 'PT Sumber Bahagia',
-    type: 'Executive',
-    hourStart: '07.00',
-    duration: '8hr 00mnt',
-    hourEnd: '15.00',
-    price: '200.000',
-    available: '20',
-    terminalStart: 'Terminal Lebak Bulus',
-    terminalEnd: 'Terminal Purabaya Bungurasih',
-  },
-];
+import OneWay from './OneWay';
+import RoundTrip from './RoundTrip';
+import { useSelector } from 'react-redux';
 
 export default function SearchResult(props) {
+  const searchResultList = useSelector(state => {
+    return state.HomeReducer.searchResultBus;
+  });
+  console.log(searchResultList, 'ini console');
   const [isChangeVisible, setChangeVisible] = useState(false);
   const [isSortVisible, setSortVisible] = useState(false);
   const [isFilterVisible, setFilterVisible] = useState(false);
@@ -90,15 +40,15 @@ export default function SearchResult(props) {
   const toggleFilterModal = () => {
     setFilterVisible(!isFilterVisible);
   };
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState(0);
   const dataTab = [
     {
-      title: 'One Way'
+      title: 'One Way',
     },
     {
-      title: 'Round Trip'
-    }
-  ]
+      title: 'Round Trip',
+    },
+  ];
   const Item = ({
     bus,
     type,
@@ -123,7 +73,7 @@ export default function SearchResult(props) {
           style={{ height: ms(40), width: ms(40) }}
         />
         <Text style={styles.hour}>{hourStart}</Text>
-        <Text style={styles.duration}>{duration}</Text>
+        <Text style={styles.duration}>{duration}hr 00mnt</Text>
         <Text style={styles.hour}>{hourEnd}</Text>
       </View>
       <View style={{ flexDirection: 'column', marginTop: ms(10) }}>
@@ -210,15 +160,15 @@ export default function SearchResult(props) {
 
   const renderItem = ({ item }) => (
     <Item
-      bus={item.bus}
-      type={item.type}
+      bus={item.BusProvider}
+      type={'Executive'}
       price={item.price}
-      available={item.available}
-      hourStart={item.hourStart}
-      duration={item.duration}
-      hourEnd={item.hourEnd}
-      terminalStart={item.terminalStart}
-      terminalEnd={item.terminalEnd}
+      available={item.seats}
+      hourStart={item.departureTime}
+      duration={item.roadtime}
+      hourEnd={item.arrivalTime}
+      terminalStart={item.departure_shuttle}
+      terminalEnd={item.arrivalShuttle}
     />
   );
 
@@ -263,10 +213,19 @@ export default function SearchResult(props) {
               {dataTab.map((e, i) => (
                 <TouchableOpacity
                   onPress={() => setActive(i)}
-                  style={[{
-                    backgroundColor: active === i ? '#fff' : '#EDEDED', width: '50%',
-                  }, styles.topTab]}>
-                  <Text style={active === i ? styles.fontButton : styles.fontMedium}>{e.title}</Text>
+                  style={[
+                    {
+                      backgroundColor: active === i ? '#fff' : '#EDEDED',
+                      width: '50%',
+                    },
+                    styles.topTab,
+                  ]}>
+                  <Text
+                    style={
+                      active === i ? styles.fontButton : styles.fontMedium
+                    }>
+                    {e.title}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>
@@ -506,9 +465,9 @@ export default function SearchResult(props) {
         </View>
 
         <FlatList
-          data={DATA}
+          data={searchResultList}
           renderItem={renderItem}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.busId}
         />
       </SafeAreaView>
     </>
@@ -642,7 +601,7 @@ const styles = StyleSheet.create({
   fontMedium: {
     color: '#092C4C',
     fontFamily: 'Montserrat-Medium',
-    fontSize: ms(14)
+    fontSize: ms(14),
   },
   inputContainer: {
     borderWidth: ms(1),
@@ -664,10 +623,10 @@ const styles = StyleSheet.create({
   searchResultContainer: {
     paddingHorizontal: ms(15),
     marginBottom: ms(10),
-    marginTop: ms(-10)
+    marginTop: ms(-10),
   },
   searchResult: {
-    padding: ms(15)
+    padding: ms(15),
   },
   searchResultSelected: {
     padding: ms(15),
@@ -677,7 +636,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    marginTop: ms(-25)
+    marginTop: ms(-25),
   },
   next: {
     backgroundColor: '#0F5996',
@@ -694,7 +653,7 @@ const styles = StyleSheet.create({
   top: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   topTab: {
     padding: ms(20),
@@ -705,12 +664,12 @@ const styles = StyleSheet.create({
     shadowColor: 'grey',
     shadowOffset: { width: 0, height: ms(2) },
     shadowRadius: ms(2),
-    elevation: ms(5)
+    elevation: ms(5),
   },
   extension: {
     flexDirection: 'row',
     backgroundColor: 'white',
     padding: ms(20),
     justifyContent: 'center',
-  }
+  },
 });
