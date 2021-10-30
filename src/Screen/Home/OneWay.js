@@ -16,13 +16,8 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
 // redux
-<<<<<<< HEAD
 import { getSearchLocationData, getTerminalData, setDepartureDateReducer } from '../Home/Redux/HomeAction'
 import { useDispatch, useSelector } from 'react-redux'
-=======
-import {getSearchLocationData, getTerminalData} from '../Home/Redux/HomeAction';
-import {useDispatch, useSelector} from 'react-redux';
->>>>>>> 35414bfccc80587c9d2376ea8d50dfcefd530605
 
 // others
 import {ms} from 'react-native-size-matters';
@@ -47,16 +42,10 @@ const OneWay = props => {
   const [showPassenger, setShowPassenger] = useState(false);
   const [passengerValue, setPassengerValue] = useState(1);
 
-<<<<<<< HEAD
     const [dateVisible, setDateVisible] = useState(false);
     const [datePicked, setDatePicked] = useState("")
     const [departureDate, setDepartureDate] = useState("")
     const [dateShorted, setDateShorted] = useState('')
-=======
-  const [dateVisible, setDateVisible] = useState(false);
-  const [datePicked, setDatePicked] = useState('');
-  const [departureDate, setDepartureDate] = useState('');
->>>>>>> 35414bfccc80587c9d2376ea8d50dfcefd530605
 
   useEffect(() => {
     dispatch(getTerminalData());
@@ -66,7 +55,6 @@ const OneWay = props => {
     setDateVisible(!dateVisible);
   };
 
-<<<<<<< HEAD
     const handleDate = (date) => {
         const datestring = moment(date).format("dddd, DD MMM YYYY")
         const dateshort = moment(date).format('ddd, DD MMM')
@@ -90,30 +78,6 @@ const OneWay = props => {
         }));
         dispatch(setDepartureDateReducer(dateShorted))
     };
-=======
-  const handleDate = date => {
-    const datestring = moment(date).format('dddd, DD MMM YYYY');
-    const datenum = moment(date).format('YYYY-MM-DD');
-    setDatePicked(datestring);
-    setDepartureDate(datenum);
-    setDateVisible(false);
-  };
-
-  const onSearch = () => {
-    dispatch(
-      getSearchLocationData({
-        departure_shuttle_id: terminalStartId,
-        arrival_shuttle_id: terminalEndId,
-        departure_date: departureDate,
-        return_date: '',
-        passenger: passengerValue,
-        order_type: 'OneWay',
-        time: '',
-        r_time: '',
-      }),
-    );
-  };
->>>>>>> 35414bfccc80587c9d2376ea8d50dfcefd530605
 
   const passenger = [1, 2, 3, 4];
 
