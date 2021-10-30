@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 
 import {Image, CheckBox, Input, Button} from 'react-native-elements';
@@ -16,12 +17,14 @@ import facebook from '../../Assets/Images/facebook.png';
 import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
 import {setLoading} from '../Store/globalAction';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {PostLogin} from './Redux/LoginAction';
+import {setTokenToRegisterReducer} from '../Register/Redux/RegisterAction';
+import {setTokenToLoginReducer} from './Redux/LoginAction';
 
 export default function Login(props) {
   const onLogin = () => {
-    props.navigation.navigate('Register');
+    props.navigation.navigate('Bottom Tab');
   };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
@@ -29,6 +32,11 @@ export default function Login(props) {
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
   };
+
+  const onSignUp = () => {
+    props.navigation.navigate('Register');
+  };
+
   const onSkip = () => {
     props.navigation.navigate('Bottom Tab');
   };
@@ -36,8 +44,14 @@ export default function Login(props) {
   const dispatch = useDispatch();
 
   const actionLogin = () => {
+    console.log(userEmail, userPassword);
     dispatch(PostLogin({email: userEmail, password: userPassword}));
   };
+
+  const isError = useSelector(state => {
+    console.log(state, 'harus muncul');
+    return state.LoginReducer.isError;
+  });
 
   return (
     <ScrollView>
@@ -130,24 +144,28 @@ export default function Login(props) {
             </View>
           </View>
         </View>
-
         <View style={styles.haveNoSignUpContainer}>
           <View>
             <Text style={styles.haveNoAccountText}>Don't have an account?</Text>
           </View>
 
           <View>
-            <TouchableOpacity onPress={onLogin}>
+            <TouchableOpacity onPress={onSignUp}>
               <Text style={styles.signUp}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
-
         <View>
           <Text onPress={onSkip} style={styles.skipText}>
             Skip for now
           </Text>
         </View>
+        {isError &&
+          ToastAndroid.show(
+            'email or password is incorrect',
+            ToastAndroid.LONG,
+            ToastAndroid.TOP,
+          )}
       </View>
     </ScrollView>
   );

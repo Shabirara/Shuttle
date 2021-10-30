@@ -25,3 +25,10 @@ export const PostLogin = payload => {
     payload,
   };
 };
+
+export const setErrorLogin = payload => {
+  return {
+    type: 'LOGIN_ERROR',
+    payload,
+  };
+};

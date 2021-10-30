@@ -1,20 +1,25 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
-import { ms } from 'react-native-size-matters';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import {ms} from 'react-native-size-matters';
 import OneWay from './OneWay';
 import RoundTrip from './RoundTrip';
 
 export default function Home1(props) {
-
-  const [active, setActive] = useState(0)
+  const [active, setActive] = useState(0);
   const dataTab = [
     {
-      title: 'One Way'
+      title: 'One Way',
     },
     {
-      title: 'Round Trip'
-    }
-  ]
+      title: 'Round Trip',
+    },
+  ];
 
   return (
     <ScrollView>
@@ -23,24 +28,31 @@ export default function Home1(props) {
           {dataTab.map((e, i) => (
             <TouchableOpacity
               onPress={() => setActive(i)}
-              style={[{
-                backgroundColor: active === i ? '#fff' : '#EDEDED', width: '50%',
-              }, styles.topTab]}>
-              <Text style={active === i ? styles.fontButton : styles.fontMedium}>{e.title}</Text>
+              style={[
+                {
+                  backgroundColor: active === i ? '#fff' : '#EDEDED',
+                  width: '50%',
+                },
+                styles.topTab,
+              ]}>
+              <Text
+                style={active === i ? styles.fontButton : styles.fontMedium}>
+                {e.title}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
       </View>
       {active === 0 ? <OneWay /> : <RoundTrip />}
-    </ScrollView >
-  )
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({
   fontMedium: {
     color: '#092C4C',
     fontFamily: 'Montserrat-Medium',
-    fontSize: ms(14)
+    fontSize: ms(14),
   },
   inputContainer: {
     borderWidth: ms(1),
@@ -62,20 +74,20 @@ const styles = StyleSheet.create({
   searchResultContainer: {
     paddingHorizontal: ms(15),
     marginBottom: ms(10),
-    marginTop: ms(-10)
+    marginTop: ms(-10),
   },
   searchResult: {
-    padding: ms(15)
+    padding: ms(15),
   },
   searchResultSelected: {
     padding: ms(15),
-    backgroundColor: '#CBFFCA'
+    backgroundColor: '#CBFFCA',
   },
   switch: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    marginTop: ms(-25)
+    marginTop: ms(-25),
   },
   next: {
     backgroundColor: '#0F5996',
@@ -92,19 +104,19 @@ const styles = StyleSheet.create({
   top: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   topTab: {
     padding: ms(20),
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: ms(5),
-    marginHorizontal: ms(-5)
+    marginHorizontal: ms(-5),
   },
   extension: {
     flexDirection: 'row',
     backgroundColor: '#0F5996',
     padding: ms(20),
-    justifyContent: 'center'
-  }
-})
+    justifyContent: 'center',
+  },
+});

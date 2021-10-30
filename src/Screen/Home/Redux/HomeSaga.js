@@ -1,50 +1,36 @@
-<<<<<<< HEAD
-import {all} from 'redux-saga/effects';
+import {put, takeLatest} from 'redux-saga/effects';
+import axios from 'axios';
+import {baseUrl} from '../../../Utils/Config';
 
-function* SagaOneTrip() {
-  console.log('OneTrip');
-}
+import {navigate} from '../../../Utils/Navigate';
 
-function* SagaRoundTrip() {
-  console.log('RoundTrip');
-}
-
-export function* SagaHomeWorker() {
-  yield all([SagaOneTrip(), SagaRoundTrip()]);
-}
-=======
-import { put, takeLatest } from 'redux-saga/effects'
-import axios from 'axios'
-import { baseUrl } from '../../../Utils/Config'
-
-import { navigate } from '../../../Utils/Navigate'
-
-import { setTerminalData, setSearchResultBus } from './HomeAction'
+import {setTerminalData, setSearchResultBus} from './HomeAction';
 
 function* fetchLocationData(action) {
-    console.log(action.payload, 'coba INI')
-    try {
-        const res = yield axios.get(`${baseUrl}/search?departure_shuttle_id=${action.payload.departure_shuttle_id}&arrival_shuttle_id=${action.payload.arrival_shuttle_id}&departure_date=${action.payload.departure_date}&return_date=${action.payload.return_date}&passenger=${action.payload.passenger}&order_type=${action.payload.order_type}&time=${action.payload.time}&r_time=${action.payload.r_time}`)
-        yield put(setSearchResultBus(res.data.data))
-        console.log(res, 'Location Data')
-        yield navigate('Detail Stack', { screen: 'Search Result' })
-    } catch (error) {
-        console.log(error.toJSON())
-    }
+  console.log(action.payload, 'coba INI');
+  try {
+    const res = yield axios.get(
+      `${baseUrl}/search?departure_shuttle_id=${action.payload.departure_shuttle_id}&arrival_shuttle_id=${action.payload.arrival_shuttle_id}&departure_date=${action.payload.departure_date}&return_date=${action.payload.return_date}&passenger=${action.payload.passenger}&order_type=${action.payload.order_type}&time=${action.payload.time}&r_time=${action.payload.r_time}`,
+    );
+    yield put(setSearchResultBus(res.data.data));
+    console.log(res, 'Location Data');
+    yield navigate('Detail Stack', {screen: 'Search Result'});
+  } catch (error) {
+    console.log(error.toJSON());
+  }
 }
 
 function* fetchTerminalData(action) {
-    try {
-        const res = yield axios.get(`${baseUrl}/search/shuttle`)
-        yield put(setTerminalData(res.data.data))
-        console.log(res, 'Terminal Data')
-    } catch (error) {
-        console.log(error)
-    }
+  try {
+    const res = yield axios.get(`${baseUrl}/search/shuttle`);
+    yield put(setTerminalData(res.data.data));
+    console.log(res, 'Terminal Data');
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export function* SagaHomeWorker() {
-    yield takeLatest('GET_SEARCH_LOCATION_DATA', fetchLocationData)
-    yield takeLatest('GET_TERMINAL_DATA', fetchTerminalData)
+  yield takeLatest('GET_SEARCH_LOCATION_DATA', fetchLocationData);
+  yield takeLatest('GET_TERMINAL_DATA', fetchTerminalData);
 }
->>>>>>> 335085e9f993ad8acb041a612d6e8260c9403cc0
