@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import {Image, CheckBox, Input, Button} from 'react-native-elements';
+import { Image, CheckBox, Input, Button } from 'react-native-elements';
 import styles from './login-Sytyle';
 import logoShuttle from '../../Assets/Images/shuttle-logo.png';
 import inToShuttle from '../../Assets/Images/Group-179.png';
@@ -16,11 +16,15 @@ import orOptional from '../../Assets/Images/orOptional.png';
 import facebook from '../../Assets/Images/facebook.png';
 import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
-import {setLoading} from '../Store/globalAction';
-import {useDispatch, useSelector} from 'react-redux';
-import {PostLogin} from './Redux/LoginAction';
-import {setTokenToRegisterReducer} from '../Register/Redux/RegisterAction';
-import {setTokenToLoginReducer} from './Redux/LoginAction';
+import { setLoading } from '../Store/globalAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { PostLogin } from './Redux/LoginAction';
+import { setTokenToRegisterReducer } from '../Register/Redux/RegisterAction';
+import { setTokenToLoginReducer } from './Redux/LoginAction';
+
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+
 
 export default function Login(props) {
   const onLogin = () => {
@@ -45,13 +49,28 @@ export default function Login(props) {
 
   const actionLogin = () => {
     console.log(userEmail, userPassword);
-    dispatch(PostLogin({email: userEmail, password: userPassword}));
+    dispatch(PostLogin({ email: userEmail, password: userPassword }));
   };
 
   const isError = useSelector(state => {
     console.log(state, 'harus muncul');
     return state.LoginReducer.isError;
   });
+
+  GoogleSignin.configure({
+    webClientId: '573103940805-jev717g1lbqmivvo8srfv3h4knar35gl.apps.googleusercontent.com',
+  });
+
+  async function onGoogleButtonPress() {
+    const { idToken } = await GoogleSignin.signIn();
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    // setGoogleToken(googleCredential.token);
+    const data = {
+      token: googleCredential.token
+    };
+    console.log(googleCredential)
+    // return auth().signInWithCredential(googleCredential);
+  }
 
   return (
     <ScrollView>
@@ -126,22 +145,22 @@ export default function Login(props) {
             />
           </View>
 
-          <View style={styles.sosmedContainer}>
-            <View style={styles.googleContainer}>
+          <View style={styles.sosmedContainer} >
+            <TouchableOpacity style={styles.googleContainer} onPress={onGoogleButtonPress}>
               <Image
                 resizeMode="contain"
                 style={styles.medIcon}
                 source={google}
               />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.facebookContainer}>
+            <TouchableOpacity style={styles.facebookContainer} >
               <Image
                 resizeMode="contain"
                 style={styles.medIcon}
                 source={facebook}
               />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.haveNoSignUpContainer}>

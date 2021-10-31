@@ -1,15 +1,22 @@
 import axios from 'axios';
-import {all, call, put, takeLatest} from 'redux-saga/effects';
-import {setTokenToLoginReducer, PostLogin, setErrorLogin} from './LoginAction';
-import {navigate} from '../../../Utils/Navigate';
-import {ToastAndroid} from 'react-native';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { setTokenToLoginReducer, PostLogin, setErrorLogin } from './LoginAction';
+import { navigate } from '../../../Utils/Navigate';
+import { ToastAndroid } from 'react-native';
 
 function* SagaLogin(action) {
   try {
     console.log(action.payload, 'berhasil');
     const res = yield axios.post(
-      'https://final-project-shuttle.herokuapp.com/user/login/',
-      action.payload,
+      {
+        'method': 'POST',
+        'hostname': 'final-project-shuttle.herokuapp.com',
+        'path': '/user/login/',
+        'headers': {
+        },
+        'maxRedirects': 20,
+        'data': action.payload
+      }
     );
 
     console.log(res, 'res');
@@ -24,7 +31,7 @@ function* SagaLogin(action) {
       //   ToastAndroid.TOP,
       // );
     }
-    console.log('Login from saga');
+    console.log(action.payload, 'Login from saga');
   } catch (error) {
     console.log(error, 'Bagaimana');
     yield put(setErrorLogin());

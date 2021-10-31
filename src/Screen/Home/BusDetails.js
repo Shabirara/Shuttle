@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Button,
   ActivityIndicator,
   ScrollView,
   FlatList,
@@ -13,6 +12,9 @@ import { ms } from 'react-native-size-matters';
 import { Card, Divider, Image } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+
+import { useSelector } from 'react-redux';
+import { setLoading } from '../../Store/globalAction'
 
 
 const REVIEW = [
@@ -47,7 +49,24 @@ const REVIEW = [
 ];
 
 export default function BusDetails(props) {
+  const detailData = useSelector(state => {
+    return state.HomeReducer.busDetailsData;
+  })
+
+  const reviewData = useSelector(state => {
+    return state.HomeReducer.busReviewData;
+  })
+
+  const departureDateData = useSelector(state => {
+    return state.HomeReducer.departureDate
+  })
+
+  const arrivalDateData = useSelector(state => {
+    return state.HomeReducer.arrivalDate
+  })
+
   const [isSeeAll, setIsSeeAll] = useState(false)
+
   const onAllPhotos = () => {
     props.navigation.navigate('All Photos');
   };
@@ -56,11 +75,22 @@ export default function BusDetails(props) {
     props.navigation.navigate('Select Seat');
   };
 
+  const reviewComment = () => {
+
+  }
+
   const Item = ({ reviewer, review, comment }) => (
     <View style={styles.reviewContainer}>
       <View style={styles.reviewHeader}>
         <Text style={styles.fontReviewer}>{reviewer}</Text>
-        <Text style={styles.biruMedium}>{review}</Text>
+        <Text style={styles.biruMedium}>{review}/5 {
+          review === 5 ? '(Very Good)' :
+            review === 4 ? '(Good)' :
+              review === 3 ? '(Okay)' :
+                review === 2 ? '(Bad)' :
+                  'Very Bad'
+        }
+        </Text>
       </View>
 
       <Text style={styles.comment}>{comment}</Text>
@@ -69,9 +99,9 @@ export default function BusDetails(props) {
 
   const renderReview = ({ item }) => (
     <Item
-      reviewer={item.reviewer}
-      review={item.review}
-      comment={item.comment}
+      reviewer={item.fullname}
+      review={item.rating}
+      comment={item.review}
     />
   );
 
@@ -80,22 +110,22 @@ export default function BusDetails(props) {
     <ScrollView>
       <View style={styles.ijo}>
         <View style={styles.columnEven}>
-          <Text style={styles.fontBiru}>PT Sinar Jaya Group</Text>
+          <Text style={styles.fontBiru}>{detailData.Bus.bus_name}</Text>
           <Text style={styles.fontKecil}>Executive</Text>
         </View>
         <View style={[styles.columnEven, { alignItems: 'flex-end' }]}>
           <View style={styles.rowBawah}>
-            <Text style={styles.fontBiru}>IDR 300.000</Text>
+            <Text style={styles.fontBiru}>IDR {detailData.price}</Text>
             <Text style={styles.fontKecil}>/seat</Text>
           </View>
-          <Text style={styles.fontKecil}>Available seat: 20</Text>
+          <Text style={styles.fontKecil}>Available seat: {detailData.Bus.seat}</Text>
         </View>
       </View>
       <View>
         <Image
           source={require('../../Assets/Images/fotoBus.png')}
           PlaceholderContent={<ActivityIndicator />}
-          style={styles.thumbnail}></Image>
+          style={styles.thumbnail} />
         <TouchableOpacity style={styles.allPhotos} onPress={onAllPhotos}>
           <Text style={styles.biruKecil}>See All Photos</Text>
         </TouchableOpacity>
@@ -114,14 +144,14 @@ export default function BusDetails(props) {
             height: ms(130),
           }}>
           <View style={styles.columnCenter}>
-            <Text style={styles.fontKecil}>07.00</Text>
-            <Text style={styles.fontMini}>Sat, 21 Aug</Text>
+            <Text style={styles.fontKecil}>{detailData.departure_time}</Text>
+            <Text style={styles.fontMini}>{departureDateData}</Text>
           </View>
 
           <Text style={styles.fontMini}>8hr 00mnt</Text>
           <View style={styles.columnCenter}>
-            <Text style={styles.fontKecil}>15.00</Text>
-            <Text style={styles.fontMini}>Sat, 21 Aug</Text>
+            <Text style={styles.fontKecil}>{detailData.arrival_time}</Text>
+            <Text style={styles.fontMini}>{departureDateData}</Text>
           </View>
         </View>
         <View style={{ flexDirection: 'column' }}>
@@ -202,17 +232,17 @@ export default function BusDetails(props) {
                 height: ms(130),
               }}>
               <View style={styles.contentBetween}>
-                <Text style={styles.fontKecil}>Terminal Lebak Bulus</Text>
+                <Text style={styles.fontKecil}>{detailData.departure_shuttle}</Text>
                 <Text style={styles.abuKecil}>
-                  Jl. Lebak Bulus Jaya Abadi RT 06 RW 07 Jakarta Selatan
+                  {detailData.departure_city}
                 </Text>
               </View>
               <View style={styles.contentBetween}>
                 <Text style={styles.fontKecil}>
-                  Terminal Purabaya Bungurasih
+                  {detailData.arrival_shuttle}
                 </Text>
                 <Text style={styles.abuKecil}>
-                  Jl. Bungurasih Timur, Waru, Sidoarjo
+                  {detailData.destination_city}
                 </Text>
               </View>
             </View>
@@ -223,84 +253,106 @@ export default function BusDetails(props) {
         <Text style={styles.fontBesar}>Facilities</Text>
       </View>
 
-      <View style={styles.contentContainer}>
-        <View style={[styles.columnCenter, { width: '20%' }]}>
-          <Image
-            source={require('../../Assets/Images/iconoir_air-conditioner.png')}
-            PlaceholderContent={<ActivityIndicator />}
-            style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
-            Air Conditioner
-          </Text>
-        </View>
-        <View style={[styles.columnCenter, { width: '20%' }]}>
-          <Image
-            source={require('../../Assets/Images/map_toilet.png')}
-            PlaceholderContent={<ActivityIndicator />}
-            style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Toilet</Text>
-        </View>
-        <View style={[styles.columnCenter, { width: '20%' }]}>
-          <Image
-            source={require('../../Assets/Images/fluent_food-24-filled.png')}
-            PlaceholderContent={<ActivityIndicator />}
-            style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
-            Free Meal
-          </Text>
-        </View>
-        <View style={[styles.columnCenter, { width: '20%' }]}>
-          <Image
-            source={require('../../Assets/Images/iconoir_ev-charge.png')}
-            PlaceholderContent={<ActivityIndicator />}
-            style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Charger</Text>
-        </View>
-        <View style={[styles.columnCenter, { width: '20%' }]}>
-          <Image
-            source={require('../../Assets/Images/icon-park-outline_baby-car-seat.png')}
-            PlaceholderContent={<ActivityIndicator />}
-            style={styles.icon}></Image>
-          <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
-            Comfortable Seat
-          </Text>
-        </View>
+      <View style={[styles.contentContainer, { justifyContent: 'space-evenly' }]}>
+        {detailData.Bus.air_conditioner ?
+          <View style={[styles.columnCenter, { width: '20%' }]}>
+            <Image
+              source={require('../../Assets/Images/iconoir_air-conditioner.png')}
+              PlaceholderContent={<ActivityIndicator />}
+              style={styles.icon}></Image>
+            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
+              Air Conditioner
+            </Text>
+          </View> : null
+        }
+        {detailData.Bus.toilet ?
+          <View style={[styles.columnCenter, { width: '20%' }]}>
+            <Image
+              source={require('../../Assets/Images/map_toilet.png')}
+              PlaceholderContent={<ActivityIndicator />}
+              style={styles.icon}></Image>
+            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Toilet</Text>
+          </View> : null
+        }
+        {detailData.Bus.free_meal ?
+          <View style={[styles.columnCenter, { width: '20%' }]}>
+            <Image
+              source={require('../../Assets/Images/fluent_food-24-filled.png')}
+              PlaceholderContent={<ActivityIndicator />}
+              style={styles.icon}></Image>
+            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
+              Free Meal
+            </Text>
+          </View> : null
+        }
+        {detailData.Bus.charger ?
+          <View style={[styles.columnCenter, { width: '20%' }]}>
+            <Image
+              source={require('../../Assets/Images/iconoir_ev-charge.png')}
+              PlaceholderContent={<ActivityIndicator />}
+              style={styles.icon}></Image>
+            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Charger</Text>
+          </View> : null
+        }
+        {detailData.Bus.comfortable_seat ?
+          <View style={[styles.columnCenter, { width: '20%' }]}>
+            <Image
+              source={require('../../Assets/Images/icon-park-outline_baby-car-seat.png')}
+              PlaceholderContent={<ActivityIndicator />}
+              style={styles.icon}></Image>
+            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
+              Comfortable Seat
+            </Text>
+          </View> : null
+        }
       </View>
 
       <View style={styles.headerContainer}>
         <Text style={styles.fontBesar}>Passenger Rating & Review</Text>
         <View
           style={[
-            styles.rowBawah,
-            { width: ms(58), justifyContent: 'space-between' },
+            styles.rowBawah, { justifyContent: 'flex-end' }
           ]}>
           <FontAwesome name="star" color="#0F5996" size={ms(17)} />
-          <View style={styles.rowBawah}>
-            <Text style={styles.fontBiru}>4,7</Text>
+          <View style={[styles.rowBawah, { marginLeft: ms(5) }]}>
+            <Text style={styles.fontBiru}>{reviewData.rating}</Text>
             <Text style={styles.biruKecil}>/5</Text>
           </View>
         </View>
       </View>
 
-      <View style={styles.passengerReview}>
-        <FlatList
-          data={REVIEW.slice(0, isSeeAll ? REVIEW.length + 1 : 2)}
-          renderItem={renderReview}
-          keyExtractor={item => item.id}
-          ItemSeparatorComponent={Divider}
-        />
-      </View>
-
-      <TouchableOpacity style={styles.allReviews} onPress={() => setIsSeeAll(!isSeeAll)}>
-        <Text style={styles.fontBiru}>{isSeeAll ? 'SEE LESS' : 'SEE ALL REVIEW'}</Text>
-      </TouchableOpacity>
+      {reviewData && reviewData.allReview !== undefined ?
+        <View>
+          <View style={styles.passengerReview}>
+            <FlatList
+              data={reviewData.allReview.length > 2 ? reviewData.allReview.splice(0, 2) : reviewData.allReview}
+              renderItem={renderReview}
+              keyExtractor={item => item.id}
+              ItemSeparatorComponent={Divider}
+            />
+          </View>
+          {reviewData.allReview > 1 ?
+            <TouchableOpacity style={styles.allReviews} onPress={() => setIsSeeAll(!isSeeAll)}>
+              <Text style={styles.fontBiru}>{isSeeAll ? 'SEE LESS' : 'SEE ALL REVIEW'}</Text>
+            </TouchableOpacity> : null
+          }
+        </View>
+        :
+        <View style={styles.passengerReview}>
+          <View style={styles.reviewContainer}>
+            <View style={[styles.reviewHeader, { justifyContent: 'center' }]}>
+              <Text style={styles.fontReviewer}>{reviewData.message}</Text>
+            </View>
+          </View>
+        </View>
+      }
 
       <Card containerStyle={styles.card}>
         <TouchableOpacity style={styles.selectSeat} onPress={onSelectSeat}>
           <Text style={styles.fontSeat}>Select Seat</Text>
         </TouchableOpacity>
       </Card>
-    </ScrollView>
+    </ScrollView >
   );
 }
 

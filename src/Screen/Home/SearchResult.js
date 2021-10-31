@@ -16,20 +16,26 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
 import OneWay from './OneWay';
 import RoundTrip from './RoundTrip';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getBusDetailsData, getBusReviewData } from './Redux/HomeAction';
 
 export default function SearchResult(props) {
   const searchResultList = useSelector(state => {
     return state.HomeReducer.searchResultBus;
   });
-  console.log(searchResultList, 'ini console');
+  console.log(searchResultList, 'searchResultList');
   const [isChangeVisible, setChangeVisible] = useState(false);
   const [isSortVisible, setSortVisible] = useState(false);
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [activeCheck, setActiveCheck] = useState(0);
+  const [busDetailsId, setBusDetailsId] = useState("");
+
+  const dispatch = useDispatch();
 
   const onBusDetails = () => {
-    props.navigation.navigate('Bus Details');
+    console.log(busDetailsId)
+    dispatch(getBusDetailsData({ id: busDetailsId }))
+    dispatch(getBusReviewData(busDetailsId))
   };
   const toggleChangeModal = () => {
     setChangeVisible(!isChangeVisible);
@@ -40,6 +46,7 @@ export default function SearchResult(props) {
   const toggleFilterModal = () => {
     setFilterVisible(!isFilterVisible);
   };
+
   const [active, setActive] = useState(0);
   const dataTab = [
     {
@@ -59,15 +66,18 @@ export default function SearchResult(props) {
     hourEnd,
     terminalStart,
     terminalEnd,
+    id
   }) => (
-    <TouchableOpacity style={styles.item} onPress={onBusDetails}>
+    <TouchableOpacity style={styles.item}
+      onPress={setBusDetailsId(id), onBusDetails}>
       <View
         style={{
           alignItems: 'center',
           marginRight: ms(10),
           justifyContent: 'space-evenly',
           height: ms(125),
-        }}>
+        }}
+      >
         <Image
           source={require('../../Assets/Images/bx_bx-bus.png')}
           style={{ height: ms(40), width: ms(40) }}
@@ -143,13 +153,14 @@ export default function SearchResult(props) {
               marginTop: ms(7),
               justifyContent: 'space-between',
               height: ms(60),
-            }}>
+            }}
+          >
             <Text style={styles.type}>{terminalStart}</Text>
             <Text style={styles.type}>{terminalEnd}</Text>
           </View>
         </View>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity >
   );
   const checklist = [
     'Lowest price',
@@ -169,6 +180,7 @@ export default function SearchResult(props) {
       hourEnd={item.arrivalTime}
       terminalStart={item.departure_shuttle}
       terminalEnd={item.arrivalShuttle}
+      id={item.busId}
     />
   );
 

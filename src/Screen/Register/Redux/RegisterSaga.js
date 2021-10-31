@@ -1,6 +1,6 @@
 import axios from 'axios';
-import {all, put, takeLatest} from 'redux-saga/effects';
-import {setTokenToRegisterReducer} from './RegisterAction';
+import { all, put, takeLatest } from 'redux-saga/effects';
+import { setTokenToRegisterReducer } from './RegisterAction';
 
 function* SagaRegister(action) {
   try {
@@ -10,7 +10,9 @@ function* SagaRegister(action) {
     );
     yield put(setTokenToRegisterReducer(res.data));
     console.log('Register from saga');
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 export function* SagaRegisterWorker() {
