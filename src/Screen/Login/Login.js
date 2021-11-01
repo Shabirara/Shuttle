@@ -22,6 +22,8 @@ import {PostLogin} from './Redux/LoginAction';
 import {setTokenToRegisterReducer} from '../Register/Redux/RegisterAction';
 import {setTokenToLoginReducer} from './Redux/LoginAction';
 
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
 export default function Login(props) {
   const onLogin = () => {
     props.navigation.navigate('Bottom Tab');
@@ -46,13 +48,26 @@ export default function Login(props) {
   const actionLogin = () => {
     console.log(userEmail, userPassword);
     dispatch(PostLogin({email: userEmail, password: userPassword}));
-    props.navigation.navigate('Bottom Tab');
   };
 
-  const isError = useSelector(state => {
-    console.log(state, 'harus muncul');
-    return state.LoginReducer.isError;
-  });
+  async function onGoogleButtonPress() {
+    try {
+      GoogleSignin.configure({
+        offlineAccess: true,
+        webClientId:
+          '1070118107911-m8bdq6m70vsm60bdsql1alp1ukoelfpm.apps.googleusercontent.com',
+        androidClientId:
+          '573103940805-nutqthgajbhumvu392a2t3kth6r9ia9o.apps.googleusercontent.com',
+        scopes: ['profile', 'email'],
+      });
+      await GoogleSignin.hasPlayServices();
+      console.log('reached google sign in');
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <ScrollView>
@@ -128,21 +143,23 @@ export default function Login(props) {
           </View>
 
           <View style={styles.sosmedContainer}>
-            <View style={styles.googleContainer}>
+            <TouchableOpacity
+              style={styles.googleContainer}
+              onPress={onGoogleButtonPress}>
               <Image
                 resizeMode="contain"
                 style={styles.medIcon}
                 source={google}
               />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.facebookContainer}>
+            <TouchableOpacity style={styles.facebookContainer}>
               <Image
                 resizeMode="contain"
                 style={styles.medIcon}
                 source={facebook}
               />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.haveNoSignUpContainer}>
@@ -161,12 +178,6 @@ export default function Login(props) {
             Skip for now
           </Text>
         </View>
-        {isError &&
-          ToastAndroid.show(
-            'email or password is incorrect',
-            ToastAndroid.LONG,
-            ToastAndroid.TOP,
-          )}
       </View>
     </ScrollView>
   );

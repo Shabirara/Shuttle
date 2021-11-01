@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "573103940805",
+    "project_id": "shuttle-62486",
+    "storage_bucket": "shuttle-62486.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:573103940805:android:3ce652580cb184d6a7bcac",
+        "android_client_info": {
+          "package_name": "com.shuttle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "573103940805-lbmhr7u8jlqri7botjcd0bm6l2i59h2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shuttle",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "573103940805-nutqthgajbhumvu392a2t3kth6r9ia9o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8AB8brb2wZGZ3BP9hzPch0mc0rqXWNPs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "573103940805-nutqthgajbhumvu392a2t3kth6r9ia9o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

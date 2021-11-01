@@ -25,3 +25,59 @@ export const setSearchResultBus = (payload) => {
         payload
     }
 }
+
+export const getBusDetailsData = (payload) => {
+    return {
+        type: 'GET_BUS_DETAILS_DATA',
+        payload
+    }
+}
+
+export const setBusDetailsData = (payload) => {
+    return {
+        type: 'SET_BUS_DETAILS_DATA',
+        payload
+    }
+}
+
+export const setDepartureDateReducer = (payload) => {
+    return {
+        type: 'SET_DEPARTURE_DATE',
+        payload
+    }
+}
+
+export const setArrivalDateReducer = (payload) => {
+    return {
+        type: 'SET_ARRIVAL_DATE',
+        payload
+    }
+}
+
+export const getBusReviewData = (payload) => {
+    return {
+        type: 'GET_BUS_REVIEW_DATA',
+        payload
+    }
+}
+
+export const setBusReviewData = (payload) => {
+    return {
+        type: 'SET_BUS_REVIEW_DATA',
+        payload
+    }
+}
+
+export const setIsOneWay = (payload) => {
+    return {
+        type: 'SET_IS_ONE_WAY',
+        payload
+    }
+}
+
+export const setIsArrival = (payload) => {
+    return {
+        type: 'SET_IS_ARRIVAL',
+        payload
+    }
+}

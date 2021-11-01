@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 
 //component
 import {
@@ -9,18 +9,18 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {Card, Input} from 'react-native-elements';
+import { Card, Input } from 'react-native-elements';
 
 // icons
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
 // redux
-import {getSearchLocationData, getTerminalData} from '../Home/Redux/HomeAction';
-import {useDispatch, useSelector} from 'react-redux';
+import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setIsOneWay } from '../Home/Redux/HomeAction'
+import { useDispatch, useSelector } from 'react-redux'
 
 // others
-import {ms} from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 
@@ -43,8 +43,9 @@ const OneWay = props => {
   const [passengerValue, setPassengerValue] = useState(1);
 
   const [dateVisible, setDateVisible] = useState(false);
-  const [datePicked, setDatePicked] = useState('');
-  const [departureDate, setDepartureDate] = useState('');
+  const [datePicked, setDatePicked] = useState("")
+  const [departureDate, setDepartureDate] = useState("")
+  const [dateShorted, setDateShorted] = useState('')
 
   useEffect(() => {
     dispatch(getTerminalData());
@@ -54,27 +55,29 @@ const OneWay = props => {
     setDateVisible(!dateVisible);
   };
 
-  const handleDate = date => {
-    const datestring = moment(date).format('dddd, DD MMM YYYY');
-    const datenum = moment(date).format('YYYY-MM-DD');
+  const handleDate = (date) => {
+    const datestring = moment(date).format("dddd, DD MMM YYYY")
+    const dateshort = moment(date).format('ddd, DD MMM')
+    const datenum = moment(date).format('YYYY-MM-DD')
     setDatePicked(datestring);
+    setDateShorted(dateshort)
     setDepartureDate(datenum);
     setDateVisible(false);
-  };
+  }
 
   const onSearch = () => {
-    dispatch(
-      getSearchLocationData({
-        departure_shuttle_id: terminalStartId,
-        arrival_shuttle_id: terminalEndId,
-        departure_date: departureDate,
-        return_date: '',
-        passenger: passengerValue,
-        order_type: 'OneWay',
-        time: '',
-        r_time: '',
-      }),
-    );
+    dispatch(getSearchLocationData({
+      departure_shuttle_id: terminalStartId,
+      arrival_shuttle_id: terminalEndId,
+      departure_date: departureDate,
+      return_date: "",
+      passenger: passengerValue,
+      order_type: "OneWay",
+      time: "",
+      r_time: ""
+    }));
+    dispatch(setDepartureDateReducer(dateShorted))
+    dispatch(setIsOneWay(true))
   };
 
   const passenger = [1, 2, 3, 4];
@@ -115,7 +118,7 @@ const OneWay = props => {
             pressed ? (
               <EvilIcons
                 name="search"
-                style={{color: 'grey', fontSize: ms(25)}}
+                style={{ color: 'grey', fontSize: ms(25) }}
               />
             ) : (
               <Image source={require('../../Assets/Images/Berangkat.png')} />
@@ -151,26 +154,26 @@ const OneWay = props => {
             </Text>
             {searchResult.length > 0
               ? searchResult.map(e => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setValueSearch(e.name);
-                      setPressed(false);
-                    }}
-                    style={styles.searchResult}>
-                    <Text style={styles.fontKecil}>{e.name}</Text>
-                  </TouchableOpacity>
-                ))
+                <TouchableOpacity
+                  onPress={() => {
+                    setValueSearch(e.name);
+                    setPressed(false);
+                  }}
+                  style={styles.searchResult}>
+                  <Text style={styles.fontKecil}>{e.name}</Text>
+                </TouchableOpacity>
+              ))
               : terminalData.map(e => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setValueSearch(e.shuttle_name);
-                      setPressed(false);
-                      setTerminalStartId(e.id);
-                    }}
-                    style={styles.searchResult}>
-                    <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
-                  </TouchableOpacity>
-                ))}
+                <TouchableOpacity
+                  onPress={() => {
+                    setValueSearch(e.shuttle_name);
+                    setPressed(false);
+                    setTerminalStartId(e.id);
+                  }}
+                  style={styles.searchResult}>
+                  <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
+                </TouchableOpacity>
+              ))}
           </View>
         ) : null}
       </View>
@@ -194,7 +197,7 @@ const OneWay = props => {
             pressedA ? (
               <EvilIcons
                 name="search"
-                style={{color: 'grey', fontSize: ms(25)}}
+                style={{ color: 'grey', fontSize: ms(25) }}
               />
             ) : (
               <Image source={require('../../Assets/Images/Pulang.png')} />
@@ -229,26 +232,26 @@ const OneWay = props => {
             </Text>
             {searchResultA.length > 0
               ? searchResultA.map(e => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setValueSearchA(e.name);
-                      setPressedA(false);
-                    }}
-                    style={styles.searchResult}>
-                    <Text style={styles.fontKecil}>{e.name}</Text>
-                  </TouchableOpacity>
-                ))
+                <TouchableOpacity
+                  onPress={() => {
+                    setValueSearchA(e.name);
+                    setPressedA(false);
+                  }}
+                  style={styles.searchResult}>
+                  <Text style={styles.fontKecil}>{e.name}</Text>
+                </TouchableOpacity>
+              ))
               : terminalData.map(e => (
-                  <TouchableOpacity
-                    onPress={() => {
-                      setValueSearchA(e.shuttle_name);
-                      setPressedA(false);
-                      setTerminalEndId(e.id);
-                    }}
-                    style={styles.searchResult}>
-                    <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
-                  </TouchableOpacity>
-                ))}
+                <TouchableOpacity
+                  onPress={() => {
+                    setValueSearchA(e.shuttle_name);
+                    setPressedA(false);
+                    setTerminalEndId(e.id);
+                  }}
+                  style={styles.searchResult}>
+                  <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
+                </TouchableOpacity>
+              ))}
           </View>
         ) : null}
       </View>
@@ -286,19 +289,19 @@ const OneWay = props => {
       <View style={showPassenger ? styles.dropdown : null}>
         {showPassenger
           ? passenger.map(e => (
-              <TouchableOpacity
-                style={
-                  passengerValue === e
-                    ? styles.searchResultSelected
-                    : styles.searchResult
-                }
-                onPress={() => {
-                  setPassengerValue(e);
-                  setShowPassenger(false);
-                }}>
-                <Text style={styles.fontKecil}>{e} Passenger</Text>
-              </TouchableOpacity>
-            ))
+            <TouchableOpacity
+              style={
+                passengerValue === e
+                  ? styles.searchResultSelected
+                  : styles.searchResult
+              }
+              onPress={() => {
+                setPassengerValue(e);
+                setShowPassenger(false);
+              }}>
+              <Text style={styles.fontKecil}>{e} Passenger</Text>
+            </TouchableOpacity>
+          ))
           : null}
       </View>
 
