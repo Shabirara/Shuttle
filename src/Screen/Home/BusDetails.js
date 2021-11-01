@@ -13,25 +13,29 @@ import { Card, Divider, Image } from 'react-native-elements';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../Store/globalAction'
+import { setFromBusDetails } from './Redux/HomeAction';
+import { navigate } from '../../Utils/Navigate';
 
 export default function BusDetails(props) {
   const detailData = useSelector(state => {
     return state.HomeReducer.busDetailsData;
   })
-
   const reviewData = useSelector(state => {
     return state.HomeReducer.busReviewData;
   })
-
   const departureDateData = useSelector(state => {
     return state.HomeReducer.departureDate
   })
-
   const arrivalDateData = useSelector(state => {
     return state.HomeReducer.arrivalDate
   })
+  const isLogged = useSelector(state => {
+    return state.Global.isLogged
+  })
+
+  const dispatch = useDispatch()
 
   const [isSeeAll, setIsSeeAll] = useState(false)
 
@@ -43,8 +47,9 @@ export default function BusDetails(props) {
     props.navigation.navigate('Select Seat');
   };
 
-  const reviewComment = () => {
-
+  const onLogin = () => {
+    navigate('Login', { params: "'Detail Stack', {screen: 'Bus Details'}" })
+    dispatch(setFromBusDetails(true))
   }
 
   const Item = ({ reviewer, review, comment }) => (
@@ -315,8 +320,21 @@ export default function BusDetails(props) {
         </View>
       }
 
+      {isLogged ? null :
+        <View>
+          <View style={styles.headerContainer}>
+            <Text style={styles.fontReviewer}>You’re not logged in, please login to continue</Text>
+          </View>
+          <Card containerStyle={[styles.card, { marginTop: 0 }]}>
+            <TouchableOpacity style={styles.selectSeat} onPress={onLogin}>
+              <Text style={styles.fontSeat}>Sign In</Text>
+            </TouchableOpacity>
+          </Card>
+        </View>
+      }
+
       <Card containerStyle={styles.card}>
-        <TouchableOpacity style={styles.selectSeat} onPress={onSelectSeat}>
+        <TouchableOpacity style={isLogged ? styles.selectSeat : styles.selectSeatDisabled} onPress={onSelectSeat} disabled={isLogged ? false : true}>
           <Text style={styles.fontSeat}>Select Seat</Text>
         </TouchableOpacity>
       </Card>
@@ -464,6 +482,13 @@ const styles = StyleSheet.create({
   },
   selectSeat: {
     backgroundColor: '#0F5996',
+    borderRadius: ms(10),
+    paddingVertical: ms(15),
+    width: ms(310),
+    alignItems: 'center',
+  },
+  selectSeatDisabled: {
+    backgroundColor: '#0F599610',
     borderRadius: ms(10),
     paddingVertical: ms(15),
     width: ms(310),

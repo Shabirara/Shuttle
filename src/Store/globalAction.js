@@ -4,3 +4,11 @@ export const setLoading = (payload) => {
         payload: payload
     }
 }
+
+
+export const setIsLogged = (payload) => {
+    return {
+        type: 'SET_IS_LOGGED',
+        payload: payload
+    }
+}

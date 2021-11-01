@@ -81,3 +81,10 @@ export const setIsArrival = (payload) => {
         payload
     }
 }
+
+export const setFromBusDetails = (payload) => {
+    return {
+        type: 'SET_FROM_BUS_DETAILS',
+        payload
+    }
+}

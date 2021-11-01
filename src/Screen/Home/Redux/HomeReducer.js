@@ -7,7 +7,8 @@ const initialState = {
   departureDate: '',
   arrivalDate: '',
   isOneWay: true,
-  isArrival: false
+  isArrival: false,
+  fromBusDetails: false,
 };
 
 export default function HomeReducer(state = initialState, action) {
@@ -58,6 +59,13 @@ export default function HomeReducer(state = initialState, action) {
       return {
         ...state,
         isArrival: action.payload
+      }
+    }
+
+    case 'SET_FROM_BUS_DETAILS': {
+      return {
+        ...state,
+        fromBusDetails: action.payload
       }
     }
 
