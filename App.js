@@ -1,21 +1,24 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
-import { ms } from 'react-native-size-matters';
+// root
+import Root from './root';
+
+import {ms} from 'react-native-size-matters';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 // redux
-import { Provider } from 'react-redux';
-import { Persistor, Store } from './src/Store/Store';
-import { PersistGate } from 'redux-persist/lib/integration/react';
+import {Provider} from 'react-redux';
+import {Persistor, Store} from './src/Store/Store';
+import {PersistGate} from 'redux-persist/lib/integration/react';
 
 // navigation
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-import { nav } from './src/Utils/Navigate'
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
+import {nav} from './src/Utils/Navigate';
 
 // root stack
 import Login from './src/Screen/Login/Login';
@@ -49,16 +52,7 @@ const App = () => {
   return (
     <Provider store={Store}>
       <PersistGate loading={null} persistor={Persistor}>
-        <NavigationContainer ref={nav}>
-          <Stack.Navigator
-            initialRouteName="Login"
-            screenOptions={{ headerShown: false }}>
-            <Stack.Screen component={Login} name="Login" />
-            <Stack.Screen component={Register} name="Register" />
-            <Stack.Screen component={BottomTab} name="Bottom Tab" />
-            <Stack.Screen component={DetailStack} name="Detail Stack" />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <Root />
       </PersistGate>
     </Provider>
   );
@@ -66,7 +60,7 @@ const App = () => {
 
 const Tab = createBottomTabNavigator();
 
-const BottomTab = () => {
+export const BottomTab = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -82,7 +76,7 @@ const BottomTab = () => {
         headerTintColor: '#fff',
         tabBarActiveTintColor: '#0F5996',
         tabBarInactiveTintColor: '#ABB3BB',
-        tabBarStyle: { height: ms(70), paddingVertical: ms(10) },
+        tabBarStyle: {height: ms(70), paddingVertical: ms(10)},
         tabBarLabelStyle: {
           paddingBottom: ms(12),
           fontFamily: 'Montserrat-Medium',
@@ -93,7 +87,7 @@ const BottomTab = () => {
         component={Home}
         name="Home"
         options={{
-          tabBarIcon: ({ color, size }) => {
+          tabBarIcon: ({color, size}) => {
             return <Feather name="home" size={size} color={color} />;
           },
         }}
@@ -102,13 +96,13 @@ const BottomTab = () => {
         component={MyBooking}
         name="My Booking"
         options={{
-          tabBarIcon: ({ color, size }) => {
+          tabBarIcon: ({color, size}) => {
             return (
               <MaterialCommunityIcons
                 name="ticket-outline"
                 size={size}
                 color={color}
-                style={{ transform: [{ rotate: '135deg' }] }}
+                style={{transform: [{rotate: '135deg'}]}}
               />
             );
           },
@@ -118,7 +112,7 @@ const BottomTab = () => {
         component={Notification}
         name="Notification"
         options={{
-          tabBarIcon: ({ color, size }) => {
+          tabBarIcon: ({color, size}) => {
             return (
               <MaterialIcons
                 name="notifications-none"
@@ -133,7 +127,7 @@ const BottomTab = () => {
         component={Profile}
         name="Profile"
         options={{
-          tabBarIcon: ({ color, size }) => {
+          tabBarIcon: ({color, size}) => {
             return <Feather name="user" size={size} color={color} />;
           },
         }}
@@ -142,7 +136,7 @@ const BottomTab = () => {
   );
 };
 
-const DetailStack = () => {
+export const DetailStack = () => {
   return (
     <Stack.Navigator
       screenOptions={{
