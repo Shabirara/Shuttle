@@ -46,6 +46,7 @@ export default function Login(props) {
   const actionLogin = () => {
     console.log(userEmail, userPassword);
     dispatch(PostLogin({email: userEmail, password: userPassword}));
+    props.navigation.navigate('Bottom Tab');
   };
 
   const isError = useSelector(state => {
