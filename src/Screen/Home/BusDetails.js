@@ -16,38 +16,6 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
 import { setLoading } from '../../Store/globalAction'
 
-
-const REVIEW = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bb',
-    reviewer: 'Irham Raziqony',
-    review: '5/5 (Very Good)',
-    comment:
-      '"Bisnya nyaman dan bersih, tempat duduknya enak perjalanan jauh serasa dekat karna tidak terasa capek"',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bc',
-    reviewer: 'Ozie Irham',
-    review: '4/5 (Good)',
-    comment:
-      'Bisnya nyaman dan bersih, tempat duduknya enak perjalanan jauh serasa dekat karna tidak terasa capek',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28bd',
-    reviewer: 'Irham Raziqony',
-    review: '5/5 (Very Good)',
-    comment:
-      '"Bisnya nyaman dan bersih, tempat duduknya enak perjalanan jauh serasa dekat karna tidak terasa capek"',
-  },
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28be',
-    reviewer: 'Ozie Irham',
-    review: '4/5 (Good)',
-    comment:
-      'Bisnya nyaman dan bersih, tempat duduknya enak perjalanan jauh serasa dekat karna tidak terasa capek',
-  },
-];
-
 export default function BusDetails(props) {
   const detailData = useSelector(state => {
     return state.HomeReducer.busDetailsData;

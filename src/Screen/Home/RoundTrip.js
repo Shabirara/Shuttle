@@ -8,7 +8,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
 
 // redux
-import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setArrivalDateReducer } from '../Home/Redux/HomeAction'
+import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setArrivalDateReducer, setIsOneWay } from '../Home/Redux/HomeAction'
 import { useDispatch, useSelector } from 'react-redux'
 
 const RoundTrip = (props) => {
@@ -83,8 +83,9 @@ const RoundTrip = (props) => {
                 r_time: ""
             })
         );
-        setDepartureDateReducer(dateShorted);
-        setArrivalDateReducer(dateShortedArrival);
+        dispatch(setDepartureDateReducer(dateShorted));
+        dispatch(setArrivalDateReducer(dateShortedArrival));
+        dispatch(setIsOneWay(false))
     };
 
     const findData = (searchString) => {

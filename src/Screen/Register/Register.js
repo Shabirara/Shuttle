@@ -40,6 +40,7 @@ export default function Login(props) {
     console.log('A date has been picked: ', date);
     hideDatePicker();
     setSelectedDate(moment(date).format('DD MMMM YYYY'));
+    setUserBirthDay(moment(date).format('YYYY-MM-DD'));
   };
 
   const showPassword = () => {
@@ -54,10 +55,11 @@ export default function Login(props) {
   const actionRegister = () => {
     dispatch(
       PostRegister({
-        name: userName,
-        email: userEmail,
-        birthDay: userBirthDay,
-        password: userPassword,
+        "fullname": userName,
+        "email": userEmail,
+        "birthday": userBirthDay,
+        "password": userPassword,
+        "roles": "user"
       }),
     );
   };

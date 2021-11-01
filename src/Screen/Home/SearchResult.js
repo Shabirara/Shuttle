@@ -24,6 +24,7 @@ export default function SearchResult(props) {
     return state.HomeReducer.searchResultBus;
   });
   console.log(searchResultList, 'searchResultList');
+
   const [isChangeVisible, setChangeVisible] = useState(false);
   const [isSortVisible, setSortVisible] = useState(false);
   const [isFilterVisible, setFilterVisible] = useState(false);

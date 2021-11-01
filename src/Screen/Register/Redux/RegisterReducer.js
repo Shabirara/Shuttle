@@ -7,6 +7,7 @@ const InitialState = {
   access_token: '',
   isloading: false,
   isLogged: false,
+  postRegister: {},
 };
 
 export const RegisterReducer = (state = InitialState, action) => {
@@ -40,6 +41,11 @@ export const RegisterReducer = (state = InitialState, action) => {
       return {
         ...state,
         access_token: action.payload,
+      };
+    case 'POST_REGISTER':
+      return {
+        ...state,
+        postRegister: action.payload
       };
     default:
       return state;

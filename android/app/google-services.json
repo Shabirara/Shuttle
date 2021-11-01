@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "573103940805-jev717g1lbqmivvo8srfv3h4knar35gl.apps.googleusercontent.com",
+          "client_id": "573103940805-lbmhr7u8jlqri7botjcd0bm6l2i59h2c.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.shuttle",
-            "certificate_hash": "9e43a0dd84be0edc2919015a61ae6af6b58c404e"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {

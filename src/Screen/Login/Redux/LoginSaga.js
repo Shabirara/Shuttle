@@ -3,21 +3,15 @@ import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { setTokenToLoginReducer, PostLogin, setErrorLogin } from './LoginAction';
 import { navigate } from '../../../Utils/Navigate';
 import { ToastAndroid } from 'react-native';
+import { baseUrl } from '../../../Utils/Config'
 
 function* SagaLogin(action) {
   try {
     console.log(action.payload, 'berhasil');
-    const res = yield axios.post(
-      {
-        'method': 'POST',
-        'hostname': 'final-project-shuttle.herokuapp.com',
-        'path': '/user/login/',
-        'headers': {
-        },
-        'maxRedirects': 20,
-        'data': action.payload
-      }
-    );
+    const options = {
+      headers: { 'content-type': 'application/json' }
+    }
+    const res = yield axios.post(`${baseUrl}/user/login`, action.payload, options);
 
     console.log(res, 'res');
     if (res.status === 200) {
@@ -25,11 +19,11 @@ function* SagaLogin(action) {
       yield navigate('Bottom Tab');
     } else if (res.status === 400) {
       console.log(res);
-      // ToastAndroid.show(
-      //   'email or password are incorrect',
-      //   ToastAndroid.LONG,
-      //   ToastAndroid.TOP,
-      // );
+      ToastAndroid.show(
+        'email or password are incorrect',
+        ToastAndroid.LONG,
+        ToastAndroid.TOP,
+      );
     }
     console.log(action.payload, 'Login from saga');
   } catch (error) {

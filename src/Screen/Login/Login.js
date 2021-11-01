@@ -49,27 +49,25 @@ export default function Login(props) {
 
   const actionLogin = () => {
     console.log(userEmail, userPassword);
-    dispatch(PostLogin({ email: userEmail, password: userPassword }));
+    dispatch(PostLogin({ 'email': userEmail, 'password': userPassword }));
   };
 
-  const isError = useSelector(state => {
-    console.log(state, 'harus muncul');
-    return state.LoginReducer.isError;
-  });
-
-  GoogleSignin.configure({
-    webClientId: '573103940805-jev717g1lbqmivvo8srfv3h4knar35gl.apps.googleusercontent.com',
-  });
-
   async function onGoogleButtonPress() {
-    const { idToken } = await GoogleSignin.signIn();
-    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-    // setGoogleToken(googleCredential.token);
-    const data = {
-      token: googleCredential.token
-    };
-    console.log(googleCredential)
-    // return auth().signInWithCredential(googleCredential);
+    try {
+      GoogleSignin.configure(
+        {
+          offlineAccess: true,
+          webClientId: "1070118107911-m8bdq6m70vsm60bdsql1alp1ukoelfpm.apps.googleusercontent.com",
+          androidClientId: "573103940805-nutqthgajbhumvu392a2t3kth6r9ia9o.apps.googleusercontent.com",
+          scopes: ['profile', 'email']
+        });
+      await GoogleSignin.hasPlayServices();
+      console.log("reached google sign in");
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -179,12 +177,6 @@ export default function Login(props) {
             Skip for now
           </Text>
         </View>
-        {isError &&
-          ToastAndroid.show(
-            'email or password is incorrect',
-            ToastAndroid.LONG,
-            ToastAndroid.TOP,
-          )}
       </View>
     </ScrollView>
   );
