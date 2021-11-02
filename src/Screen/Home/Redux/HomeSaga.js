@@ -3,7 +3,7 @@ import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 import { baseUrl } from '../../../Utils/Config';
 import { navigate } from '../../../Utils/Navigate';
-import { setTerminalData, setSearchResultBus, setBusDetailsData, setBusReviewData } from './HomeAction';
+import { setTerminalData, setSearchResultBus, setBusDetailsData, setBusReviewData, setSeatData } from './HomeAction';
 
 function* SagaOneTrip() {
   console.log('OneTrip');
@@ -60,10 +60,22 @@ function* fetchBusReviewData(action) {
   }
 }
 
+function* fetchSeatData(action) {
+  try {
+    const res = yield axios.get(`${baseUrl}/order/?date=${action.payload.date}&bus_schedule_id=${action.payload.bus_schedule_id}`, { headers: { 'Authorization': `bearer ${action.payload.token}` } })
+    yield put(setSeatData(res.data.data))
+    console.log(res.data.data, 'Seat Data')
+  } catch (err) {
+    console.log(err)
+    console.log(action.payload.token)
+  }
+}
+
 export function* SagaHomeWorker() {
   yield all([SagaOneTrip(), SagaRoundTrip()]);
   yield takeLatest('GET_SEARCH_LOCATION_DATA', fetchLocationData);
   yield takeLatest('GET_TERMINAL_DATA', fetchTerminalData);
   yield takeLatest('GET_BUS_DETAILS_DATA', fetchBusDetailsData);
   yield takeLatest('GET_BUS_REVIEW_DATA', fetchBusReviewData);
+  yield takeLatest('GET_SEAT_DATA', fetchSeatData)
 }

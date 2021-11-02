@@ -15,7 +15,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../../Store/globalAction'
-import { setFromBusDetails } from './Redux/HomeAction';
+import { setFromBusDetails, getSeatData } from './Redux/HomeAction';
 import { navigate } from '../../Utils/Navigate';
 
 export default function BusDetails(props) {
@@ -31,9 +31,19 @@ export default function BusDetails(props) {
   const arrivalDateData = useSelector(state => {
     return state.HomeReducer.arrivalDate
   })
+  const busDepartureId = useSelector(state => {
+    return state.HomeReducer.busDepartureId
+  })
   const isLogged = useSelector(state => {
     return state.Global.isLogged
   })
+  const departureDateNum = useSelector(state => {
+    return state.HomeReducer.departureDateNum
+  })
+  const token = useSelector(state => {
+    return state.LoginReducer.access_token.token
+  })
+
 
   const dispatch = useDispatch()
 
@@ -44,11 +54,16 @@ export default function BusDetails(props) {
   };
 
   const onSelectSeat = () => {
+    dispatch(getSeatData({
+      date: departureDateNum,
+      bus_schedule_id: busDepartureId,
+      token: token
+    }))
     props.navigation.navigate('Select Seat');
   };
 
   const onLogin = () => {
-    navigate('Login', { params: "'Detail Stack', {screen: 'Bus Details'}" })
+    navigate('Login')
     dispatch(setFromBusDetails(true))
   }
 

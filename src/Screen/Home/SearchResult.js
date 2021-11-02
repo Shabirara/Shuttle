@@ -17,7 +17,7 @@ import Modal from 'react-native-modal';
 import OneWay from './OneWay';
 import RoundTrip from './RoundTrip';
 import { useSelector, useDispatch } from 'react-redux';
-import { getBusDetailsData, getBusReviewData } from './Redux/HomeAction';
+import { getBusDetailsData, getBusReviewData, setBusDepartureId, setBusReturnId } from './Redux/HomeAction';
 
 export default function SearchResult(props) {
   const searchResultList = useSelector(state => {
@@ -37,6 +37,7 @@ export default function SearchResult(props) {
     console.log(busDetailsId)
     dispatch(getBusDetailsData({ id: busDetailsId }))
     dispatch(getBusReviewData(busDetailsId))
+    dispatch(setBusDepartureId(busDetailsId))
   };
   const toggleChangeModal = () => {
     setChangeVisible(!isChangeVisible);
