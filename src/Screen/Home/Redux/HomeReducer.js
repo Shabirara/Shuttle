@@ -4,11 +4,17 @@ const initialState = {
   searchResultBus: [],
   busDetailsData: [],
   busReviewData: [],
+  seatData: [],
+  busDepartureId: '',
+  busReturnId: '',
   departureDate: '',
+  departureDateNum: '',
   arrivalDate: '',
   isOneWay: true,
-  isArrival: false,
+  isReturn: false,
   fromBusDetails: false,
+  selectedSeat: [],
+  selectedSeatReturn: []
 };
 
 export default function HomeReducer(state = initialState, action) {
@@ -55,10 +61,10 @@ export default function HomeReducer(state = initialState, action) {
         isOneWay: action.payload
       }
 
-    case 'SET_IS_ARRIVAL': {
+    case 'SET_IS_RETURN': {
       return {
         ...state,
-        isArrival: action.payload
+        isReturn: action.payload
       }
     }
 
@@ -66,6 +72,48 @@ export default function HomeReducer(state = initialState, action) {
       return {
         ...state,
         fromBusDetails: action.payload
+      }
+    }
+
+    case 'SET_BUS_DEPARTURE_ID': {
+      return {
+        ...state,
+        busDepartureId: action.payload
+      }
+    }
+
+    case 'SET_BUS_RETURN_ID': {
+      return {
+        ...state,
+        busArrivalId: action.payload
+      }
+    }
+
+    case 'SET_DEPARTURE_DATE_NUM': {
+      return {
+        ...state,
+        departureDateNum: action.payload
+      }
+    }
+
+    case 'SET_SEAT_DATA': {
+      return {
+        ...state,
+        seatData: action.payload
+      }
+    }
+
+    case 'SET_SELECTED_SEAT': {
+      return {
+        ...state,
+        selectedSeat: action.payload
+      }
+    }
+
+    case 'SET_SELECTED_SEAT_RETURN': {
+      return {
+        ...state,
+        selectedSeatReturn: action.payload
       }
     }
 

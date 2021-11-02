@@ -16,7 +16,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
 // redux
-import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setIsOneWay } from '../Home/Redux/HomeAction'
+import { getSearchLocationData, getTerminalData, setDepartureDateNum, setDepartureDateReducer, setIsOneWay } from '../Home/Redux/HomeAction'
 import { useDispatch, useSelector } from 'react-redux'
 
 // others
@@ -44,7 +44,7 @@ const OneWay = props => {
 
   const [dateVisible, setDateVisible] = useState(false);
   const [datePicked, setDatePicked] = useState("")
-  const [departureDate, setDepartureDate] = useState("")
+  const [departureDate, setDepartureDate] = useState('')
   const [dateShorted, setDateShorted] = useState('')
 
   useEffect(() => {
@@ -77,6 +77,7 @@ const OneWay = props => {
       r_time: ""
     }));
     dispatch(setDepartureDateReducer(dateShorted))
+    dispatch(setDepartureDateNum(departureDate))
     dispatch(setIsOneWay(true))
   };
 

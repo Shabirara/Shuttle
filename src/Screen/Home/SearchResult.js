@@ -17,7 +17,13 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
 import OneWay from './OneWay';
 import RoundTrip from './RoundTrip';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  getBusDetailsData,
+  getBusReviewData,
+  setBusDepartureId,
+  setBusReturnId,
+} from './Redux/HomeAction';
 
 export default function SearchResult(props) {
   const searchResultList = useSelector(state => {

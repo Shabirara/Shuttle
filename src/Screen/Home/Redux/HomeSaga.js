@@ -9,6 +9,7 @@ import {
   setSearchResultBus,
   setBusDetailsData,
   setBusReviewData,
+  setSeatData,
 } from './HomeAction';
 
 function* SagaOneTrip() {
@@ -76,9 +77,24 @@ function* fetchBusReviewData(action) {
   }
 }
 
+function* fetchSeatData(action) {
+  try {
+    const res = yield axios.get(
+      `${baseUrl}/order/?date=${action.payload.date}&bus_schedule_id=${action.payload.bus_schedule_id}`,
+      {headers: {Authorization: `bearer ${action.payload.token}`}},
+    );
+    yield put(setSeatData(res.data.data));
+    console.log(res.data.data, 'Seat Data');
+  } catch (err) {
+    console.log(err);
+    console.log(action.payload.token);
+  }
+}
+
 export function* SagaHomeWorker() {
   yield takeLatest('GET_SEARCH_LOCATION_DATA', fetchLocationData);
   yield takeLatest('GET_TERMINAL_DATA', fetchTerminalData);
   yield takeLatest('GET_BUS_DETAILS_DATA', fetchBusDetailsData);
   yield takeLatest('GET_BUS_REVIEW_DATA', fetchBusReviewData);
+  yield takeLatest('GET_SEAT_DATA', fetchSeatData);
 }

@@ -75,9 +75,9 @@ export const setIsOneWay = (payload) => {
     }
 }
 
-export const setIsArrival = (payload) => {
+export const setIsReturn = (payload) => {
     return {
-        type: 'SET_IS_ARRIVAL',
+        type: 'SET_IS_RETURN',
         payload
     }
 }
@@ -85,6 +85,55 @@ export const setIsArrival = (payload) => {
 export const setFromBusDetails = (payload) => {
     return {
         type: 'SET_FROM_BUS_DETAILS',
+        payload
+    }
+}
+
+export const setBusDepartureId = (payload) => {
+    return {
+        type: 'SET_BUS_DEPARTURE_ID',
+        payload
+    }
+}
+
+export const setBusReturnId = (payload) => {
+    return {
+        type: 'SET_BUS_RETURN_ID',
+        payload
+    }
+}
+
+export const getSeatData = (payload) => {
+    return {
+        type: 'GET_SEAT_DATA',
+        payload
+    }
+}
+
+export const setSeatData = (payload) => {
+    return {
+        type: 'SET_SEAT_DATA',
+        payload
+    }
+}
+
+export const setDepartureDateNum = (payload) => {
+    return {
+        type: 'SET_DEPARTURE_DATE_NUM',
+        payload
+    }
+}
+
+export const setSelectedSeat = (payload) => {
+    return {
+        type: 'SET_SELECTED_SEAT',
+        payload
+    }
+}
+
+export const setSelectedSeatReturn = (payload) => {
+    return {
+        type: 'SET_SELECTED_SEAT_RETURN',
         payload
     }
 }
