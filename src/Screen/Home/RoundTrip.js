@@ -8,7 +8,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
 
 // redux
-import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setArrivalDateReducer, setIsOneWay } from '../Home/Redux/HomeAction'
+import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setArrivalDateReducer, setIsOneWay, setTerminalDepartureId, setTerminalArrivalId, setDepartureDateNum, setReturnDate, setPassengerNum, setIsReturn } from '../Home/Redux/HomeAction'
 import { useDispatch, useSelector } from 'react-redux'
 
 const RoundTrip = (props) => {
@@ -40,6 +40,7 @@ const RoundTrip = (props) => {
     const [arrivalDate, setArrivalDate] = useState("")
     const [dateShorted, setDateShorted] = useState('')
     const [dateShortedArrival, setDateShortedArrival] = useState('')
+    const [arrivalDateRaw, setArrivalDateRaw] = useState('')
 
     const toggleDate = () => {
         setDateVisible(!dateVisible)
@@ -64,13 +65,23 @@ const RoundTrip = (props) => {
         const datenum = moment(date).format('YYYY-MM-DD')
         setDatePickedA(datestring);
         setArrivalDate(datenum);
-        setDateShortedArrival(dateshort)
+        setDateShortedArrival(dateshort);
+        setArrivalDateRaw(date)
         setDateVisibleA(false);
     }
 
     const passenger = [1, 2, 3, 4]
 
     const onSearch = () => {
+        dispatch(setDepartureDateReducer(dateShorted));
+        dispatch(setArrivalDateReducer(dateShortedArrival));
+        dispatch(setIsOneWay(false))
+        dispatch(setTerminalDepartureId(terminalStartId))
+        dispatch(setTerminalArrivalId(terminalEndId))
+        dispatch(setDepartureDateNum(departureDate))
+        dispatch(setReturnDate(arrivalDateRaw))
+        dispatch(setPassengerNum(passengerValue))
+        dispatch(setIsReturn(false))
         dispatch(
             getSearchLocationData({
                 departure_shuttle_id: terminalStartId,
@@ -83,9 +94,6 @@ const RoundTrip = (props) => {
                 r_time: ""
             })
         );
-        dispatch(setDepartureDateReducer(dateShorted));
-        dispatch(setArrivalDateReducer(dateShortedArrival));
-        dispatch(setIsOneWay(false))
     };
 
     const findData = (searchString) => {

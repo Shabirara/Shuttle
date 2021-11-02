@@ -3,6 +3,7 @@ import { all, put, takeLatest } from 'redux-saga/effects';
 import { setTokenToRegisterReducer } from './RegisterAction';
 import { baseUrl } from '../../../Utils/Config';
 import { navigate } from '../../../Utils/Navigate';
+import { setIsLogged } from '../../../Store/globalAction';
 
 function* SagaRegister(action) {
   try {
@@ -15,6 +16,7 @@ function* SagaRegister(action) {
     console.log(res, 'res');
     if (res.status === 200) {
       yield put(setTokenToRegisterReducer(res.data));
+      yield put(setIsLogged(true))
       yield navigate('Bottom Tab');
     } else if (res.status === 400) {
       console.log(res);

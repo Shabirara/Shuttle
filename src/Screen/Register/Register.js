@@ -26,7 +26,6 @@ export default function Login(props) {
   const [userEmail, setUserEmail] = useState('');
   const [userBirthDay, setUserBirthDay] = useState('');
   const [userPassword, setUserPassword] = useState('');
-  const [userRoles, setUserRoles] = useState('');
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
