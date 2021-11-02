@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   View,
   Text,
@@ -6,16 +6,18 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
-import {Input, Image, Avatar, Accessory, Button} from 'react-native-elements';
+import { Input, Image, Avatar, Accessory, Button } from 'react-native-elements';
 // import {createStackNavigator, createAppContainer} from 'react-navigation';
 // import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // import editprofile from './../../Assets/Images/profile.png';
-import {useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import styles from './profile-Style';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
+import { setIsLogged } from '../../Store/globalAction';
 
 export default function Profile(props) {
+  const dispatch = useDispatch()
   const getProfile = async () => {
     try {
       const result = await axios.get(
@@ -33,15 +35,16 @@ export default function Profile(props) {
   };
 
   const onLogin = () => {
+    dispatch(setIsLogged(false))
     props.navigation.navigate('Login');
   };
 
   const editProf = () => {
-    props.navigation.navigate('Detail Stack', {screen: 'Edit Profile'});
+    props.navigation.navigate('Detail Stack', { screen: 'Edit Profile' });
   };
 
   const editPassword = () => {
-    props.navigation.navigate('Detail Stack', {screen: 'Change Password'});
+    props.navigation.navigate('Detail Stack', { screen: 'Change Password' });
   };
 
   return (
@@ -49,7 +52,7 @@ export default function Profile(props) {
       <View style={styles.mainContainer}>
         <View style={styles.avatarContainer}>
           <Avatar
-            containerStyle={{marginBottom: 20, marginTop: 20}}
+            containerStyle={{ marginBottom: 20, marginTop: 20 }}
             size="xlarge"
             rounded
             source={{

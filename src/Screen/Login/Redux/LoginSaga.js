@@ -1,29 +1,38 @@
 import axios from 'axios';
-import {all, put, takeLatest} from 'redux-saga/effects';
-import {setTokenToLoginReducer} from './LoginAction';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { setTokenToLoginReducer, PostLogin, setErrorLogin } from './LoginAction';
+import { navigate } from '../../../Utils/Navigate';
+import { baseUrl } from '../../../Utils/Config'
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsLogged } from '../../../Store/globalAction';
+
+
 
 function* SagaLogin(action) {
   try {
-    const res = yield axios.post(
-      'https://final-project-shuttle.herokuapp.com/user/login/',
-      action.payload,
-    );
+    console.log(action.payload, 'berhasil');
 
-    yield put(setTokenToLoginReducer(res.data));
-    console.log('Login from saga');
+    const options = {
+      headers: { 'content-type': 'application/json' }
+    }
+    const res = yield axios.post(`${baseUrl}/user/login`, action.payload, options);
+    console.log(res, 'res');
+
+    if (res.status === 200) {
+      yield put(setTokenToLoginReducer(res.data));
+      yield put(setIsLogged(true))
+      navigate.params ? yield navigate(navigate.params) : yield navigate('Bottom Tab')
+    } else if (res.status === 400) {
+      console.log(res);
+    }
+
+    console.log(action.payload, 'Login from saga');
+
   } catch (error) {
-    console.log(error);
+    console.log(error, 'Error Login');
+    yield put(setErrorLogin());
   }
 }
-
-// function* SagaForgotPassword() {
-//   try {
-//     // const res = yield axios.post('url', {body});
-//     // yield put(namaAction(res.data.access_token));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 export function* SagaLoginWorker() {
   yield takeLatest('POST_LOGIN', SagaLogin);

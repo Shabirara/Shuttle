@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {ms} from 'react-native-size-matters';
+import { StyleSheet } from 'react-native';
+import { ms } from 'react-native-size-matters';
 
 export default StyleSheet.create({
   logoContainer: {
@@ -38,7 +38,7 @@ export default StyleSheet.create({
     borderWidth: ms(0.2),
     borderColor: '#777',
     marginBottom: ms(16),
-
+    color: 'black',
     borderRadius: ms(2),
   },
   checkBox: {
@@ -58,6 +58,9 @@ export default StyleSheet.create({
   },
   rememberText: {
     paddingBottom: ms(4),
+    fontFamily: 'Montserrat-Regular',
+    fontSize: ms(10),
+    color: '#ABB3BB'
   },
   forgotText: {
     color: 'red',

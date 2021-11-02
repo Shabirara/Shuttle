@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TextInput,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 
 import {Image, CheckBox, Input, Button} from 'react-native-elements';
@@ -16,12 +17,16 @@ import facebook from '../../Assets/Images/facebook.png';
 import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
 import {setLoading} from '../Store/globalAction';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {PostLogin} from './Redux/LoginAction';
+import {setTokenToRegisterReducer} from '../Register/Redux/RegisterAction';
+import {setTokenToLoginReducer} from './Redux/LoginAction';
+
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 export default function Login(props) {
   const onLogin = () => {
-    props.navigation.navigate('Register');
+    props.navigation.navigate('Bottom Tab');
   };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
@@ -29,6 +34,11 @@ export default function Login(props) {
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
   };
+
+  const onSignUp = () => {
+    props.navigation.navigate('Register');
+  };
+
   const onSkip = () => {
     props.navigation.navigate('Bottom Tab');
   };
@@ -36,8 +46,28 @@ export default function Login(props) {
   const dispatch = useDispatch();
 
   const actionLogin = () => {
+    console.log(userEmail, userPassword);
     dispatch(PostLogin({email: userEmail, password: userPassword}));
   };
+
+  async function onGoogleButtonPress() {
+    try {
+      GoogleSignin.configure({
+        offlineAccess: true,
+        webClientId:
+          '1070118107911-m8bdq6m70vsm60bdsql1alp1ukoelfpm.apps.googleusercontent.com',
+        androidClientId:
+          '573103940805-nutqthgajbhumvu392a2t3kth6r9ia9o.apps.googleusercontent.com',
+        scopes: ['profile', 'email'],
+      });
+      await GoogleSignin.hasPlayServices();
+      console.log('reached google sign in');
+      const userInfo = await GoogleSignin.signIn();
+      console.log(userInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <ScrollView>
@@ -113,36 +143,36 @@ export default function Login(props) {
           </View>
 
           <View style={styles.sosmedContainer}>
-            <View style={styles.googleContainer}>
+            <TouchableOpacity
+              style={styles.googleContainer}
+              onPress={onGoogleButtonPress}>
               <Image
                 resizeMode="contain"
                 style={styles.medIcon}
                 source={google}
               />
-            </View>
+            </TouchableOpacity>
 
-            <View style={styles.facebookContainer}>
+            <TouchableOpacity style={styles.facebookContainer}>
               <Image
                 resizeMode="contain"
                 style={styles.medIcon}
                 source={facebook}
               />
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
-
         <View style={styles.haveNoSignUpContainer}>
           <View>
             <Text style={styles.haveNoAccountText}>Don't have an account?</Text>
           </View>
 
           <View>
-            <TouchableOpacity onPress={onLogin}>
+            <TouchableOpacity onPress={onSignUp}>
               <Text style={styles.signUp}>Sign Up</Text>
             </TouchableOpacity>
           </View>
         </View>
-
         <View>
           <Text onPress={onSkip} style={styles.skipText}>
             Skip for now

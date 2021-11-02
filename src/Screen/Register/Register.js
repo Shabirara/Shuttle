@@ -11,6 +11,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { PostRegister } from './Redux/RegisterAction';
 
 export default function Login(props) {
   const onLogin = () => {
@@ -20,6 +22,11 @@ export default function Login(props) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userBirthDay, setUserBirthDay] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [userRoles, setUserRoles] = useState('');
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -33,6 +40,7 @@ export default function Login(props) {
     console.log('A date has been picked: ', date);
     hideDatePicker();
     setSelectedDate(moment(date).format('DD MMMM YYYY'));
+    setUserBirthDay(moment(date).format('YYYY-MM-DD'));
   };
 
   const showPassword = () => {
@@ -41,6 +49,19 @@ export default function Login(props) {
 
   const onSkip = () => {
     props.navigation.navigate('Bottom Tab');
+  };
+
+  const dispatch = useDispatch();
+  const actionRegister = () => {
+    dispatch(
+      PostRegister({
+        "fullname": userName,
+        "email": userEmail,
+        "birthday": userBirthDay,
+        "password": userPassword,
+        "roles": "user"
+      }),
+    );
   };
 
   return (
@@ -68,8 +89,14 @@ export default function Login(props) {
               placeholder="Full name"
               containerStyle={styles.inputEmail}
               inputContainerStyle={styles.borderLess}
+              onChangeText={text => {
+                setUserName(text);
+              }}
             />
             <Input
+              onChangeText={text => {
+                setUserBirthDay(text);
+              }}
               placeholder="Search your birthday"
               containerStyle={styles.inputEmail}
               onPressIn={showDatePicker}
@@ -78,12 +105,18 @@ export default function Login(props) {
               rightIcon={<AntDesign name="calendar" />}
             />
             <Input
+              onChangeText={text => {
+                setUserEmail(text);
+              }}
               placeholder="Enter your email"
               containerStyle={styles.inputEmail}
               inputContainerStyle={styles.borderLess}
             />
             <View style={styles.eyeOff}>
               <Input
+                onChangeText={text => {
+                  setUserPassword(text);
+                }}
                 placeholder="Enter your password"
                 secureTextEntry={!isShowPassword}
                 containerStyle={styles.inputEmail}
@@ -111,7 +144,7 @@ export default function Login(props) {
           </View>
 
           <View style={styles.loginContainer}>
-            <TouchableOpacity style={styles.button} onPress={onLogin}>
+            <TouchableOpacity style={styles.button} onPress={actionRegister} >
               <Text style={styles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
@@ -158,7 +191,7 @@ export default function Login(props) {
         </View>
 
         <View>
-          <Text onPress={onSkip} style={styles.skipText}>
+          <Text style={styles.skipText} onPress={onSkip}>
             Skip for now
           </Text>
         </View>

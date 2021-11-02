@@ -8,7 +8,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
 
 // redux
-import { getSearchLocationData, getTerminalData } from '../Home/Redux/HomeAction'
+import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setArrivalDateReducer, setIsOneWay } from '../Home/Redux/HomeAction'
 import { useDispatch, useSelector } from 'react-redux'
 
 const RoundTrip = (props) => {
@@ -38,6 +38,8 @@ const RoundTrip = (props) => {
     const [datePickedA, setDatePickedA] = useState("")
     const [departureDate, setDepartureDate] = useState("")
     const [arrivalDate, setArrivalDate] = useState("")
+    const [dateShorted, setDateShorted] = useState('')
+    const [dateShortedArrival, setDateShortedArrival] = useState('')
 
     const toggleDate = () => {
         setDateVisible(!dateVisible)
@@ -48,33 +50,42 @@ const RoundTrip = (props) => {
 
     const handleDate = (date) => {
         const datestring = moment(date).format("dddd, DD MMM YYYY")
+        const dateshort = moment(date).format('ddd, DD MMM')
         const datenum = moment(date).format('YYYY-MM-DD')
         setDatePicked(datestring);
         setDepartureDate(datenum);
+        setDateShorted(dateshort)
         setDateVisible(false);
     }
 
     const handleDateA = (date) => {
         const datestring = moment(date).format("dddd, DD MMM YYYY")
+        const dateshort = moment(date).format('ddd, DD MMM')
         const datenum = moment(date).format('YYYY-MM-DD')
         setDatePickedA(datestring);
         setArrivalDate(datenum);
+        setDateShortedArrival(dateshort)
         setDateVisibleA(false);
     }
 
     const passenger = [1, 2, 3, 4]
 
     const onSearch = () => {
-        dispatch(getSearchLocationData({
-            departure_shuttle_id: terminalStartId,
-            arrival_shuttle_id: terminalEndId,
-            departure_date: departureDate,
-            return_date: arrivalDate,
-            passenger: passengerValue,
-            order_type: "RoundTrip",
-            time: "",
-            r_time: ""
-        }))
+        dispatch(
+            getSearchLocationData({
+                departure_shuttle_id: terminalStartId,
+                arrival_shuttle_id: terminalEndId,
+                departure_date: departureDate,
+                return_date: arrivalDate,
+                passenger: passengerValue,
+                order_type: "RoundTrip",
+                time: "",
+                r_time: ""
+            })
+        );
+        dispatch(setDepartureDateReducer(dateShorted));
+        dispatch(setArrivalDateReducer(dateShortedArrival));
+        dispatch(setIsOneWay(false))
     };
 
     const findData = (searchString) => {

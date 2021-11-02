@@ -195,15 +195,6 @@ export default function SearchResult(props) {
     {title: 'Harapan Jaya', active: false},
   ]);
 
-  const App = () => (
-    <View style={[styles.container, styles.horizontal]}>
-      <ActivityIndicator />
-      <ActivityIndicator size="large" />
-      <ActivityIndicator size="small" color="#0000ff" />
-      <ActivityIndicator size="large" color="#00ff00" />
-    </View>
-  );
-
   return (
     <>
       <Modal
