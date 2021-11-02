@@ -26,6 +26,13 @@ export const setSearchResultBus = (payload) => {
     }
 }
 
+export const setSearchResultReturn = (payload) => {
+    return {
+        type: 'SET_SEARCH_RESULT_RETURN',
+        payload
+    }
+}
+
 export const getBusDetailsData = (payload) => {
     return {
         type: 'GET_BUS_DETAILS_DATA',
@@ -40,6 +47,35 @@ export const setBusDetailsData = (payload) => {
     }
 }
 
+export const setBusProviderName = (payload) => {
+    return {
+        type: 'SET_BUS_PROVIDER_NAME',
+        payload
+    }
+}
+
+export const setBusProviderNameReturn = (payload) => {
+    return {
+        type: 'SET_BUS_PROVIDER_NAME_RETURN',
+        payload
+    }
+}
+
+// get search result
+export const setTerminalDepartureId = (payload) => {
+    return {
+        type: 'SET_TERMINAL_DEPARTURE_ID',
+        payload
+    }
+}
+
+export const setTerminalArrivalId = (payload) => {
+    return {
+        type: 'SET_TERMINAL_ARRIVAL_ID',
+        payload
+    }
+}
+
 export const setDepartureDateReducer = (payload) => {
     return {
         type: 'SET_DEPARTURE_DATE',
@@ -47,9 +83,30 @@ export const setDepartureDateReducer = (payload) => {
     }
 }
 
+export const setDepartureDateNum = (payload) => {
+    return {
+        type: 'SET_DEPARTURE_DATE_NUM',
+        payload
+    }
+}
+
+export const setDepartureDateString = (payload) => {
+    return {
+        type: 'SET_DEPARTURE_DATE_STRING',
+        payload
+    }
+}
+
 export const setArrivalDateReducer = (payload) => {
     return {
         type: 'SET_ARRIVAL_DATE',
+        payload
+    }
+}
+
+export const setReturnDate = (payload) => {
+    return {
+        type: 'SET_RETURN_DATE',
         payload
     }
 }
@@ -117,13 +174,6 @@ export const setSeatData = (payload) => {
     }
 }
 
-export const setDepartureDateNum = (payload) => {
-    return {
-        type: 'SET_DEPARTURE_DATE_NUM',
-        payload
-    }
-}
-
 export const setSelectedSeat = (payload) => {
     return {
         type: 'SET_SELECTED_SEAT',
@@ -134,6 +184,83 @@ export const setSelectedSeat = (payload) => {
 export const setSelectedSeatReturn = (payload) => {
     return {
         type: 'SET_SELECTED_SEAT_RETURN',
+        payload
+    }
+}
+
+export const postOrder = (payload) => {
+    return {
+        type: POST_ORDER,
+        payload
+    }
+}
+
+export const setOrderId = (payload) => {
+    return {
+        type: 'SET_ORDER_ID',
+        payload
+    }
+}
+
+export const setDepartureCity = (payload) => {
+    return {
+        type: 'SET_DEPARTURE_CITY',
+        payload
+    }
+}
+
+export const setArrivalCity = (payload) => {
+    return {
+        type: 'SET_ARRIVAL_CITY',
+        payload
+    }
+}
+
+export const setDepartureCityReturn = (payload) => {
+    return {
+        type: 'SET_DEPARTURE_CITY_RETURN',
+        payload
+    }
+}
+
+export const setArrivalCityReturn = (payload) => {
+    return {
+        type: 'SET_ARRIVAL_CITY_RETURN',
+        payload
+    }
+}
+
+export const setDepartureTime = (payload) => {
+    return {
+        type: 'SET_DEPARTURE_TIME',
+        payload
+    }
+}
+
+export const setArrivalTime = (payload) => {
+    return {
+        type: 'SET_ARRIVAL_TIME',
+        payload
+    }
+}
+
+export const setDepartureTimeReturn = (payload) => {
+    return {
+        type: 'SET_DEPARTURE_TIME_RETURN',
+        payload
+    }
+}
+
+export const setArrivalTimeReturn = (payload) => {
+    return {
+        type: 'SET_ARRIVAL_TIME_RETURN',
+        payload
+    }
+}
+
+export const setPassengerNum = (payload) => {
+    return {
+        type: 'SET_PASSENGER_NUM',
         payload
     }
 }

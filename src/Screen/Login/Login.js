@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import {Image, CheckBox, Input, Button} from 'react-native-elements';
+import { Image, CheckBox, Input, Button } from 'react-native-elements';
 import styles from './login-Sytyle';
 import logoShuttle from '../../Assets/Images/shuttle-logo.png';
 import inToShuttle from '../../Assets/Images/Group-179.png';
@@ -16,17 +16,24 @@ import orOptional from '../../Assets/Images/orOptional.png';
 import facebook from '../../Assets/Images/facebook.png';
 import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
-import {setLoading} from '../Store/globalAction';
-import {useDispatch, useSelector} from 'react-redux';
-import {PostLogin} from './Redux/LoginAction';
-import {setTokenToRegisterReducer} from '../Register/Redux/RegisterAction';
-import {setTokenToLoginReducer} from './Redux/LoginAction';
+import { setLoading } from '../Store/globalAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { PostLogin } from './Redux/LoginAction';
+import { setTokenToRegisterReducer } from '../Register/Redux/RegisterAction';
+import { setTokenToLoginReducer } from './Redux/LoginAction';
 
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+
+
 
 export default function Login(props) {
+  const isLogged = useSelector(state => { return state.Global.isLogged })
+  isLogged ? props.navigation.navigate('Bottom Tab') : null
+
+  const fromBusDetails = useSelector(state => { return state.HomeReducer.fromBusDetails })
   const onLogin = () => {
-    props.navigation.navigate('Bottom Tab');
+    fromBusDetails ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' }) : props.navigation.navigate('Bottom Tab');
   };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
@@ -47,20 +54,19 @@ export default function Login(props) {
 
   const actionLogin = () => {
     console.log(userEmail, userPassword);
-    dispatch(PostLogin({email: userEmail, password: userPassword}));
+    dispatch(PostLogin({ email: userEmail, password: userPassword }));
   };
 
   async function onGoogleButtonPress() {
     try {
-      GoogleSignin.configure({
+
+      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.configure({
         offlineAccess: true,
         webClientId:
-          '1070118107911-m8bdq6m70vsm60bdsql1alp1ukoelfpm.apps.googleusercontent.com',
-        androidClientId:
           '573103940805-nutqthgajbhumvu392a2t3kth6r9ia9o.apps.googleusercontent.com',
-        scopes: ['profile', 'email'],
+        scopes: ['https://www.googleapis.com/auth/userinfo.profile'],
       });
-      await GoogleSignin.hasPlayServices();
       console.log('reached google sign in');
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);

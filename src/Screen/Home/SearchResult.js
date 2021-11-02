@@ -22,21 +22,64 @@ import {
   getBusDetailsData,
   getBusReviewData,
   setBusDepartureId,
+  setBusProviderName,
+  setBusProviderNameReturn,
   setBusReturnId,
 } from './Redux/HomeAction';
+import moment from 'moment';
 
 export default function SearchResult(props) {
   const searchResultList = useSelector(state => {
     return state.HomeReducer.searchResultBus;
   });
-  console.log(searchResultList, 'ini console');
+  console.log(searchResultList, 'searchResultList');
+  const dataReturn = useSelector(state => {
+    return state.HomeReducer.searchResultReturn;
+  });
+  const isReturn = useSelector(state => {
+    return state.HomeReducer.isReturn;
+  });
+  const departureCity = useSelector(state => {
+    return state.HomeReducer.departureCity;
+  });
+  const arrivalCity = useSelector(state => {
+    return state.HomeReducer.arrivalCity;
+  });
+  const departureDate = useSelector(state => {
+    return state.HomeReducer.departureDateString;
+  });
+  const returnDateRaw = useSelector(state => {
+    return state.HomeReducer.returnDate;
+  });
+  const returnDate = moment(returnDateRaw).format('ddd, DD MMM YYYY');
+  const isOneWay = useSelector(state => {
+    return state.HomeReducer.isOneWay;
+  });
+
   const [isChangeVisible, setChangeVisible] = useState(false);
   const [isSortVisible, setSortVisible] = useState(false);
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [activeCheck, setActiveCheck] = useState(0);
+  const [busDetailsId, setBusDetailsId] = useState('');
+  const [provider, setProvider] = useState('');
+
+  const [active, setActive] = useState(isOneWay ? 0 : 1);
+
+  const dispatch = useDispatch();
 
   const onBusDetails = () => {
-    props.navigation.navigate('Bus Details');
+    console.log(busDetailsId);
+    console.log(provider, 'PROVIDER');
+    if (isReturn) {
+      dispatch(setBusReturnId(busDetailsId));
+      dispatch(setBusProviderNameReturn(provider));
+    } else {
+      dispatch(setBusDepartureId(busDetailsId));
+      dispatch(setBusProviderName(provider));
+    }
+
+    dispatch(getBusDetailsData({id: busDetailsId}));
+    dispatch(getBusReviewData(busDetailsId));
   };
   const toggleChangeModal = () => {
     setChangeVisible(!isChangeVisible);
@@ -47,7 +90,6 @@ export default function SearchResult(props) {
   const toggleFilterModal = () => {
     setFilterVisible(!isFilterVisible);
   };
-  const [active, setActive] = useState(0);
   const dataTab = [
     {
       title: 'One Way',
@@ -56,6 +98,36 @@ export default function SearchResult(props) {
       title: 'Round Trip',
     },
   ];
+
+  const checklist = [
+    'Lowest price',
+    'Earliest departure time',
+    'Earliest arrival time',
+    'Shortest duration',
+  ];
+
+  const [filterDeparture, setFilterDeparture] = useState([
+    {title: '00:00 - 16:00', active: false},
+    {title: '06:00 - 12:00', active: false},
+    {title: '12:00 - 18:00', active: false},
+    {title: '18:00 - 00:00', active: false},
+  ]);
+  const [filterArrival, setFilterArrival] = useState([
+    {title: '00:00 - 16:00', active: false},
+    {title: '06:00 - 12:00', active: false},
+    {title: '12:00 - 18:00', active: false},
+    {title: '18:00 - 00:00', active: false},
+  ]);
+  const [busVendor, setBusVendor] = useState([
+    {title: 'KYM Trans', active: false},
+    {title: 'PT Sumber Bahagia', active: false},
+    {title: 'DAMRI', active: false},
+    {title: 'Harapan Jaya', active: false},
+    {title: 'KYM Trans', active: false},
+    {title: 'PT Sumber Bahagia', active: false},
+    {title: 'Harapan Jaya', active: false},
+  ]);
+
   const Item = ({
     bus,
     type,
@@ -67,7 +139,13 @@ export default function SearchResult(props) {
     terminalStart,
     terminalEnd,
   }) => (
-    <TouchableOpacity style={styles.item} onPress={onBusDetails}>
+    <TouchableOpacity
+      style={styles.item}
+      onPress={() => {
+        setBusDetailsId(id);
+        setProvider(bus);
+        onBusDetails();
+      }}>
       <View
         style={{
           alignItems: 'center',
@@ -158,12 +236,6 @@ export default function SearchResult(props) {
       </View>
     </TouchableOpacity>
   );
-  const checklist = [
-    'Lowest price',
-    'Earliest departure time',
-    'Earliest arrival time',
-    'Shortest duration',
-  ];
 
   const renderItem = ({item}) => (
     <Item
@@ -178,28 +250,6 @@ export default function SearchResult(props) {
       terminalEnd={item.arrivalShuttle}
     />
   );
-
-  const [filterDeparture, setFilterDeparture] = useState([
-    {title: '00:00 - 16:00', active: false},
-    {title: '06:00 - 12:00', active: false},
-    {title: '12:00 - 18:00', active: false},
-    {title: '18:00 - 00:00', active: false},
-  ]);
-  const [filterArrival, setFilterArrival] = useState([
-    {title: '00:00 - 16:00', active: false},
-    {title: '06:00 - 12:00', active: false},
-    {title: '12:00 - 18:00', active: false},
-    {title: '18:00 - 00:00', active: false},
-  ]);
-  const [busVendor, setBusVendor] = useState([
-    {title: 'KYM Trans', active: false},
-    {title: 'PT Sumber Bahagia', active: false},
-    {title: 'DAMRI', active: false},
-    {title: 'Harapan Jaya', active: false},
-    {title: 'KYM Trans', active: false},
-    {title: 'PT Sumber Bahagia', active: false},
-    {title: 'Harapan Jaya', active: false},
-  ]);
 
   return (
     <>
@@ -436,14 +486,27 @@ export default function SearchResult(props) {
 
       <SafeAreaView style={{flex: 1}}>
         <View style={styles.jalurTanggal}>
-          <Text style={styles.jalur}>Jakarta ➜ Surabaya</Text>
-          <Text style={styles.tanggal}>Sat, 9 Okt 2021</Text>
-          <Button
-            title="Change"
-            onPress={toggleChangeModal}
-            titleStyle={styles.change}
-            buttonStyle={styles.buttonChange}
-          />
+          <Text style={styles.jalur}>
+            {isReturn ? arrivalCity : departureCity} ➜{' '}
+            {isReturn ? departureCity : arrivalCity}
+          </Text>
+          <Text style={styles.tanggal}>
+            {isReturn ? returnDate : departureDate}
+          </Text>
+          {isReturn ? (
+            <View style={styles.buttonChange}>
+              <Text style={[styles.change, {alignSelf: 'center'}]}>
+                Return Trip
+              </Text>
+            </View>
+          ) : (
+            <Button
+              title="Change"
+              onPress={toggleChangeModal}
+              titleStyle={styles.change}
+              buttonStyle={styles.buttonChange}
+            />
+          )}
         </View>
 
         <View style={styles.floatings}>
@@ -472,7 +535,7 @@ export default function SearchResult(props) {
         </View>
 
         <FlatList
-          data={searchResultList}
+          data={isReturn ? dataReturn : searchResultList}
           renderItem={renderItem}
           keyExtractor={item => item.busId}
         />

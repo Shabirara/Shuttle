@@ -1,9 +1,10 @@
+import moment from 'moment';
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { Card, Divider } from 'react-native-elements';
 import { ms } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSelectedSeat, setSelectedSeatReturn } from './Redux/HomeAction';
+import { setIsReturn, setSelectedSeat, setSelectedSeatReturn } from './Redux/HomeAction';
 
 const SelectSeat = (props) => {
     const seatData = useSelector(state => {
@@ -12,6 +13,7 @@ const SelectSeat = (props) => {
     const isReturn = useSelector(state => {
         return state.HomeReducer.isReturn
     })
+    const oneWay = useSelector(state => { return state.HomeReducer.isOneWay })
 
     const [seatDataRow, setSeatDataRow] = useState(seatData)
     const selected = [];
@@ -23,9 +25,12 @@ const SelectSeat = (props) => {
     const dispatch = useDispatch()
 
     const onPassengerDetail = () => {
-        isReturn ? dispatch(setSelectedSeatReturn(selected)) : dispatch(setSelectedSeat(selected))
+        isReturn ? dispatch(setSelectedSeatReturn(selected)) &&
+            dispatch(setIsReturn(false)) &&
+            props.navigation.navigate('Passenger Detail') :
+            dispatch(setSelectedSeat(selected)) && oneWay ? props.navigation.navigate('Passenger Detail') :
+                dispatch(setIsReturn(true)) && props.navigation.navigate('Search Result')
         console.log(`${isReturn} = isReturn`)
-        props.navigation.navigate('Passenger Detail')
     }
 
     return (
@@ -73,7 +78,7 @@ const SelectSeat = (props) => {
             </View>
             <Card containerStyle={styles.card}>
                 <TouchableOpacity onPress={onPassengerDetail} style={styles.next}>
-                    <Text style={styles.fontButton}>Fill Passenger Detail</Text>
+                    <Text style={styles.fontButton}>{oneWay || isReturn ? 'Fill Passenger Detail' : 'Search Return Bus'}</Text>
                 </TouchableOpacity>
             </Card>
         </ScrollView>

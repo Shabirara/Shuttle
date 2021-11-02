@@ -7,6 +7,7 @@ import {navigate} from '../../../Utils/Navigate';
 import {
   setTerminalData,
   setSearchResultBus,
+  setSearchResultReturn,
   setBusDetailsData,
   setBusReviewData,
   setSeatData,
@@ -30,7 +31,8 @@ function* fetchLocationData(action) {
     const res = yield axios.get(
       `${baseUrl}/search?departure_shuttle_id=${action.payload.departure_shuttle_id}&arrival_shuttle_id=${action.payload.arrival_shuttle_id}&departure_date=${action.payload.departure_date}&return_date=${action.payload.return_date}&passenger=${action.payload.passenger}&order_type=${action.payload.order_type}&time=${action.payload.time}&r_time=${action.payload.r_time}`,
     );
-    yield put(setSearchResultBus(res.data.data));
+    yield put(setSearchResultBus(res.data.departure));
+    yield put(setSearchResultReturn(res.data.return));
     console.log(res, 'Location Data');
     yield navigate('Detail Stack', {screen: 'Search Result'});
   } catch (error) {
@@ -85,6 +87,7 @@ function* fetchSeatData(action) {
     );
     yield put(setSeatData(res.data.data));
     console.log(res.data.data, 'Seat Data');
+    yield navigate('Detail Stack', {screen: 'Select Seat'});
   } catch (err) {
     console.log(err);
     console.log(action.payload.token);
