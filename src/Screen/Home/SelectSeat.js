@@ -14,8 +14,10 @@ const SelectSeat = (props) => {
         return state.HomeReducer.isReturn
     })
     const oneWay = useSelector(state => { return state.HomeReducer.isOneWay })
+    const homeReducer = useSelector(state => { return state.HomeReducer })
 
     const [seatDataRow, setSeatDataRow] = useState(seatData)
+    const [count, setCount] = useState(homeReducer?.passengerNum)
     const selected = [];
     const filtered = seatDataRow.filter((e, i) => {
         if (e === 1) {
@@ -65,8 +67,9 @@ const SelectSeat = (props) => {
                                             prevState[i] === 1 ? prevState[i] = 0 :
                                                 prevState[i];
                                         return [...prevState]
-                                    })
+                                    });
                                 }}
+                                    disabled={count === 0 ? true : false}
                                     style={[e !== 0 && e !== 1 ? styles.boxBooked :
                                         e === 1 ? styles.boxSelected : styles.boxAvailable, { marginHorizontal: ms(10), marginBottom: ms(10) }]}
                                 />

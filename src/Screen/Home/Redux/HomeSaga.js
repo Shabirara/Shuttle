@@ -1,9 +1,9 @@
-import {all} from 'redux-saga/effects';
-import {put, takeLatest} from 'redux-saga/effects';
+import { all } from 'redux-saga/effects';
+import { put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
-import {setLoading} from '../../../Store/globalAction';
-import {baseUrl} from '../../../Utils/Config';
-import {navigate} from '../../../Utils/Navigate';
+import { setLoading } from '../../../Store/globalAction';
+import { baseUrl } from '../../../Utils/Config';
+import { navigate } from '../../../Utils/Navigate';
 import {
   setTerminalData,
   setSearchResultBus,
@@ -11,6 +11,7 @@ import {
   setBusDetailsData,
   setBusReviewData,
   setSeatData,
+  setOrderId,
 } from './HomeAction';
 
 function* SagaOneTrip() {
@@ -34,7 +35,7 @@ function* fetchLocationData(action) {
     yield put(setSearchResultBus(res.data.departure));
     yield put(setSearchResultReturn(res.data.return));
     console.log(res, 'Location Data');
-    yield navigate('Detail Stack', {screen: 'Search Result'});
+    yield navigate('Detail Stack', { screen: 'Search Result' });
   } catch (error) {
     console.log(error);
   } finally {
@@ -61,7 +62,7 @@ function* fetchBusDetailsData(action) {
     yield put(setBusDetailsData(res.data.data));
     console.log(res, 'Bus Details');
     console.log(res.data.data, 'Bus Details Data');
-    yield navigate('Detail Stack', {screen: 'Bus Details'});
+    yield navigate('Detail Stack', { screen: 'Bus Details' });
   } catch (err) {
     console.log(err);
   }
@@ -83,14 +84,25 @@ function* fetchSeatData(action) {
   try {
     const res = yield axios.get(
       `${baseUrl}/order/?date=${action.payload.date}&bus_schedule_id=${action.payload.bus_schedule_id}`,
-      {headers: {Authorization: `bearer ${action.payload.token}`}},
+      { headers: { Authorization: `bearer ${action.payload.token}` } },
     );
     yield put(setSeatData(res.data.data));
     console.log(res.data.data, 'Seat Data');
-    yield navigate('Detail Stack', {screen: 'Select Seat'});
+    yield navigate('Detail Stack', { screen: 'Select Seat' });
   } catch (err) {
     console.log(err);
     console.log(action.payload.token);
+  }
+}
+
+
+function* postOrderData(action) {
+  try {
+    const res = yield axios.post(`${baseUrl}/order`, action.payload, { headers: { Authorization: `bearer ${action.payload.token}` } })
+    yield put(setOrderId(res.data))
+    yield navigate('Detail Stack', { screen: 'Payment Method' })
+  } catch (error) {
+    console.log(error)
   }
 }
 
@@ -100,4 +112,5 @@ export function* SagaHomeWorker() {
   yield takeLatest('GET_BUS_DETAILS_DATA', fetchBusDetailsData);
   yield takeLatest('GET_BUS_REVIEW_DATA', fetchBusReviewData);
   yield takeLatest('GET_SEAT_DATA', fetchSeatData);
+  yield takeLatest('POST_ORDER', postOrderData);
 }

@@ -25,7 +25,9 @@ const initialState = {
   fromBusDetails: false,
   selectedSeat: [],
   selectedSeatReturn: [],
+
   orderId: '',
+
   departureCity: '',
   arrivalCity: '',
   departureCityReturn: '',
@@ -34,6 +36,8 @@ const initialState = {
   arrivalTime: '',
   departureTimeReturn: '',
   arrivalTimeReturn: '',
+
+  postOrder: {}
 };
 
 export default function HomeReducer(state = initialState, action) {
@@ -184,6 +188,13 @@ export default function HomeReducer(state = initialState, action) {
       return {
         ...state,
         selectedSeatReturn: action.payload
+      }
+    }
+
+    case 'POST_ORDER': {
+      return {
+        ...state,
+        postOrder: action.payload
       }
     }
 

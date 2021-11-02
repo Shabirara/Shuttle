@@ -190,7 +190,7 @@ export const setSelectedSeatReturn = (payload) => {
 
 export const postOrder = (payload) => {
     return {
-        type: POST_ORDER,
+        type: 'POST_ORDER',
         payload
     }
 }
