@@ -5,13 +5,13 @@ export default StyleSheet.create({
   logoContainer: {
     justifyContent: 'center',
     paddingTop: ms(10),
-    paddingBottom: ms(6),
     alignItems: 'center',
   },
   mainContainer: {
     flex: 1,
     backgroundColor: '#E5E5E5',
     paddingHorizontal: ms(16),
+    paddingTop: ms(42),
   },
   subContainer: {
     flex: 1,
@@ -19,6 +19,7 @@ export default StyleSheet.create({
     paddingHorizontal: ms(16),
     borderRadius: ms(12),
     paddingBottom: ms(20),
+    marginTop: ms(28),
   },
   intoContainer: {
     paddingVertical: ms(17),
