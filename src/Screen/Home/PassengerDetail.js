@@ -4,13 +4,15 @@ import { View, Text, Button, ScrollView, StyleSheet, Image, TextInput, Touchable
 import { Card, Divider, Input } from 'react-native-elements'
 import { ms } from 'react-native-size-matters'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { postOrder } from './Redux/HomeAction'
 
 export default function PassengerDetail(props) {
     const oneWay = useSelector(state => { return state.HomeReducer.isOneWay })
     const departureDate = useSelector(state => { return state.HomeReducer.departureDateString })
     const returnDateRaw = useSelector(state => { return state.HomeReducer.returnDate })
     const returnDate = moment(returnDateRaw).format('ddd, DD MMM YYYY')
+    const returnDateNum = moment(returnDateRaw).format('YYYY-MM-DD')
     const departureCity = useSelector(state => { return state.HomeReducer.departureCity })
     const arrivalCity = useSelector(state => { return state.HomeReducer.arrivalCity })
     const departureTime = useSelector(state => { return state.HomeReducer.departureTime })
@@ -20,9 +22,32 @@ export default function PassengerDetail(props) {
     const departureSeat = useSelector(state => { return state.HomeReducer.selectedSeat })
     const returnSeat = useSelector(state => { return state.HomeReducer.selectedSeatReturn })
     const passengerNum = useSelector(state => { return state.HomeReducer.passengerNum })
+    const data = useSelector(state => state.HomeReducer)
+    const token = useSelector(state => state.LoginReducer.access_token.token)
+
+    const [userName, setUserName] = useState([''])
+    const [userEmail, setUserEmail] = useState([''])
+    const [userPhone, setUserPhone] = useState([''])
+    const [userAge, setUserAge] = useState([''])
+
+    const dispatch = useDispatch()
 
     const onPayment = () => {
-        props.navigation.navigate('Payment Method')
+        dispatch(postOrder({
+            "departure_date": departureDate,
+            "return_date": oneWay ? [] : returnDateNum,
+            "fullname": userName,
+            "email": userEmail,
+            "age": userAge,
+            "phone": userPhone,
+            "departure_seat": departureSeat,
+            "return_seat": oneWay ? [] : returnSeat,
+            "passenger": passengerNum,
+            "order_type": oneWay ? "OneWay" : 'RoundTrip',
+            "departure_bus_id": data?.busDepartureId,
+            "return_bus_id": oneWay ? [] : data?.busArrivalId,
+            token: token
+        }))
     }
 
 
@@ -36,7 +61,7 @@ export default function PassengerDetail(props) {
                             <Text style={styles.fontKecil}>{departureDate}</Text>
                             <Text style={styles.fontBesar}>{departureCity}  ➜  {arrivalCity}</Text>
                             <Text style={styles.fontKecil}>{departureTime} - {arrivalTime}</Text>
-                            <Text style={styles.fontMedium}>(Executive)</Text>
+                            <Text style={styles.fontMedium}>{data?.busProviderName} (Executive)</Text>
                             <Text style={styles.fontKecil}>Seat number : {departureSeat.join(', ')}</Text>
                         </View>
                     </View> :
@@ -52,7 +77,7 @@ export default function PassengerDetail(props) {
                                     <Text style={styles.fontKecil}>{departureDate}</Text>
                                     <Text style={styles.fontBesar}>{departureCity}  ➜  {arrivalCity}</Text>
                                     <Text style={styles.fontKecil}>{departureTime} - {arrivalTime}</Text>
-                                    <Text style={styles.fontMedium}>(Executive)</Text>
+                                    <Text style={styles.fontMedium}>{data?.busProviderName} (Executive)</Text>
                                     <Text style={styles.fontKecil}>Seat number : {departureSeat.join(', ')}</Text>
                                 </View>
                             </View>
@@ -68,20 +93,20 @@ export default function PassengerDetail(props) {
                                     <Text style={styles.fontKecil}>{returnDate}</Text>
                                     <Text style={styles.fontBesar}>{arrivalCity}  ➜  {departureCity}</Text>
                                     <Text style={styles.fontKecil}>{departureTimeReturn} - {arrivalTimeReturn}</Text>
-                                    <Text style={styles.fontMedium}>(Executive)</Text>
+                                    <Text style={styles.fontMedium}>{data?.busProviderNameReturn}(Executive)</Text>
                                     <Text style={styles.fontKecil}>Seat number : {returnSeat.join(', ')}</Text>
                                 </View>
                             </View>
                         </View>
                     </>
                 }
-                <Card containerStyle={{ margin: 0, padding: 0 }}>
+                <Card containerStyle={{ margin: 0, padding: 0, paddingBottom: ms(30) }}>
                     <View style={styles.cardContainer}>
                         <Text style={styles.fontHeader}>Passenger Detail</Text>
                     </View>
                     <Card.Divider width={ms(2)} />
                     {Array.from(Array(passengerNum)).map((e, i) => {
-                        const [expand, setExpand] = useState(false)
+                        const [expand, setExpand] = useState(true)
                         return (
                             <View>
                                 <View style={styles.cardContainer}>
@@ -93,15 +118,46 @@ export default function PassengerDetail(props) {
                                     <AntDesign name={expand ? 'downcircleo' : 'rightcircleo'}
                                         color='#092C4C' size={ms(17)}
                                         onPress={() => setExpand(!expand)} />
-
                                 </View>
                                 {
                                     expand ?
                                         <View style={styles.formContainer}>
-                                            <Input placeholder='Enter full name' style={styles.input} inputContainerStyle={{ borderBottomWidth: 0 }} />
-                                            <Input placeholder='Age' style={styles.input} inputContainerStyle={{ borderBottomWidth: 0 }} />
-                                            <Input placeholder='Email' style={styles.input} inputContainerStyle={{ borderBottomWidth: 0 }} />
-                                            <Input placeholder='Phone Number' style={styles.input} inputContainerStyle={{ borderBottomWidth: 0 }} />
+                                            <Input placeholder='Enter full name'
+                                                style={styles.input}
+                                                onChangeText={text => {
+                                                    setUserName((prevState) => {
+                                                        prevState[i] = text;
+                                                        return [...prevState]
+                                                    });
+                                                }}
+                                                inputContainerStyle={{ borderBottomWidth: 0 }} />
+                                            <Input placeholder='Age'
+                                                style={styles.input}
+                                                onChangeText={text => {
+                                                    setUserAge((prevState) => {
+                                                        prevState[i] = text;
+                                                        return [...prevState]
+                                                    });
+                                                }}
+                                                inputContainerStyle={{ borderBottomWidth: 0 }} />
+                                            <Input placeholder='Email'
+                                                style={styles.input}
+                                                onChangeText={text => {
+                                                    setUserEmail((prevState) => {
+                                                        prevState[i] = text;
+                                                        return [...prevState]
+                                                    });
+                                                }}
+                                                inputContainerStyle={{ borderBottomWidth: 0 }} />
+                                            <Input placeholder='Phone Number'
+                                                style={styles.input}
+                                                onChangeText={text => {
+                                                    setUserPhone((prevState) => {
+                                                        prevState[i] = text;
+                                                        return [...prevState]
+                                                    });
+                                                }}
+                                                inputContainerStyle={{ borderBottomWidth: 0 }} />
                                         </View> : null
                                 }
                             </View>
@@ -109,12 +165,13 @@ export default function PassengerDetail(props) {
                     })
                     }
                 </Card>
+                <Card containerStyle={styles.card}>
+                    <TouchableOpacity onPress={onPayment} style={styles.next}>
+                        <Text style={styles.fontButton}>Continue to Payment</Text>
+                    </TouchableOpacity>
+                </Card>
             </ScrollView>
-            <Card containerStyle={styles.card}>
-                <TouchableOpacity onPress={onPayment} style={styles.next}>
-                    <Text style={styles.fontButton}>Continue to Payment</Text>
-                </TouchableOpacity>
-            </Card>
+
         </View>
     )
 }
@@ -163,7 +220,6 @@ const styles = StyleSheet.create({
     formContainer: {
         backgroundColor: '#F7F9FA',
         marginHorizontal: ms(20),
-        marginBottom: ms(80),
         borderRadius: ms(10),
         paddingTop: ms(30),
         paddingHorizontal: ms(10)
@@ -182,8 +238,6 @@ const styles = StyleSheet.create({
         width: '100%',
         marginHorizontal: 0,
         alignItems: 'center',
-        bottom: 0,
-        position: 'absolute'
     },
     next: {
         backgroundColor: '#0F5996',

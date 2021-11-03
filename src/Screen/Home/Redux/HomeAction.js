@@ -188,20 +188,6 @@ export const setSelectedSeatReturn = (payload) => {
     }
 }
 
-export const postOrder = (payload) => {
-    return {
-        type: POST_ORDER,
-        payload
-    }
-}
-
-export const setOrderId = (payload) => {
-    return {
-        type: 'SET_ORDER_ID',
-        payload
-    }
-}
-
 export const setDepartureCity = (payload) => {
     return {
         type: 'SET_DEPARTURE_CITY',
@@ -261,6 +247,76 @@ export const setArrivalTimeReturn = (payload) => {
 export const setPassengerNum = (payload) => {
     return {
         type: 'SET_PASSENGER_NUM',
+        payload
+    }
+}
+
+export const postOrder = (payload) => {
+    return {
+        type: 'POST_ORDER',
+        payload
+    }
+}
+
+export const setOrderId = (payload) => {
+    return {
+        type: 'SET_ORDER_ID',
+        payload
+    }
+}
+
+export const getOrderDetail = (payload) => {
+    return {
+        type: 'GET_ORDER_DETAIL',
+        payload
+    }
+}
+
+export const setOrderDetail = (payload) => {
+    return {
+        type: 'SET_ORDER_DETAIL',
+        payload
+    }
+}
+
+export const getPaymentData = (payload) => {
+    return {
+        type: 'GET_PAYMENT_DATA',
+        payload
+    }
+}
+
+export const setPaymentData = (payload) => {
+    return {
+        type: 'SET_PAYMENT_DATA',
+        payload
+    }
+}
+
+export const getPaymentDetail = (payload) => {
+    return {
+        type: 'GET_PAYMENT_DETAIL',
+        payload
+    }
+}
+
+export const setPaymentDetail = (payload) => {
+    return {
+        type: 'SET_PAYMENT_DETAIL',
+        payload
+    }
+}
+
+export const getTicketDetail = (payload) => {
+    return {
+        type: 'GET_TICKET_DETAIL',
+        payload
+    }
+}
+
+export const setTicketDetail = (payload) => {
+    return {
+        type: 'SET_TICKET_DETAIL',
         payload
     }
 }

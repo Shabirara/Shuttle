@@ -1,14 +1,26 @@
-import {StyleSheet} from 'react-native';
-import {ms} from 'react-native-size-matters';
+import { StyleSheet } from 'react-native';
+import { ms } from 'react-native-size-matters';
 
 export default StyleSheet.create({
   mainContainer: {
     flex: 1,
-    backgroundColor: '#E5E5E5',
-    paddingHorizontal: ms(16),
-    paddingBottom: ms(20),
+    padding: ms(20)
   },
-
+  textNormal: {
+    fontSize: ms(12),
+    fontFamily: 'Montserrat-Regular',
+    color: '#092C4C'
+  },
+  textNama: {
+    fontSize: ms(20),
+    fontFamily: 'Montserrat-SemiBold',
+    color: '#092C4C'
+  },
+  textEdit: {
+    fontSize: ms(12),
+    fontFamily: 'Montserrat-Medium',
+    color: '#092C4C'
+  },
   image: {
     paddingBottom: ms(65),
     height: ms(100),
@@ -19,7 +31,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: ms(10),
-    paddingBottom: ms(10),
+    paddingBottom: ms(10)
   },
   namaUser: {
     alignItems: 'center',
@@ -27,16 +39,17 @@ export default StyleSheet.create({
   telpDanUserContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingVertical: ms(10),
+    paddingVertical: ms(20)
   },
-  // titikAsingContainer: {
-  //   // marginTop: ms(10),
-  // },
   titikAsing: {
     fontSize: ms(40),
+    color: '#092C4C'
   },
   inputContainer: {
-    paddingBottom: ms(4),
+    alignItems: 'center',
+    marginHorizontal: 5,
+    borderRadius: ms(15),
+    justifyContent: 'space-evenly'
   },
 
   borderLess: {
@@ -74,13 +87,12 @@ export default StyleSheet.create({
   },
   editProfile: {
     backgroundColor: 'white',
-    paddingTop: ms(4),
     paddingVertical: ms(14),
     paddingHorizontal: ms(10),
     borderRadius: ms(6),
     alignItems: 'flex-start',
     paddingBottom: ms(6),
-    width: ms(330),
+    width: ms(300),
     height: ms(52),
     justifyContent: 'center',
     color: 'blue',

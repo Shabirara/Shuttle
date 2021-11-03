@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -18,8 +18,15 @@ import bookingButton from '../../Assets/Images/BookingButton.png';
 import bookingTicket from '../../Assets/Images/BookingTicket.png';
 import {Icon} from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import {getAllBookings} from './Redux/BookingAction';
 
 export default function MyBooking(props) {
+  const token = useSelector(state => state.LoginReducer.access_token.token);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllBookings({token: token}));
+  }, []);
   const [active, setActive] = useState(0);
 
   const dataTab = [

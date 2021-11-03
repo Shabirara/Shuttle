@@ -1,4 +1,4 @@
-import React, {useState, Component} from 'react';
+import React, { useState, Component } from 'react';
 import {
   View,
   Text,
@@ -9,15 +9,15 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import {Button, CheckBox, Divider} from 'react-native-elements';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {ms} from 'react-native-size-matters';
+import { Button, CheckBox, Divider } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ms } from 'react-native-size-matters';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modal';
 import OneWay from './OneWay';
 import RoundTrip from './RoundTrip';
-import {useSelector, useDispatch} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   getBusDetailsData,
   getBusReviewData,
@@ -60,26 +60,21 @@ export default function SearchResult(props) {
   const [isSortVisible, setSortVisible] = useState(false);
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [activeCheck, setActiveCheck] = useState(0);
-  const [busDetailsId, setBusDetailsId] = useState('');
-  const [provider, setProvider] = useState('');
 
   const [active, setActive] = useState(isOneWay ? 0 : 1);
 
   const dispatch = useDispatch();
 
-  const onBusDetails = () => {
-    console.log(busDetailsId);
-    console.log(provider, 'PROVIDER');
+  const onBusDetails = (id, bus) => {
     if (isReturn) {
-      dispatch(setBusReturnId(busDetailsId));
-      dispatch(setBusProviderNameReturn(provider));
+      dispatch(setBusReturnId(id));
+      dispatch(setBusProviderNameReturn(bus));
     } else {
-      dispatch(setBusDepartureId(busDetailsId));
-      dispatch(setBusProviderName(provider));
+      dispatch(setBusDepartureId(id));
+      dispatch(setBusProviderName(bus));
     }
-
-    dispatch(getBusDetailsData({id: busDetailsId}));
-    dispatch(getBusReviewData(busDetailsId));
+    dispatch(getBusDetailsData({ id: id }));
+    dispatch(getBusReviewData(id));
   };
   const toggleChangeModal = () => {
     setChangeVisible(!isChangeVisible);
@@ -107,25 +102,25 @@ export default function SearchResult(props) {
   ];
 
   const [filterDeparture, setFilterDeparture] = useState([
-    {title: '00:00 - 16:00', active: false},
-    {title: '06:00 - 12:00', active: false},
-    {title: '12:00 - 18:00', active: false},
-    {title: '18:00 - 00:00', active: false},
+    { title: '00:00 - 16:00', active: false },
+    { title: '06:00 - 12:00', active: false },
+    { title: '12:00 - 18:00', active: false },
+    { title: '18:00 - 00:00', active: false },
   ]);
   const [filterArrival, setFilterArrival] = useState([
-    {title: '00:00 - 16:00', active: false},
-    {title: '06:00 - 12:00', active: false},
-    {title: '12:00 - 18:00', active: false},
-    {title: '18:00 - 00:00', active: false},
+    { title: '00:00 - 16:00', active: false },
+    { title: '06:00 - 12:00', active: false },
+    { title: '12:00 - 18:00', active: false },
+    { title: '18:00 - 00:00', active: false },
   ]);
   const [busVendor, setBusVendor] = useState([
-    {title: 'KYM Trans', active: false},
-    {title: 'PT Sumber Bahagia', active: false},
-    {title: 'DAMRI', active: false},
-    {title: 'Harapan Jaya', active: false},
-    {title: 'KYM Trans', active: false},
-    {title: 'PT Sumber Bahagia', active: false},
-    {title: 'Harapan Jaya', active: false},
+    { title: 'KYM Trans', active: false },
+    { title: 'PT Sumber Bahagia', active: false },
+    { title: 'DAMRI', active: false },
+    { title: 'Harapan Jaya', active: false },
+    { title: 'KYM Trans', active: false },
+    { title: 'PT Sumber Bahagia', active: false },
+    { title: 'Harapan Jaya', active: false },
   ]);
 
   const Item = ({
@@ -138,13 +133,12 @@ export default function SearchResult(props) {
     hourEnd,
     terminalStart,
     terminalEnd,
+    id
   }) => (
     <TouchableOpacity
       style={styles.item}
       onPress={() => {
-        setBusDetailsId(id);
-        setProvider(bus);
-        onBusDetails();
+        onBusDetails(id, bus);
       }}>
       <View
         style={{
@@ -155,13 +149,13 @@ export default function SearchResult(props) {
         }}>
         <Image
           source={require('../../Assets/Images/bx_bx-bus.png')}
-          style={{height: ms(40), width: ms(40)}}
+          style={{ height: ms(40), width: ms(40) }}
         />
         <Text style={styles.hour}>{hourStart}</Text>
         <Text style={styles.duration}>{duration}hr 00mnt</Text>
         <Text style={styles.hour}>{hourEnd}</Text>
       </View>
-      <View style={{flexDirection: 'column', marginTop: ms(10)}}>
+      <View style={{ flexDirection: 'column', marginTop: ms(10) }}>
         <View
           style={{
             flexDirection: 'row',
@@ -176,7 +170,7 @@ export default function SearchResult(props) {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <View style={{flexShrink: 1, width: ms(120)}}>
+            <View style={{ flexShrink: 1, width: ms(120) }}>
               <Text style={styles.tanggal} numberOfLines={1}>
                 {bus}
               </Text>
@@ -185,7 +179,7 @@ export default function SearchResult(props) {
           </View>
 
           <View>
-            <View style={{flexDirection: 'row', alignItems: 'flex-end'}}>
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
               <Text style={styles.change}>IDR {price}/</Text>
               <Text style={styles.type}>seat</Text>
             </View>
@@ -193,8 +187,8 @@ export default function SearchResult(props) {
           </View>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
-          <View style={{alignItems: 'center', marginTop: ms(5)}}>
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ alignItems: 'center', marginTop: ms(5) }}>
             <MaterialCommunityIcons
               name="circle-outline"
               color="#0F5996"
@@ -203,17 +197,17 @@ export default function SearchResult(props) {
             <FontAwesome
               name="ellipsis-v"
               color="#0F5996"
-              style={{marginVertical: ms(-3), width: ms(1)}}
+              style={{ marginVertical: ms(-3), width: ms(1) }}
             />
             <FontAwesome
               name="ellipsis-v"
               color="#0F5996"
-              style={{width: ms(1)}}
+              style={{ width: ms(1) }}
             />
             <FontAwesome
               name="ellipsis-v"
               color="#0F5996"
-              style={{marginVertical: ms(-4), width: ms(1)}}
+              style={{ marginVertical: ms(-4), width: ms(1) }}
             />
             <MaterialCommunityIcons
               name="record-circle-outline"
@@ -237,8 +231,9 @@ export default function SearchResult(props) {
     </TouchableOpacity>
   );
 
-  const renderItem = ({item}) => (
+  const renderItem = ({ item }) => (
     <Item
+      id={item.busId}
       bus={item.BusProvider}
       type={'Executive'}
       price={item.price}
@@ -257,7 +252,7 @@ export default function SearchResult(props) {
         isVisible={isChangeVisible}
         swipeDirection="down"
         onSwipeComplete={() => setChangeVisible(false)}
-        style={{margin: 0}}>
+        style={{ margin: 0 }}>
         <View style={styles.changeModal}>
           <Divider
             orientation="horizontal"
@@ -287,7 +282,7 @@ export default function SearchResult(props) {
               ))}
             </View>
           </View>
-          <ScrollView style={{width: '95%'}}>
+          <ScrollView style={{ width: '95%' }}>
             {active === 0 ? <OneWay /> : <RoundTrip />}
           </ScrollView>
         </View>
@@ -298,7 +293,7 @@ export default function SearchResult(props) {
         swipeDirection="down"
         onSwipeComplete={() => setSortVisible(false)}
         onBackdropPress={() => setSortVisible(false)}
-        style={{marginHorizontal: 0, marginTop: '100%', marginBottom: 0}}>
+        style={{ marginHorizontal: 0, marginTop: '100%', marginBottom: 0 }}>
         <View style={styles.sortModal}>
           <Divider
             orientation="horizontal"
@@ -306,7 +301,7 @@ export default function SearchResult(props) {
             style={styles.holder}
           />
           <Text style={styles.jalur}>Sort By</Text>
-          <View style={{width: '100%'}}>
+          <View style={{ width: '100%' }}>
             {checklist.map((e, i) => {
               return (
                 <CheckBox
@@ -342,7 +337,7 @@ export default function SearchResult(props) {
         isVisible={isFilterVisible}
         swipeDirection="down"
         onSwipeComplete={() => setFilterVisible(false)}
-        style={{marginHorizontal: 0, marginBottom: 0}}>
+        style={{ marginHorizontal: 0, marginBottom: 0 }}>
         <ScrollView>
           <View style={styles.changeModal}>
             <Divider
@@ -365,7 +360,7 @@ export default function SearchResult(props) {
                 <Text style={styles.sort}>RESET</Text>
               </TouchableOpacity>
             </View>
-            <View style={{width: '100%'}}>
+            <View style={{ width: '100%' }}>
               {filterDeparture.map((e, i) => {
                 return (
                   <CheckBox
@@ -406,7 +401,7 @@ export default function SearchResult(props) {
                 <Text style={styles.sort}>RESET</Text>
               </TouchableOpacity>
             </View>
-            <View style={{width: '100%'}}>
+            <View style={{ width: '100%' }}>
               {filterArrival.map((e, i) => {
                 return (
                   <CheckBox
@@ -447,7 +442,7 @@ export default function SearchResult(props) {
                 <Text style={styles.sort}>RESET</Text>
               </TouchableOpacity>
             </View>
-            <View style={{width: '100%'}}>
+            <View style={{ width: '100%' }}>
               {busVendor.map((e, i) => {
                 return (
                   <CheckBox
@@ -484,7 +479,7 @@ export default function SearchResult(props) {
         </ScrollView>
       </Modal>
 
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.jalurTanggal}>
           <Text style={styles.jalur}>
             {isReturn ? arrivalCity : departureCity} ➜{' '}
@@ -495,7 +490,7 @@ export default function SearchResult(props) {
           </Text>
           {isReturn ? (
             <View style={styles.buttonChange}>
-              <Text style={[styles.change, {alignSelf: 'center'}]}>
+              <Text style={[styles.change, { alignSelf: 'center' }]}>
                 Return Trip
               </Text>
             </View>
@@ -732,7 +727,7 @@ const styles = StyleSheet.create({
     borderRadius: ms(5),
     marginHorizontal: ms(-5),
     shadowColor: 'grey',
-    shadowOffset: {width: 0, height: ms(2)},
+    shadowOffset: { width: 0, height: ms(2) },
     shadowRadius: ms(2),
     elevation: ms(5),
   },

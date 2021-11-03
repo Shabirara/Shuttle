@@ -25,7 +25,9 @@ const initialState = {
   fromBusDetails: false,
   selectedSeat: [],
   selectedSeatReturn: [],
+
   orderId: '',
+
   departureCity: '',
   arrivalCity: '',
   departureCityReturn: '',
@@ -34,6 +36,12 @@ const initialState = {
   arrivalTime: '',
   departureTimeReturn: '',
   arrivalTimeReturn: '',
+
+  postOrder: {},
+  orderDetail: {},
+  paymentData: {},
+  paymentDetail: {},
+  ticketDetail: {}
 };
 
 export default function HomeReducer(state = initialState, action) {
@@ -187,13 +195,6 @@ export default function HomeReducer(state = initialState, action) {
       }
     }
 
-    case 'SET_ORDER_ID': {
-      return {
-        ...state,
-        orderId: action.payload
-      }
-    }
-
     case 'SET_DEPARTURE_CITY': {
       return {
         ...state,
@@ -247,6 +248,48 @@ export default function HomeReducer(state = initialState, action) {
       return {
         ...state,
         arrivalTimeReturn: action.payload
+      }
+    }
+
+    case 'POST_ORDER': {
+      return {
+        ...state,
+        postOrder: action.payload
+      }
+    }
+
+    case 'SET_ORDER_ID': {
+      return {
+        ...state,
+        orderId: action.payload
+      }
+    }
+
+    case 'SET_ORDER_DETAIL': {
+      return {
+        ...state,
+        orderDetail: action.payload
+      }
+    }
+
+    case 'SET_PAYMENT_DETAIL': {
+      return {
+        ...state,
+        paymentDetail: action.payload
+      }
+    }
+
+    case 'SET_PAYMENT_DATA': {
+      return {
+        ...state,
+        paymentData: action.payload
+      }
+    }
+
+    case 'SET_TICKET_DETAIL': {
+      return {
+        ...state,
+        ticketDetail: action.payload
       }
     }
 
