@@ -11,11 +11,9 @@ export default function BookingDetails(props) {
     const returnDate = moment(HomeRedux?.returnDate).format('ddd, DD MMM YYYY')
     console.log(data)
     const orderDate = moment(data?.order_date).format('ddd, DD MMM YYYY')
-    const [paid, setPaid] = useState(false)
-    const [expired, setExpired] = useState(false)
 
     const onPayment = () => {
-        props.navigation.navigate('Payment Details')
+        props.navigation.navigate('Bottom Tab', { screen: 'My Booking' })
     }
 
     return (
@@ -39,17 +37,18 @@ export default function BookingDetails(props) {
                                 <Text style={styles.fontKecil}>
                                     {`${data?.price_detail?.departure_provider} - ${HomeRedux?.departureDateString} - ${data?.departure_time[0]}`}
                                 </Text> :
-                                <Text style={styles.fontKecil}>
-                                    {`${data?.price_detail?.departure_provider} - ${HomeRedux?.departureDateString} - ${data?.departure_time[0]}
-                                \n${data?.price_detail?.return_provider} - Sat, 28 Aug 2021 - ${data?.return_time?.[0]}`}
-                                </Text>
-                            }
+                                <>
+                                    <Text style={[styles.fontKecil]}>
+                                        {`${data?.price_detail?.departure_provider} - ${HomeRedux?.departureDateString} - ${data?.departure_time[0]}
+                                \n${data?.return_bus_provider} - ${returnDate} - ${data?.return_time?.[0]}`}
+                                    </Text>
+                                </>}
                         </View>
                     </View>
                 </View>
                 <Divider orientation='horizontal' width={ms(2)} />
-                <View style={expired ? styles.expiredWrapper : (paid ? styles.successWrapper : styles.pendingWrapper)}>
-                    <Text style={styles.fontButton}>Status Payment: {expired ? 'Expired' : (paid ? 'Success' : 'Pending')}</Text>
+                <View style={data?.payment_status === 'expired' ? styles.expiredWrapper : (data?.payment_status === 'success' ? styles.successWrapper : styles.pendingWrapper)}>
+                    <Text style={styles.fontButton}>Status Payment: {data?.payment_status === 'expired' ? 'Expired' : (data?.payment_status === 'success' ? 'Success' : 'Pending')}</Text>
                 </View>
             </View>
             <Card containerStyle={styles.card}>
@@ -116,19 +115,13 @@ export default function BookingDetails(props) {
                             <Text style={styles.fontMedium}>IDR {data.price_detail?.return_price}</Text>
                         </View>
                     }
-
                 </View>
             </Card>
-            {
-                expired ? null : (paid ? null :
-                    <Card containerStyle={styles.card}>
-                        <TouchableOpacity onPress={onPayment} style={styles.next}>
-                            <Text style={styles.fontButton}>See Payment Instruction</Text>
-                        </TouchableOpacity>
-                    </Card>
-                )
-            }
-
+            <Card containerStyle={styles.card}>
+                <TouchableOpacity onPress={onPayment} style={styles.next}>
+                    <Text style={styles.fontButton}>See My Bookings</Text>
+                </TouchableOpacity>
+            </Card>
         </ScrollView >
     )
 }
