@@ -142,6 +142,6 @@ export default StyleSheet.create({
     alignSelf: 'center',
     paddingTop: ms(12),
     marginBottom: ms(20),
-    textDecorationLine: 'underLine',
+    textDecorationLine: 'underLine-LineThrough',
   },
 });
