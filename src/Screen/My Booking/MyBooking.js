@@ -212,7 +212,7 @@ const ETicket = () => {
             }>
             <Text style={styles.fontButton}>
               Status Ticket:{' '}
-              {expired ? 'Expired' : paid ? 'Success' : 'Waiting Check In'}
+              {expiredR ? 'Expired' : paidR ? 'Success' : 'Waiting Check In'}
             </Text>
           </View>
         </View>
