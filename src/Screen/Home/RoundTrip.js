@@ -98,10 +98,10 @@ const RoundTrip = (props) => {
 
     const findData = (searchString) => {
         setValueSearch(searchString);
-        const filteredCharacters = item.filter((e) => {
+        const filteredCharacters = terminalData.filter((e) => {
             if (searchString.length > 0) {
                 return (
-                    e.name.toUpperCase().includes(searchString.toUpperCase())
+                    e.shuttle_name.toUpperCase().includes(searchString.toUpperCase())
                 );
             } else {
                 setSearchResult([]);
@@ -112,10 +112,10 @@ const RoundTrip = (props) => {
 
     const findDataA = (searchString) => {
         setValueSearchA(searchString);
-        const filteredCharactersA = item.filter((e) => {
+        const filteredCharactersA = terminalData.filter((e) => {
             if (searchString.length > 0) {
                 return (
-                    e.name.toUpperCase().includes(searchString.toUpperCase())
+                    e.shuttle_name.toUpperCase().includes(searchString.toUpperCase())
                 );
             } else {
                 setSearchResult([]);
@@ -160,11 +160,12 @@ const RoundTrip = (props) => {
                             searchResult.map((e) => (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        setValueSearch(e.name);
+                                        setValueSearch(e.shuttle_name);
+                                        setTerminalStartId(e.id)
                                         setPressed(false)
                                     }}
                                     style={styles.searchResult}>
-                                    <Text style={styles.fontKecil}>{e.name}</Text>
+                                    <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
                                 </TouchableOpacity>
                             )) :
                             terminalData.map((e) => (
@@ -188,6 +189,8 @@ const RoundTrip = (props) => {
                 <TouchableOpacity onPress={() => {
                     setValueSearch(valueSearchA);
                     setValueSearchA(valueSearch)
+                    setTerminalStartId(terminalEndId)
+                    setTerminalEndId(terminalStartId)
                 }}>
                     <Image source={require('../../Assets/Images/switchValue.png')} />
                 </TouchableOpacity>
@@ -225,11 +228,12 @@ const RoundTrip = (props) => {
                             searchResultA.map((e) => (
                                 <TouchableOpacity
                                     onPress={() => {
-                                        setValueSearchA(e.name);
+                                        setValueSearchA(e.shuttle_name);
                                         setPressedA(false)
+                                        setTerminalEndId(e.id)
                                     }}
                                     style={styles.searchResult}>
-                                    <Text style={styles.fontKecil}>{e.name}</Text>
+                                    <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
                                 </TouchableOpacity>
                             )) :
                             terminalData.map((e) => (
@@ -257,6 +261,7 @@ const RoundTrip = (props) => {
                 inputContainerStyle={styles.inputContainer}
                 onFocus={toggleDate}
                 value={datePicked}
+                showSoftInputOnFocus={false}
             />
             <DateTimePickerModal
                 mode='date'
@@ -274,6 +279,7 @@ const RoundTrip = (props) => {
                 inputContainerStyle={styles.inputContainer}
                 onFocus={toggleDateA}
                 value={datePickedA}
+                showSoftInputOnFocus={false}
             />
             <DateTimePickerModal
                 mode='date'
@@ -291,6 +297,7 @@ const RoundTrip = (props) => {
                 inputContainerStyle={styles.inputContainer}
                 onFocus={() => setShowPassenger(true)}
                 value={`${passengerValue} Passenger`}
+                showSoftInputOnFocus={false}
             />
 
             <View style={showPassenger ? styles.dropdown : null}>

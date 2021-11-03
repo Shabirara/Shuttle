@@ -4,8 +4,13 @@ import { Divider, Card, Input } from 'react-native-elements'
 import { ms } from 'react-native-size-matters'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { useSelector } from 'react-redux'
 
 export default function TicketDetails() {
+    const depart = useSelector(state => { return state.BookingReducer.selectedTicketData.departure })
+    const returns = useSelector(state => { return state.BookingReducer.selectedTicketData.return })
+    const isReturn = useSelector(state => { return state.HomeReducer.isReturn })
+
     const [checkedIn, setCheckedIn] = useState(false)
     const [expired, setExpired] = useState(false)
     const [pressed, setPressed] = useState(false)
@@ -13,6 +18,8 @@ export default function TicketDetails() {
     const [pressed2, setPressed2] = useState(false)
     const [pressed3, setPressed3] = useState(false)
     const [pressed4, setPressed4] = useState(false)
+
+    const config = isReturn ? returns[0] : depart[0]
 
     return (
         <ScrollView>
@@ -30,15 +37,15 @@ export default function TicketDetails() {
                     </View>
                     <View>
                         <View style={{ height: ms(100), justifyContent: 'space-evenly' }}>
-                            <Text style={styles.fontMedium}>PT Sinar Jaya Group</Text>
-                            <Text style={styles.fontMedium}>Jakarta ➜ Surabaya</Text>
-                            <Text style={styles.fontMedium}>Sat, 21 Aug 2021</Text>
+                            <Text style={styles.fontMedium}>{config?.departure?.bus_name}</Text>
+                            <Text style={styles.fontMedium}>{config?.departure?.departure_from[1]} ➜ {config?.departure?.arrival_to[1]}</Text>
+                            <Text style={styles.fontMedium}>{config?.order_date}</Text>
                         </View>
                     </View>
                 </View>
                 <Divider orientation='horizontal' width={ms(2)} />
-                <View style={expired ? styles.expiredWrapper : (checkedIn ? styles.successWrapper : styles.pendingWrapper)}>
-                    <Text style={styles.fontButton}>Status Payment: {expired ? 'Expired' : (checkedIn ? 'Success' : 'Pending')}</Text>
+                <View style={styles.successWrapper}>
+                    <Text style={styles.fontButton}>Status Payment: Success</Text>
                 </View>
             </View>
             <Card containerStyle={styles.card}>
@@ -47,13 +54,13 @@ export default function TicketDetails() {
                 </View>
                 <Divider />
                 <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
+                    <View style={{ width: '45%', justifyContent: 'space-between' }}>
                         <Text style={[styles.contentContainer, styles.fontKecil]}>Order ID</Text>
-                        <Text style={styles.fontMedium}>BDTR2108187</Text>
+                        <Text style={styles.fontMedium}>{config.order_id}</Text>
                     </View>
                     <View style={{ width: '50%', justifyContent: 'space-between' }}>
                         <Text style={[styles.contentContainer, styles.fontKecil]}>Ticket Number</Text>
-                        <Text style={styles.fontMedium}>1234567890</Text>
+                        <Text style={styles.fontMedium}>{config.ticket_number}</Text>
                     </View>
                 </View>
             </Card>
@@ -61,17 +68,24 @@ export default function TicketDetails() {
                 <View style={styles.cardContainer}>
                     <Text style={styles.fontMedium}>Passenger Detail</Text>
                 </View>
-                <Divider />
-                <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>Name</Text>
-                        <Text style={styles.fontMedium}>Irham Raziqony</Text>
-                    </View>
-                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>Seat Number</Text>
-                        <Text style={styles.fontMedium}>12</Text>
-                    </View>
-                </View>
+                {config?.departure?.passenger_detail.map((e, i) => {
+                    return (
+                        <>
+                            <Divider />
+                            <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+                                <View style={{ width: '50%', justifyContent: 'space-between' }}>
+                                    <Text style={[styles.contentContainer, styles.fontKecil]}>Name</Text>
+                                    <Text style={styles.fontMedium}>{e.fullname}</Text>
+                                </View>
+                                <View style={{ width: '50%', justifyContent: 'space-between' }}>
+                                    <Text style={[styles.contentContainer, styles.fontKecil]}>Seat Number</Text>
+                                    <Text style={styles.fontMedium}>{isReturn ? e.return_seat : e.departure_seat}</Text>
+                                </View>
+                            </View>
+                        </>
+                    )
+                })}
+
             </Card>
             <Card containerStyle={styles.card}>
                 <View style={styles.cardContainer}>
@@ -87,14 +101,14 @@ export default function TicketDetails() {
                             height: ms(130),
                         }}>
                         <View style={styles.columnCenter}>
-                            <Text style={styles.fontKecil}>07.00</Text>
-                            <Text style={styles.fontMini}>Sat, 21 Aug</Text>
+                            <Text style={styles.fontKecil}>{config?.departure?.departure_from[0]}</Text>
+                            <Text style={styles.fontMini}>{ }</Text>
                         </View>
 
-                        <Text style={styles.fontMini}>8hr 00mnt</Text>
+                        <Text style={styles.fontMini}>{ }</Text>
                         <View style={styles.columnCenter}>
-                            <Text style={styles.fontKecil}>15.00</Text>
-                            <Text style={styles.fontMini}>Sat, 21 Aug</Text>
+                            <Text style={styles.fontKecil}>{config?.departure?.arrival_to[0]}</Text>
+                            <Text style={styles.fontMini}>{ }</Text>
                         </View>
                     </View>
                     <View style={{ flexDirection: 'column' }}>
@@ -176,17 +190,17 @@ export default function TicketDetails() {
                                     width: '80%'
                                 }}>
                                 <View style={styles.contentBetween}>
-                                    <Text style={styles.fontKecil}>Terminal Lebak Bulus</Text>
+                                    <Text style={styles.fontKecil}>{config?.departure?.departure_from[2]}</Text>
                                     <Text style={styles.abuKecil}>
-                                        Jl. Lebak Bulus Jaya Abadi RT 06 RW 07 Jakarta Selatan
+                                        {config?.departure?.departure_from[1]}
                                     </Text>
                                 </View>
                                 <View style={styles.contentBetween}>
                                     <Text style={styles.fontKecil}>
-                                        Terminal Purabaya Bungurasih
+                                        {config?.departure?.arrival_to[2]}
                                     </Text>
                                     <Text style={styles.abuKecil}>
-                                        Jl. Bungurasih Timur, Waru, Sidoarjo
+                                        {config?.departure?.arrival_to[1]}
                                     </Text>
                                 </View>
                             </View>
@@ -199,83 +213,95 @@ export default function TicketDetails() {
                     <Text style={styles.fontMedium}>Bus Facilities</Text>
                 </View>
                 <Divider />
-                <View style={[{ padding: ms(10), flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={[styles.columnCenter, { width: '20%' }]}>
-                        <Image
-                            source={require('../../Assets/Images/iconoir_air-conditioner.png')}
-                            PlaceholderContent={<ActivityIndicator />}
-                            style={styles.icon}></Image>
-                        <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
-                            Air Conditioner
-                        </Text>
-                    </View>
-                    <View style={[styles.columnCenter, { width: '20%' }]}>
-                        <Image
-                            source={require('../../Assets/Images/map_toilet.png')}
-                            PlaceholderContent={<ActivityIndicator />}
-                            style={styles.icon}></Image>
-                        <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Toilet</Text>
-                    </View>
-                    <View style={[styles.columnCenter, { width: '20%' }]}>
-                        <Image
-                            source={require('../../Assets/Images/fluent_food-24-filled.png')}
-                            PlaceholderContent={<ActivityIndicator />}
-                            style={styles.icon}></Image>
-                        <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
-                            Free Meal
-                        </Text>
-                    </View>
-                    <View style={[styles.columnCenter, { width: '20%' }]}>
-                        <Image
-                            source={require('../../Assets/Images/iconoir_ev-charge.png')}
-                            PlaceholderContent={<ActivityIndicator />}
-                            style={styles.icon}></Image>
-                        <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Charger</Text>
-                    </View>
-                    <View style={[styles.columnCenter, { width: '20%' }]}>
-                        <Image
-                            source={require('../../Assets/Images/icon-park-outline_baby-car-seat.png')}
-                            PlaceholderContent={<ActivityIndicator />}
-                            style={styles.icon}></Image>
-                        <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
-                            Comfortable Seat
-                        </Text>
-                    </View>
+                <View style={[{ padding: ms(10), flexDirection: 'row', justifyContent: 'space-evenly' }]}>
+                    {config?.departure?.facilities.AC ?
+                        <View style={[styles.columnCenter, { width: '20%' }]}>
+                            <Image
+                                source={require('../../Assets/Images/iconoir_air-conditioner.png')}
+                                PlaceholderContent={<ActivityIndicator />}
+                                style={styles.icon}></Image>
+                            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
+                                Air Conditioner
+                            </Text>
+                        </View> : null
+                    }
+                    {config?.departure?.facilities.toilet ?
+                        <View style={[styles.columnCenter, { width: '20%' }]}>
+                            <Image
+                                source={require('../../Assets/Images/map_toilet.png')}
+                                PlaceholderContent={<ActivityIndicator />}
+                                style={styles.icon}></Image>
+                            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Toilet</Text>
+                        </View> : null
+                    }
+                    {config?.departure?.facilities.free_meal ?
+                        <View style={[styles.columnCenter, { width: '20%' }]}>
+                            <Image
+                                source={require('../../Assets/Images/fluent_food-24-filled.png')}
+                                PlaceholderContent={<ActivityIndicator />}
+                                style={styles.icon}></Image>
+                            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
+                                Free Meal
+                            </Text>
+                        </View> : null
+                    }
+                    {config?.departure?.facilities.charger ?
+                        <View style={[styles.columnCenter, { width: '20%' }]}>
+                            <Image
+                                source={require('../../Assets/Images/iconoir_ev-charge.png')}
+                                PlaceholderContent={<ActivityIndicator />}
+                                style={styles.icon}></Image>
+                            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>Charger</Text>
+                        </View> : null
+                    }
+                    {config?.departure?.facilities.comfortable_seat ?
+                        <View style={[styles.columnCenter, { width: '20%' }]}>
+                            <Image
+                                source={require('../../Assets/Images/icon-park-outline_baby-car-seat.png')}
+                                PlaceholderContent={<ActivityIndicator />}
+                                style={styles.icon}></Image>
+                            <Text style={[styles.fontKecil, { textAlign: 'center' }]}>
+                                Comfortable Seat
+                            </Text>
+                        </View> : null
+                    }
                 </View>
             </Card>
-            {expired ? null : (checkedIn ?
-                <Card containerStyle={styles.card}>
-                    <View style={styles.cardContainer}>
-                        <Text style={styles.fontMedium}>Give Rating & Review</Text>
-                    </View>
-                    <Divider />
-                    <View style={[styles.cardContainer, { justifyContent: 'center' }]}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: ms(250) }}>
-                            <FontAwesome name={pressed ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                onPress={() => { setPressed(!pressed); setPressed1(false); setPressed2(false); setPressed3(false); setPressed4(false) }} />
-                            <FontAwesome name={pressed1 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                onPress={() => { setPressed(true); setPressed1(!pressed1), setPressed2(false); setPressed3(false); setPressed4(false) }} />
-                            <FontAwesome name={pressed2 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                onPress={() => { setPressed(true); setPressed1(true); setPressed2(!pressed2); setPressed3(false); setPressed4(false) }} />
-                            <FontAwesome name={pressed3 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                onPress={() => { setPressed(true); setPressed1(true); setPressed2(true); setPressed3(!pressed3); setPressed4(false) }} />
-                            <FontAwesome name={pressed4 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                onPress={() => { setPressed(true); setPressed1(true); setPressed2(true); setPressed3(true); setPressed4(!pressed4) }} />
+            {
+                expired ? null : (checkedIn ?
+                    <Card containerStyle={styles.card}>
+                        <View style={styles.cardContainer}>
+                            <Text style={styles.fontMedium}>Give Rating & Review</Text>
                         </View>
-                    </View>
-                    <Divider />
-                    <Input placeholder='Input Review here' multiline={true} numberOfLines={5}
-                        inputStyle={[styles.abuMedium, styles.input]}
-                        inputContainerStyle={{ borderBottomWidth: 0, marginBottom: 0 }}
-                    />
-                    <Divider />
-                    <View style={{ paddingTop: ms(15) }}>
-                        <TouchableOpacity style={styles.next}>
-                            <Text style={styles.fontButton}>Submit</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Card> : null)}
-        </ScrollView>
+                        <Divider />
+                        <View style={[styles.cardContainer, { justifyContent: 'center' }]}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: ms(250) }}>
+                                <FontAwesome name={pressed ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                    onPress={() => { setPressed(!pressed); setPressed1(false); setPressed2(false); setPressed3(false); setPressed4(false) }} />
+                                <FontAwesome name={pressed1 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                    onPress={() => { setPressed(true); setPressed1(!pressed1), setPressed2(false); setPressed3(false); setPressed4(false) }} />
+                                <FontAwesome name={pressed2 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                    onPress={() => { setPressed(true); setPressed1(true); setPressed2(!pressed2); setPressed3(false); setPressed4(false) }} />
+                                <FontAwesome name={pressed3 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                    onPress={() => { setPressed(true); setPressed1(true); setPressed2(true); setPressed3(!pressed3); setPressed4(false) }} />
+                                <FontAwesome name={pressed4 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                    onPress={() => { setPressed(true); setPressed1(true); setPressed2(true); setPressed3(true); setPressed4(!pressed4) }} />
+                            </View>
+                        </View>
+                        <Divider />
+                        <Input placeholder='Input Review here' multiline={true} numberOfLines={5}
+                            inputStyle={[styles.abuMedium, styles.input]}
+                            inputContainerStyle={{ borderBottomWidth: 0, marginBottom: 0 }}
+                        />
+                        <Divider />
+                        <View style={{ paddingTop: ms(15) }}>
+                            <TouchableOpacity style={styles.next}>
+                                <Text style={styles.fontButton}>Submit</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Card> : null)
+            }
+        </ScrollView >
     )
 }
 

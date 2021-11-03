@@ -21,7 +21,7 @@ import { Icon } from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllBookings, getOnGoing, getSelectedTicketData } from './Redux/BookingAction';
-import { getPaymentDetail } from '../Home/Redux/HomeAction';
+import { getPaymentDetail, setIsReturn } from '../Home/Redux/HomeAction';
 import { setIsOneWay } from '../Home/Redux/HomeAction';
 
 export default function MyBooking(props) {
@@ -94,6 +94,7 @@ const OnGoingBooking = props => {
 
   const onBookingDetail = (orderId, oneWay) => {
     dispatch(setIsOneWay(oneWay === 'OneWay' ? true : false))
+
     dispatch(getPaymentDetail({
       orderId: orderId.orderId,
       token: token
@@ -207,9 +208,10 @@ const ETicket = props => {
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
-  const onBookingDetail = (orderId) => {
+  const onBookingDetail = (data) => {
+    dispatch(setIsReturn(data.isReturn))
     dispatch(getSelectedTicketData({
-      orderId: orderId.orderId,
+      orderId: data.orderId,
       token: token
     }))
   };
@@ -296,7 +298,7 @@ const ETicket = props => {
             <Divider />
             <TouchableOpacity
               style={styles.buttonBookingDetail}
-              onPress={() => onBookingDetail({ orderId: e.order_id })}>
+              onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: false })}>
               <Image
                 style={{ resizeMode: 'contain', height: 60 }}
                 source={bookingTicket}
@@ -381,7 +383,7 @@ const ETicket = props => {
                 <Divider />
                 <TouchableOpacity
                   style={styles.buttonBookingDetail}
-                  onPress={() => onBookingDetail({ orderId: e.order_id })}>
+                  onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: true })}>
                   <Image
                     style={{ resizeMode: 'contain', height: 60 }}
                     source={bookingTicket}
@@ -390,7 +392,7 @@ const ETicket = props => {
               </View>
           }
 
-          <Divider style={{ marginBottom: ms(50) }} width={ms(5)} />
+          < Divider style={{ marginBottom: ms(50) }} width={ms(5)} />
         </>
       ))
       }

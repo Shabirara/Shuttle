@@ -23,6 +23,7 @@ export default function PassengerDetail(props) {
     const returnSeat = useSelector(state => { return state.HomeReducer.selectedSeatReturn })
     const passengerNum = useSelector(state => { return state.HomeReducer.passengerNum })
     const data = useSelector(state => state.HomeReducer)
+    const user = useSelector(state => state.ProfileReducer.profileData)
     const token = useSelector(state => state.LoginReducer.access_token.token)
 
     const [userName, setUserName] = useState([''])

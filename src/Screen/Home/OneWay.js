@@ -25,6 +25,10 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 
 const OneWay = props => {
+  useEffect(() => {
+    dispatch(getTerminalData());
+  }, []);
+
   const dispatch = useDispatch();
   const terminalData = useSelector(state => {
     return state.HomeReducer.terminalData;
@@ -48,9 +52,6 @@ const OneWay = props => {
   const [dateShorted, setDateShorted] = useState('')
   const [dateShortYear, setDateShortYear] = useState('')
 
-  useEffect(() => {
-    dispatch(getTerminalData());
-  }, []);
 
   const toggleDate = () => {
     setDateVisible(!dateVisible);
@@ -91,9 +92,9 @@ const OneWay = props => {
 
   const findData = searchString => {
     setValueSearch(searchString);
-    const filteredCharacters = item.filter(e => {
+    const filteredCharacters = terminalData.filter(e => {
       if (searchString.length > 0) {
-        return e.name.toUpperCase().includes(searchString.toUpperCase());
+        return e.shuttle_name.toUpperCase().includes(searchString.toUpperCase());
       } else {
         setSearchResult([]);
       }
@@ -103,9 +104,9 @@ const OneWay = props => {
 
   const findDataA = searchString => {
     setValueSearchA(searchString);
-    const filteredCharactersA = item.filter(e => {
+    const filteredCharactersA = terminalData.filter(e => {
       if (searchString.length > 0) {
-        return e.name.toUpperCase().includes(searchString.toUpperCase());
+        return e.shuttle_name.toUpperCase().includes(searchString.toUpperCase());
       } else {
         setSearchResult([]);
       }
@@ -163,11 +164,12 @@ const OneWay = props => {
               ? searchResult.map(e => (
                 <TouchableOpacity
                   onPress={() => {
-                    setValueSearch(e.name);
+                    setValueSearch(e.shuttle_name);
                     setPressed(false);
+                    setTerminalStartId(e.id);
                   }}
                   style={styles.searchResult}>
-                  <Text style={styles.fontKecil}>{e.name}</Text>
+                  <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
                 </TouchableOpacity>
               ))
               : terminalData.map(e => (
@@ -191,6 +193,8 @@ const OneWay = props => {
           onPress={() => {
             setValueSearch(valueSearchA);
             setValueSearchA(valueSearch);
+            setTerminalStartId(terminalEndId);
+            setTerminalEndId(terminalStartId)
           }}>
           <Image source={require('../../Assets/Images/switchValue.png')} />
         </TouchableOpacity>
@@ -241,11 +245,12 @@ const OneWay = props => {
               ? searchResultA.map(e => (
                 <TouchableOpacity
                   onPress={() => {
-                    setValueSearchA(e.name);
+                    setValueSearchA(e.shuttle_name);
                     setPressedA(false);
+                    setTerminalEndId(e.id);
                   }}
                   style={styles.searchResult}>
-                  <Text style={styles.fontKecil}>{e.name}</Text>
+                  <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
                 </TouchableOpacity>
               ))
               : terminalData.map(e => (
@@ -273,6 +278,7 @@ const OneWay = props => {
         inputContainerStyle={styles.inputContainer}
         onFocus={toggleDate}
         value={datePicked}
+        showSoftInputOnFocus={false}
       />
       <DateTimePickerModal
         mode="date"
@@ -291,6 +297,7 @@ const OneWay = props => {
         inputContainerStyle={styles.inputContainer}
         onFocus={() => setShowPassenger(true)}
         value={`${passengerValue} Passenger`}
+        showSoftInputOnFocus={false}
       />
 
       <View style={showPassenger ? styles.dropdown : null}>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import {ms} from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
 import OneWay from './OneWay';
 import RoundTrip from './RoundTrip';
 
