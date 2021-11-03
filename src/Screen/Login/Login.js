@@ -8,7 +8,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import {Image, CheckBox, Input, Button} from 'react-native-elements';
+import {Image, CheckBox, Input, Button, Card} from 'react-native-elements';
 import styles from './login-Sytyle';
 import logoShuttle from '../../Assets/Images/shuttle-logo.png';
 import inToShuttle from '../../Assets/Images/Group-179.png';
@@ -77,9 +77,7 @@ export default function Login(props) {
     }
   }
 
-  // onePressed() {
-  //   alert('Success')
-  // }
+  const [checked, toggleChecked] = useState(false);
 
   return (
     <ScrollView>
@@ -133,8 +131,8 @@ export default function Login(props) {
             <View style={styles.rememberMeBox}>
               <View>
                 <CheckBox
-                  checked={false}
-                  onPress={() => this.onePressed()}
+                  checked={checked}
+                  onPress={() => toggleChecked(!checked)}
                   containerStyle={styles.checkStyle}
                 />
               </View>
