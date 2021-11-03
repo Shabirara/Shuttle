@@ -21,6 +21,40 @@ function* SagaProfile(action) {
     };
 }
 
+function* PatchProfileData(action) {
+    try {
+        yield put(setLoading(true));
+        const res = yield axios.patch(
+            `${baseUrl}/user/profile`,
+            action.payload,
+            { headers: { Authorization: `bearer ${action.payload.token}` } },
+        );
+        console.log(res, 'Patch Profile')
+    } catch (error) {
+        console.log(error)
+    } finally {
+        yield put(setLoading(false));
+    };
+}
+
+function* PatchPasswordData(action) {
+    try {
+        yield put(setLoading(true));
+        const res = yield axios.patch(
+            `${baseUrl}/user`,
+            action.payload,
+            { headers: { Authorization: `bearer ${action.payload.token}` } },
+        );
+        console.log(res, 'Patch Password')
+    } catch (error) {
+        console.log(error)
+    } finally {
+        yield put(setLoading(false));
+    };
+}
+
 export function* SagaProfileWorker() {
     yield takeLatest('GET_PROFILE_DATA', SagaProfile)
+    yield takeLatest('PATCH_PROFILE', PatchProfileData)
+    yield takeLatest('PATCH_PASSWORD', PatchPasswordData)
 }

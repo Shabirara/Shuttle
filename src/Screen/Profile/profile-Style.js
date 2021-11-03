@@ -39,7 +39,10 @@ export default StyleSheet.create({
   telpDanUserContainer: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    paddingVertical: ms(20)
+    paddingVertical: ms(20),
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    flexShrink: 1
   },
   titikAsing: {
     fontSize: ms(40),

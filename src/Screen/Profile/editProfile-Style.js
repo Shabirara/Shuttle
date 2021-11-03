@@ -3,11 +3,10 @@ import { ms } from 'react-native-size-matters';
 
 export default StyleSheet.create({
   mainContainer: {
-    flex: 1,
+    marginTop: 0,
     backgroundColor: 'white',
-    paddingHorizontal: ms(16),
-    paddingBottom: ms(20),
-    paddingTop: ms(16),
+    padding: ms(20),
+    marginHorizontal: 0,
   },
   inputEmail: {
     paddingHorizontal: ms(12),
@@ -48,6 +47,8 @@ export default StyleSheet.create({
 
   signUpText: {
     color: 'white',
+    fontFamily: 'Montserrat-Medium',
+    fontSize: ms(14)
   },
 
   editProfile: {

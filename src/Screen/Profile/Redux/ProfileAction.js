@@ -11,3 +11,17 @@ export const setProfileData = (payload) => {
         payload
     }
 }
+
+export const patchProfile = (payload) => {
+    return {
+        type: 'PATCH_PROFILE',
+        payload
+    }
+}
+
+export const patchPassword = (payload) => {
+    return {
+        type: 'PATCH_PASSWORD',
+        payload
+    }
+}

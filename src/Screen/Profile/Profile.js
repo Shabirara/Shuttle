@@ -17,6 +17,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { setIsLogged } from '../../Store/globalAction';
 import { setTokenToLoginReducer } from '../Login/Redux/LoginAction';
 import { getProfileData } from './Redux/ProfileAction';
+import { ms } from 'react-native-size-matters';
 
 export default function Profile(props) {
   const token = useSelector(state => state.LoginReducer.access_token.token)
@@ -63,11 +64,11 @@ export default function Profile(props) {
           {data.phone ?
             <>
               <View>
-                <Text>{data.phone}</Text>
+                <Text style={styles.textNormal}>{data.phone}</Text>
               </View>
 
               <View style={styles.titikAsingContainer}>
-                <Text style={styles.titikAsing}>•</Text>
+                <Text style={[styles.textNormal, { fontSize: ms(20) }]}>•</Text>
               </View>
             </> : null
           }
