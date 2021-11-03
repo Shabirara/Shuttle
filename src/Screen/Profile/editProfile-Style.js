@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {ms} from 'react-native-size-matters';
+import { StyleSheet } from 'react-native';
+import { ms } from 'react-native-size-matters';
 
 export default StyleSheet.create({
   mainContainer: {
@@ -14,18 +14,18 @@ export default StyleSheet.create({
     borderWidth: ms(0.2),
     borderColor: '#777',
     marginBottom: ms(16),
-
     borderRadius: ms(2),
+    fontFamily: 'Montserrat-Regular',
+    fontSize: ms(14)
   },
   inputContainer: {
-    paddingBottom: ms(4),
-    paddingHorizontal: ms(12),
+    paddingVertical: ms(12),
+    alignItems: 'center'
   },
-
   borderLess: {
-    borderWidth: 0,
     borderColor: 'transparent',
     marginBottom: ms(-24),
+    width: ms(300)
   },
   signOutContainer: {
     alignItems: 'center',

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,18 +7,25 @@ import {
   Image,
   StyleSheet,
 } from 'react-native';
-import {ms} from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import noTicket from '../../Assets/Images/NoTicket.png';
-import {Divider} from 'react-native-elements/dist/divider/Divider';
+import { Divider } from 'react-native-elements/dist/divider/Divider';
 import bookingButton from '../../Assets/Images/BookingButton.png';
-import {Icon} from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
+import { Icon } from 'react-native-vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux'
+import { getAllBookings } from './Redux/BookingAction';
 
 export default function MyBooking(props) {
+  const token = useSelector(state => state.LoginReducer.access_token.token)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllBookings({ token: token }))
+  }, [])
   const [active, setActive] = useState(0);
 
   const dataTab = [
@@ -50,7 +57,7 @@ export default function MyBooking(props) {
                   alignItems: 'center',
                 }}>
                 <Text
-                  style={{color: '#0F5996', fontFamily: 'Montserrat-Medium'}}>
+                  style={{ color: '#0F5996', fontFamily: 'Montserrat-Medium' }}>
                   {e.title}
                 </Text>
               </TouchableOpacity>
@@ -76,7 +83,7 @@ const OnGoingBooking = props => {
   const navigation = useNavigation();
 
   const onBookingDetail = () => {
-    navigation.navigate('Detail Stack', {screen: 'Booking Details'});
+    navigation.navigate('Detail Stack', { screen: 'Booking Details' });
   };
   return (
     <View style={styles.ticketContaint}>
@@ -88,7 +95,7 @@ const OnGoingBooking = props => {
           }}>
           Order ID
         </Text>
-        <Text style={{color: '#092C4C', fontFamily: 'Montserrat-SemiBold'}}>
+        <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
           BDTR2108187
         </Text>
       </View>
@@ -99,8 +106,8 @@ const OnGoingBooking = props => {
             expired
               ? styles.expiredWrapper
               : paid
-              ? styles.successWrapper
-              : styles.pendingWrapper
+                ? styles.successWrapper
+                : styles.pendingWrapper
           }>
           <Text style={styles.fontButton}>
             Status Payment: {expired ? 'Expired' : paid ? 'Success' : 'Pending'}
@@ -132,7 +139,7 @@ const OnGoingBooking = props => {
             IDR 450.000
           </Text>
         </View>
-        <View style={{marginRight: ms(80)}}>
+        <View style={{ marginRight: ms(80) }}>
           <Text
             style={{
               color: '#092C4C',
