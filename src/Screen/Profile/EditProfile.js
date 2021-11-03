@@ -55,7 +55,7 @@ export default function EditProfile() {
             <Input
               placeholder="Search your birthday"
               containerStyle={[styles.inputEmail, { width: ms(300) }]}
-              style={{ fontSize: ms(14) }}
+              style={{ fontSize: ms(14), fontFamily: 'Montserrat-Regular' }}
               onPressIn={showDatePicker}
               value={selectedDate}
               inputContainerStyle={styles.borderLess}
