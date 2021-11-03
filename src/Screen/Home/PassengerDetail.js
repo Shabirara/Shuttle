@@ -100,13 +100,13 @@ export default function PassengerDetail(props) {
                         </View>
                     </>
                 }
-                <Card containerStyle={{ margin: 0, padding: 0 }}>
+                <Card containerStyle={{ margin: 0, padding: 0, paddingBottom: ms(30) }}>
                     <View style={styles.cardContainer}>
                         <Text style={styles.fontHeader}>Passenger Detail</Text>
                     </View>
                     <Card.Divider width={ms(2)} />
                     {Array.from(Array(passengerNum)).map((e, i) => {
-                        const [expand, setExpand] = useState(false)
+                        const [expand, setExpand] = useState(true)
                         return (
                             <View>
                                 <View style={styles.cardContainer}>
@@ -165,12 +165,13 @@ export default function PassengerDetail(props) {
                     })
                     }
                 </Card>
+                <Card containerStyle={styles.card}>
+                    <TouchableOpacity onPress={onPayment} style={styles.next}>
+                        <Text style={styles.fontButton}>Continue to Payment</Text>
+                    </TouchableOpacity>
+                </Card>
             </ScrollView>
-            <Card containerStyle={styles.card}>
-                <TouchableOpacity onPress={onPayment} style={styles.next}>
-                    <Text style={styles.fontButton}>Continue to Payment</Text>
-                </TouchableOpacity>
-            </Card>
+
         </View>
     )
 }
@@ -219,7 +220,6 @@ const styles = StyleSheet.create({
     formContainer: {
         backgroundColor: '#F7F9FA',
         marginHorizontal: ms(20),
-        marginBottom: ms(80),
         borderRadius: ms(10),
         paddingTop: ms(30),
         paddingHorizontal: ms(10)
@@ -238,8 +238,6 @@ const styles = StyleSheet.create({
         width: '100%',
         marginHorizontal: 0,
         alignItems: 'center',
-        bottom: 0,
-        position: 'absolute'
     },
     next: {
         backgroundColor: '#0F5996',

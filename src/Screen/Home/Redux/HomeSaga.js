@@ -48,17 +48,21 @@ function* fetchLocationData(action) {
 
 function* fetchTerminalData(action) {
   try {
+    yield put(setLoading(true));
     const res = yield axios.get(`${baseUrl}/search/shuttle`);
     yield put(setTerminalData(res.data.data));
     console.log(res, 'Terminal Data');
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(setLoading(false));
   }
 }
 
 function* fetchBusDetailsData(action) {
   console.log(action.payload.id, 'bus data');
   try {
+    yield put(setLoading(true));
     const res = yield axios.get(
       `${baseUrl}/search/bus?id=${action.payload.id}`,
     );
@@ -68,11 +72,14 @@ function* fetchBusDetailsData(action) {
     yield navigate('Detail Stack', { screen: 'Bus Details' });
   } catch (err) {
     console.log(err);
+  } finally {
+    yield put(setLoading(false));
   }
 }
 
 function* fetchBusReviewData(action) {
   try {
+    yield put(setLoading(true));
     const res = yield axios.get(
       `${baseUrl}/review/?bus_schedule_id=${action.payload}`,
     );
@@ -80,11 +87,14 @@ function* fetchBusReviewData(action) {
     console.log(res.data, 'Bus Review');
   } catch (err) {
     console.log(err);
+  } finally {
+    yield put(setLoading(false));
   }
 }
 
 function* fetchSeatData(action) {
   try {
+    yield put(setLoading(true));
     const res = yield axios.get(
       `${baseUrl}/order/?date=${action.payload.date}&bus_schedule_id=${action.payload.bus_schedule_id}`,
       { headers: { Authorization: `bearer ${action.payload.token}` } },
@@ -95,34 +105,44 @@ function* fetchSeatData(action) {
   } catch (err) {
     console.log(err);
     console.log(action.payload.token);
+  } finally {
+    yield put(setLoading(false));
   }
 }
 
 
 function* postOrderData(action) {
   try {
+    yield put(setLoading(true));
     const res = yield axios.post(`${baseUrl}/order`, action.payload, { headers: { Authorization: `bearer ${action.payload.token}` } })
     yield put(setOrderId(res.data))
     yield navigate('Detail Stack', { screen: 'Payment Method' })
   } catch (error) {
     console.log(error)
+  } finally {
+    yield put(setLoading(false));
   }
 }
 
 function* fetchOrderDetail(action) {
   try {
+    yield put(setLoading(true));
     const res = yield axios.get(
       `${baseUrl}/order/detail?order_id=${action.payload.orderId}`,
       { headers: { Authorization: `bearer ${action.payload.token}` } },
     );
     yield put(setOrderDetail(res.data.data));
+    console.log(res.data, 'Order Detail Return')
   } catch (error) {
     console.log(error)
+  } finally {
+    yield put(setLoading(false));
   }
 }
 
 function* fetchPaymentData(action) {
   try {
+    yield put(setLoading(true));
     const res = yield axios.get(
       `${baseUrl}/payment/?order_id=${action.payload.orderId}`,
       { headers: { Authorization: `bearer ${action.payload.token}` } },
@@ -130,11 +150,14 @@ function* fetchPaymentData(action) {
     yield put(setPaymentData(res.data));
   } catch (error) {
     console.log(error)
+  } finally {
+    yield put(setLoading(false));
   }
 }
 
 function* fetchTicketDetail(action) {
   try {
+    yield put(setLoading(true));
     const res = yield axios.get(
       `${baseUrl}/order/ticket?order_id=${action.payload.orderId}`,
       { headers: { Authorization: `bearer ${action.payload.token}` } },
@@ -143,6 +166,8 @@ function* fetchTicketDetail(action) {
     yield navigate('Detail Stack', { screen: 'Booking Details' })
   } catch (error) {
     console.log(error)
+  } finally {
+    yield put(setLoading(false));
   }
 }
 

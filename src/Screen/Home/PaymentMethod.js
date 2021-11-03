@@ -72,7 +72,7 @@ export default function PaymentMethod(props) {
                 <Text style={[styles.fontJudul, { padding: ms(30) }]}>Transfer Virtual Account</Text>
                 <Card.Divider width={ms(2)} />
                 {redirect ?
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: ms(20), width: '100%' }}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: ms(30), width: '100%' }}
                     >
                         <Text style={styles.fontCard}>Please check your order details and click Book to continue.</Text>
                     </View> :
