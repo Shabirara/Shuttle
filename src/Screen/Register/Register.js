@@ -58,10 +58,10 @@ export default function Login(props) {
         email: userEmail,
         birthday: userBirthDay,
         password: userPassword,
-        roles: 'user',
+        roles: 'bus_provider',
       }),
     );
-    props.navigation.navigate('Login');
+    // props.navigation.navigate('Login');
   };
 
   return (
