@@ -60,25 +60,21 @@ export default function SearchResult(props) {
   const [isSortVisible, setSortVisible] = useState(false);
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [activeCheck, setActiveCheck] = useState(0);
-  const [busDetailsId, setBusDetailsId] = useState('');
-  const [provider, setProvider] = useState('');
 
   const [active, setActive] = useState(isOneWay ? 0 : 1);
 
   const dispatch = useDispatch();
 
-  const onBusDetails = () => {
-    console.log(busDetailsId);
-    console.log(provider, 'PROVIDER');
+  const onBusDetails = (id, bus) => {
     if (isReturn) {
-      dispatch(setBusReturnId(busDetailsId));
-      dispatch(setBusProviderNameReturn(provider));
+      dispatch(setBusReturnId(id));
+      dispatch(setBusProviderNameReturn(bus));
     } else {
-      dispatch(setBusDepartureId(busDetailsId));
-      dispatch(setBusProviderName(provider));
+      dispatch(setBusDepartureId(id));
+      dispatch(setBusProviderName(bus));
     }
-    dispatch(getBusDetailsData({ id: busDetailsId }));
-    dispatch(getBusReviewData(busDetailsId));
+    dispatch(getBusDetailsData({ id: id }));
+    dispatch(getBusReviewData(id));
   };
   const toggleChangeModal = () => {
     setChangeVisible(!isChangeVisible);
@@ -142,9 +138,7 @@ export default function SearchResult(props) {
     <TouchableOpacity
       style={styles.item}
       onPress={() => {
-        setBusDetailsId(id);
-        setProvider(bus);
-        onBusDetails();
+        onBusDetails(id, bus);
       }}>
       <View
         style={{
