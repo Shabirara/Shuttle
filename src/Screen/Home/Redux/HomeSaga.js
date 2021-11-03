@@ -15,6 +15,7 @@ import {
   setPaymentData,
   setOrderDetail,
   setTicketDetail,
+  setPaymentDetail
 } from './HomeAction';
 
 function* SagaOneTrip() {
@@ -155,6 +156,22 @@ function* fetchPaymentData(action) {
   }
 }
 
+function* fetchPaymentDetail(action) {
+  try {
+    yield put(setLoading(true));
+    const res = yield axios.get(
+      `${baseUrl}/payment/detail?order_id=${action.payload.orderId}`,
+      { headers: { Authorization: `bearer ${action.payload.token}` } },
+    );
+    yield put(setPaymentDetail(res.data.data));
+    yield navigate('Detail Stack', { screen: 'Booking Details' })
+  } catch (error) {
+    console.log(error)
+  } finally {
+    yield put(setLoading(false));
+  }
+}
+
 function* fetchTicketDetail(action) {
   try {
     yield put(setLoading(true));
@@ -181,4 +198,5 @@ export function* SagaHomeWorker() {
   yield takeLatest('GET_ORDER_DETAIL', fetchOrderDetail)
   yield takeLatest('GET_PAYMENT_DATA', fetchPaymentData)
   yield takeLatest('GET_TICKET_DETAIL', fetchTicketDetail)
+  yield takeLatest('GET_PAYMENT_DETAIL', fetchPaymentDetail)
 }
