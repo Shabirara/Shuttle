@@ -283,7 +283,10 @@ const ETicket = () => {
         <TouchableOpacity
           style={styles.buttonBookingDetail}
           onPress={onBookingDetail}>
-          <Image source={bookingTicket} />
+          <Image
+            style={{resizeMode: 'contain', height: 60}}
+            source={bookingTicket}
+          />
         </TouchableOpacity>
       </View>
       <View style={styles.ticketContaint}>
@@ -364,7 +367,10 @@ const ETicket = () => {
         <TouchableOpacity
           style={styles.buttonBookingDetail}
           onPress={onBookingDetail}>
-          <Image source={bookingTicket} />
+          <Image
+            style={{resizeMode: 'contain', height: 60}}
+            source={bookingTicket}
+          />
         </TouchableOpacity>
       </View>
     </View>
