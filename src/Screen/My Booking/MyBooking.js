@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -6,27 +6,31 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  ScrollView,
 } from 'react-native';
-import {ms} from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import noTicket from '../../Assets/Images/NoTicket.png';
-import {Divider} from 'react-native-elements/dist/divider/Divider';
+import { Divider } from 'react-native-elements/dist/divider/Divider';
 import bookingButton from '../../Assets/Images/BookingButton.png';
 import bookingTicket from '../../Assets/Images/BookingTicket.png';
-import {Icon} from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
-import {useSelector, useDispatch} from 'react-redux';
-import {getAllBookings} from './Redux/BookingAction';
+import { Icon } from 'react-native-vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllBookings, getOnGoing } from './Redux/BookingAction';
 
 export default function MyBooking(props) {
   const token = useSelector(state => state.LoginReducer.access_token.token);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllBookings({token: token}));
+    dispatch(getAllBookings({ token: token }));
+    dispatch(getOnGoing({ token: token }))
   }, []);
+  const ticket = useSelector(state => { return state.BookingReducer.ticketData.data })
+
   const [active, setActive] = useState(0);
 
   const dataTab = [
@@ -58,7 +62,7 @@ export default function MyBooking(props) {
                   alignItems: 'center',
                 }}>
                 <Text
-                  style={{color: '#0F5996', fontFamily: 'Montserrat-Medium'}}>
+                  style={{ color: '#0F5996', fontFamily: 'Montserrat-Medium' }}>
                   {e.title}
                 </Text>
               </TouchableOpacity>
@@ -79,94 +83,108 @@ export default function MyBooking(props) {
 }
 
 const OnGoingBooking = props => {
+  const ongoing = useSelector(state => { return state.BookingReducer.onGoing.data })
   const [paid, setPaid] = useState(false);
   const [expired, setExpired] = useState(false);
   const navigation = useNavigation();
 
   const onBookingDetail = () => {
-    navigation.navigate('Detail Stack', {screen: 'Booking Details'});
+    navigation.navigate('Detail Stack', { screen: 'Booking Details' });
   };
   return (
-    <View style={styles.ticketContaint}>
-      <View style={styles.orderID}>
-        <Text
-          style={{
-            color: '#092C4C',
-            fontFamily: 'Montserrat-SemiBold',
-          }}>
-          Order ID
-        </Text>
-        <Text style={{color: '#092C4C', fontFamily: 'Montserrat-SemiBold'}}>
-          BDTR2108187
-        </Text>
-      </View>
-      <Divider />
-      <View style={styles.paymentContainer}>
-        <View
-          style={
-            expired
-              ? styles.expiredWrapper
-              : paid
-              ? styles.successWrapper
-              : styles.pendingWrapper
-          }>
-          <Text style={styles.fontButton}>
-            Status Payment: {expired ? 'Expired' : paid ? 'Success' : 'Pending'}
-          </Text>
-        </View>
-      </View>
-      <Divider />
-      <View style={styles.payAndDestination}>
-        <View
-          style={{
-            marginLeft: ms(90),
-            marginRight: ms(40),
-          }}>
-          <Text
-            style={{
-              color: '#092C4C',
-              fontSize: ms(10),
-              fontFamily: 'Montserrat-Regular',
-              paddingBottom: ms(5),
-            }}>
-            Amount to Pay
-          </Text>
-          <Text
-            style={{
-              color: '#092C4C',
-              fontFamily: 'Montserrat-SemiBold',
-              fontSize: ms(14),
-            }}>
-            IDR 450.000
-          </Text>
-        </View>
-        <View style={{marginRight: ms(80)}}>
-          <Text
-            style={{
-              color: '#092C4C',
-              fontSize: ms(10),
-              fontFamily: 'Montserrat-Regular',
-              paddingBottom: ms(5),
-            }}>
-            Destination
-          </Text>
-          <Text
-            style={{
-              color: '#092C4C',
-              fontFamily: 'Montserrat-SemiBold',
-              fontSize: ms(14),
-            }}>
-            Jakarta - Surabaya (Roundtrip)
-          </Text>
-        </View>
-      </View>
-      <Divider />
-      <TouchableOpacity
-        style={styles.buttonBookingDetail}
-        onPress={onBookingDetail}>
-        <Image source={bookingButton} />
-      </TouchableOpacity>
-    </View>
+    <ScrollView style={{ marginBottom: ms(170) }}>
+
+      {
+        ongoing.map((e, i) => (
+          <View>
+            <View style={styles.ticketContaint}>
+              <View style={styles.orderID}>
+                <Text
+                  style={{
+                    color: '#092C4C',
+                    fontFamily: 'Montserrat-SemiBold',
+                  }}>
+                  Order ID
+                </Text>
+                <View style={{ width: ms(160) }}>
+                  <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold', flexShrink: 1 }}>
+                    {e.order_id}
+                  </Text>
+                </View>
+
+              </View>
+              <Divider />
+              <View style={styles.paymentContainer}>
+                <View
+                  style={
+                    e?.status_payment === 'expired'
+                      ? styles.expiredWrapper
+                      : e?.status_payment === 'success'
+                        ? styles.successWrapper
+                        : styles.pendingWrapper
+                  }>
+                  <Text style={styles.fontButton}>
+                    Status Payment: {e?.status_payment === 'expired' ? 'Expired' : e?.status_payment === 'success' ? 'Success' : 'Pending'}
+                  </Text>
+                </View>
+              </View>
+              <Divider />
+              <View style={styles.payAndDestination}>
+                <View
+                  style={{
+                    marginLeft: ms(90),
+                    marginRight: ms(40),
+                  }}>
+                  <Text
+                    style={{
+                      color: '#092C4C',
+                      fontSize: ms(10),
+                      fontFamily: 'Montserrat-Regular',
+                      paddingBottom: ms(5),
+                    }}>
+                    Amount to Pay
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#092C4C',
+                      fontFamily: 'Montserrat-SemiBold',
+                      fontSize: ms(14),
+                    }}>
+                    IDR {e.amount_to_pay}
+                  </Text>
+                </View>
+                <View style={{ marginRight: ms(80) }}>
+                  <Text
+                    style={{
+                      color: '#092C4C',
+                      fontSize: ms(10),
+                      fontFamily: 'Montserrat-Regular',
+                      paddingBottom: ms(5),
+                    }}>
+                    Destination
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#092C4C',
+                      fontFamily: 'Montserrat-SemiBold',
+                      fontSize: ms(14),
+                    }}>
+                    {e.destination} ({e.order_status})
+                  </Text>
+                </View>
+              </View>
+              <Divider />
+              <TouchableOpacity
+                style={styles.buttonBookingDetail}
+                onPress={onBookingDetail}>
+                <Image source={bookingButton} />
+              </TouchableOpacity>
+            </View>
+          </View >
+        ))
+      }
+
+    </ScrollView>
   );
 };
 
@@ -178,7 +196,7 @@ const ETicket = () => {
   const navigation = useNavigation();
 
   const onBookingDetail = () => {
-    navigation.navigate('Detail Stack', {screen: 'Booking Details'});
+    navigation.navigate('Detail Stack', { screen: 'Booking Details' });
   };
   return (
     // -- No Ticket --
@@ -196,7 +214,7 @@ const ETicket = () => {
             }}>
             Departure Date
           </Text>
-          <Text style={{color: '#092C4C', fontFamily: 'Montserrat-SemiBold'}}>
+          <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
             BDTR2108187
           </Text>
         </View>
@@ -207,8 +225,8 @@ const ETicket = () => {
               expiredR
                 ? styles.expiredWrapper
                 : paidR
-                ? styles.successWrapper
-                : styles.pendingWrapper
+                  ? styles.successWrapper
+                  : styles.pendingWrapper
             }>
             <Text style={styles.fontButton}>
               Status Ticket:{' '}
@@ -241,7 +259,7 @@ const ETicket = () => {
               Sat, 21 Aug 2021
             </Text>
           </View>
-          <View style={{marginRight: ms(80)}}>
+          <View style={{ marginRight: ms(80) }}>
             <Text
               style={{
                 color: '#092C4C',
@@ -277,7 +295,7 @@ const ETicket = () => {
             }}>
             Return Ticket
           </Text>
-          <Text style={{color: '#092C4C', fontFamily: 'Montserrat-SemiBold'}}>
+          <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
             BDTR2108187
           </Text>
         </View>
@@ -288,8 +306,8 @@ const ETicket = () => {
               expired
                 ? styles.expiredWrapper
                 : paid
-                ? styles.successWrapper
-                : styles.pendingWrapper
+                  ? styles.successWrapper
+                  : styles.pendingWrapper
             }>
             <Text style={styles.fontButton}>
               Status Ticket:{' '}
@@ -322,7 +340,7 @@ const ETicket = () => {
               Sat, 21 Aug 2021
             </Text>
           </View>
-          <View style={{marginRight: ms(80)}}>
+          <View style={{ marginRight: ms(80) }}>
             <Text
               style={{
                 color: '#092C4C',
@@ -370,6 +388,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: ms(20),
     paddingVertical: ms(15),
     justifyContent: 'space-between',
+    flexShrink: 1
   },
   paymentContainer: {
     paddingHorizontal: ms(5),

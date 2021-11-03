@@ -25,3 +25,17 @@ export const setTicketData = (payload) => {
         payload
     }
 }
+
+export const getOnGoing = (payload) => {
+    return {
+        type: 'GET_ON_GOING',
+        payload
+    }
+}
+
+export const setOnGoing = (payload) => {
+    return {
+        type: 'SET_ON_GOING',
+        payload
+    }
+}

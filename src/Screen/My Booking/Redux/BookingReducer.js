@@ -1,6 +1,7 @@
 const initialState = {
     allBookings: {},
-    ticketData: {}
+    ticketData: {},
+    onGoing: {}
 }
 
 export default function BookingReducer(state = initialState, action) {
@@ -14,6 +15,11 @@ export default function BookingReducer(state = initialState, action) {
             return {
                 ...state,
                 ticketData: action.payload
+            }
+        case 'SET_ON_GOING':
+            return {
+                ...state,
+                onGoing: action.payload
             }
         default:
             return state

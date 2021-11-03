@@ -4,7 +4,7 @@ import axios from 'axios';
 import { setLoading } from '../../../Store/globalAction';
 import { baseUrl } from '../../../Utils/Config';
 import { navigate } from '../../../Utils/Navigate';
-import { setAllBookings } from './BookingAction';
+import { setAllBookings, setOnGoing } from './BookingAction';
 
 function* BookingSaga(action) {
     try {
@@ -21,6 +21,22 @@ function* BookingSaga(action) {
     };
 }
 
+function* fetchOnGoing(action) {
+    try {
+        yield put(setLoading(true));
+        const res = yield axios.get(
+            `${baseUrl}/payment/show/status?status=pending`,
+            { headers: { Authorization: `bearer ${action.payload.token}` } },
+        );
+        yield put(setOnGoing(res.data));
+    } catch (error) {
+        console.log(error)
+    } finally {
+        yield put(setLoading(false));
+    };
+}
+
 export function* SagaBookingWorker() {
     yield takeLatest('GET_ALL_BOOKINGS', BookingSaga)
+    yield takeLatest('GET_ON_GOING', fetchOnGoing)
 }
