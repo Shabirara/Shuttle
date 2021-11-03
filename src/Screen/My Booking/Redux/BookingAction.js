@@ -39,3 +39,17 @@ export const setOnGoing = (payload) => {
         payload
     }
 }
+
+export const getSelectedTicketData = (payload) => {
+    return {
+        type: 'GET_SELECTED_TICKET_DATA',
+        payload
+    }
+}
+
+export const setSelectedTicketData = (payload) => {
+    return {
+        type: 'SET_SELECTED_TICKET_DATA',
+        payload
+    }
+}

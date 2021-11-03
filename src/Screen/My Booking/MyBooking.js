@@ -20,7 +20,9 @@ import bookingTicket from '../../Assets/Images/BookingTicket.png';
 import { Icon } from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllBookings, getOnGoing } from './Redux/BookingAction';
+import { getAllBookings, getOnGoing, getSelectedTicketData } from './Redux/BookingAction';
+import { getPaymentDetail } from '../Home/Redux/HomeAction';
+import { setIsOneWay } from '../Home/Redux/HomeAction';
 
 export default function MyBooking(props) {
   const token = useSelector(state => state.LoginReducer.access_token.token);
@@ -29,7 +31,6 @@ export default function MyBooking(props) {
     dispatch(getAllBookings({ token: token }));
     dispatch(getOnGoing({ token: token }))
   }, []);
-  const ticket = useSelector(state => { return state.BookingReducer.ticketData.data })
 
   const [active, setActive] = useState(0);
 
@@ -84,16 +85,22 @@ export default function MyBooking(props) {
 
 const OnGoingBooking = props => {
   const ongoing = useSelector(state => { return state.BookingReducer.onGoing.data })
+  const token = useSelector(state => state.LoginReducer.access_token.token)
+
   const [paid, setPaid] = useState(false);
   const [expired, setExpired] = useState(false);
   const navigation = useNavigation();
+  const dispatch = useDispatch()
 
-  const onBookingDetail = () => {
-    navigation.navigate('Detail Stack', { screen: 'Booking Details' });
+  const onBookingDetail = (orderId, oneWay) => {
+    dispatch(setIsOneWay(oneWay === 'OneWay' ? true : false))
+    dispatch(getPaymentDetail({
+      orderId: orderId.orderId,
+      token: token
+    }))
   };
   return (
     <ScrollView style={{ marginBottom: ms(170) }}>
-
       {
         ongoing.map((e, i) => (
           <View>
@@ -117,14 +124,14 @@ const OnGoingBooking = props => {
               <View style={styles.paymentContainer}>
                 <View
                   style={
-                    e?.status_payment === 'expired'
+                    e?.payment_status === 'expired'
                       ? styles.expiredWrapper
-                      : e?.status_payment === 'success'
+                      : e?.payment_status === 'success'
                         ? styles.successWrapper
                         : styles.pendingWrapper
                   }>
                   <Text style={styles.fontButton}>
-                    Status Payment: {e?.status_payment === 'expired' ? 'Expired' : e?.status_payment === 'success' ? 'Success' : 'Pending'}
+                    Status Payment: {e?.payment_status === 'expired' ? 'Expired' : e?.payment_status === 'success' ? 'Success' : 'Pending'}
                   </Text>
                 </View>
               </View>
@@ -169,14 +176,14 @@ const OnGoingBooking = props => {
                       fontFamily: 'Montserrat-SemiBold',
                       fontSize: ms(14),
                     }}>
-                    {e.destination} ({e.order_status})
+                    {e.destination} ({e.order_type})
                   </Text>
                 </View>
               </View>
               <Divider />
               <TouchableOpacity
                 style={styles.buttonBookingDetail}
-                onPress={onBookingDetail}>
+                onPress={() => onBookingDetail({ orderId: e.order_id, oneWay: e.order_type })}>
                 <Image source={bookingButton} />
               </TouchableOpacity>
             </View>
@@ -188,15 +195,23 @@ const OnGoingBooking = props => {
   );
 };
 
-const ETicket = () => {
+const ETicket = props => {
+  const tickets = useSelector(state => { return state.BookingReducer.allBookings.data })
+  const token = useSelector(state => state.LoginReducer.access_token.token)
+
   const [paidR, setPaidR] = useState(false);
   const [expiredR, setExpiredR] = useState(true);
   const [paid, setPaid] = useState(false);
   const [expired, setExpired] = useState(false);
-  const navigation = useNavigation();
 
-  const onBookingDetail = () => {
-    navigation.navigate('Detail Stack', { screen: 'Booking Details' });
+  const navigation = useNavigation();
+  const dispatch = useDispatch()
+
+  const onBookingDetail = (orderId) => {
+    dispatch(getSelectedTicketData({
+      orderId: orderId.orderId,
+      token: token
+    }))
   };
   return (
     // -- No Ticket --
@@ -204,176 +219,182 @@ const ETicket = () => {
     //   <Image source={noTicket} />
     // </View>
     // -- End Of No Ticket --
-    <View>
-      <View style={styles.ticketContaint}>
-        <View style={styles.orderID}>
-          <Text
-            style={{
-              color: '#092C4C',
-              fontFamily: 'Montserrat-SemiBold',
-            }}>
-            Departure Date
-          </Text>
-          <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
-            BDTR2108187
-          </Text>
-        </View>
-        <Divider />
-        <View style={styles.paymentContainer}>
-          <View
-            style={
-              expiredR
-                ? styles.expiredWrapper
-                : paidR
-                  ? styles.successWrapper
-                  : styles.pendingWrapper
-            }>
-            <Text style={styles.fontButton}>
-              Status Ticket:{' '}
-              {expiredR ? 'Expired' : paidR ? 'Success' : 'Waiting Check In'}
-            </Text>
+    <ScrollView style={{ marginBottom: ms(170) }}>
+      {tickets.map((e, i) => (
+        <>
+          <View style={styles.ticketContaint}>
+            <View style={styles.orderID}>
+              <Text
+                style={{
+                  color: '#092C4C',
+                  fontFamily: 'Montserrat-SemiBold',
+                }}>
+                Departure Ticket
+              </Text>
+              <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
+                {e.ticket}
+              </Text>
+            </View>
+            <Divider />
+            <View style={styles.paymentContainer}>
+              <View
+                style={
+                  e.departure_status_ticket ? styles.successWrapper
+                    : styles.pendingWrapper
+                }>
+                <Text style={styles.fontButton}>
+                  Status Ticket:{' '}
+                  {e.departure_status_ticket ? 'Success' : 'Waiting Check In'}
+                </Text>
+              </View>
+            </View>
+            <Divider />
+            <View style={styles.payAndDestination}>
+              <View
+                style={{
+                  marginLeft: ms(90),
+                  marginRight: ms(40),
+                }}>
+                <Text
+                  style={{
+                    color: '#092C4C',
+                    fontSize: ms(10),
+                    fontFamily: 'Montserrat-Regular',
+                    paddingBottom: ms(5),
+                  }}>
+                  Departure Date
+                </Text>
+                <Text
+                  style={{
+                    color: '#092C4C',
+                    fontFamily: 'Montserrat-SemiBold',
+                    fontSize: ms(14),
+                  }}>
+                  {e.departure_date}
+                </Text>
+              </View>
+              <View style={{ marginRight: ms(80) }}>
+                <Text
+                  style={{
+                    color: '#092C4C',
+                    fontSize: ms(10),
+                    fontFamily: 'Montserrat-Regular',
+                    paddingBottom: ms(5),
+                  }}>
+                  Destination
+                </Text>
+                <Text
+                  style={{
+                    color: '#092C4C',
+                    fontFamily: 'Montserrat-SemiBold',
+                    fontSize: ms(14),
+                  }}>
+                  {e.departure_destination}
+                </Text>
+              </View>
+            </View>
+            <Divider />
+            <TouchableOpacity
+              style={styles.buttonBookingDetail}
+              onPress={() => onBookingDetail({ orderId: e.order_id })}>
+              <Image
+                style={{ resizeMode: 'contain', height: 60 }}
+                source={bookingTicket}
+              />
+            </TouchableOpacity>
           </View>
-        </View>
-        <Divider />
-        <View style={styles.payAndDestination}>
-          <View
-            style={{
-              marginLeft: ms(90),
-              marginRight: ms(40),
-            }}>
-            <Text
-              style={{
-                color: '#092C4C',
-                fontSize: ms(10),
-                fontFamily: 'Montserrat-Regular',
-                paddingBottom: ms(5),
-              }}>
-              Departure Date
-            </Text>
-            <Text
-              style={{
-                color: '#092C4C',
-                fontFamily: 'Montserrat-SemiBold',
-                fontSize: ms(14),
-              }}>
-              Sat, 21 Aug 2021
-            </Text>
-          </View>
-          <View style={{ marginRight: ms(80) }}>
-            <Text
-              style={{
-                color: '#092C4C',
-                fontSize: ms(10),
-                fontFamily: 'Montserrat-Regular',
-                paddingBottom: ms(5),
-              }}>
-              Destination
-            </Text>
-            <Text
-              style={{
-                color: '#092C4C',
-                fontFamily: 'Montserrat-SemiBold',
-                fontSize: ms(14),
-              }}>
-              Jakarta - Surabaya
-            </Text>
-          </View>
-        </View>
-        <Divider />
-        <TouchableOpacity
-          style={styles.buttonBookingDetail}
-          onPress={onBookingDetail}>
-          <Image
-            style={{resizeMode: 'contain', height: 60}}
-            source={bookingTicket}
-          />
-        </TouchableOpacity>
-      </View>
-      <View style={styles.ticketContaint}>
-        <View style={styles.orderID}>
-          <Text
-            style={{
-              color: '#092C4C',
-              fontFamily: 'Montserrat-SemiBold',
-            }}>
-            Return Ticket
-          </Text>
-          <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
-            BDTR2108187
-          </Text>
-        </View>
-        <Divider />
-        <View style={styles.paymentContainer}>
-          <View
-            style={
-              expired
-                ? styles.expiredWrapper
-                : paid
-                  ? styles.successWrapper
-                  : styles.pendingWrapper
-            }>
-            <Text style={styles.fontButton}>
-              Status Ticket:{' '}
-              {expired ? 'Expired' : paid ? 'Success' : 'Waiting Check In'}
-            </Text>
-          </View>
-        </View>
-        <Divider />
-        <View style={styles.payAndDestination}>
-          <View
-            style={{
-              marginLeft: ms(90),
-              marginRight: ms(40),
-            }}>
-            <Text
-              style={{
-                color: '#092C4C',
-                fontSize: ms(10),
-                fontFamily: 'Montserrat-Regular',
-                paddingBottom: ms(5),
-              }}>
-              Return Date
-            </Text>
-            <Text
-              style={{
-                color: '#092C4C',
-                fontFamily: 'Montserrat-SemiBold',
-                fontSize: ms(14),
-              }}>
-              Sat, 21 Aug 2021
-            </Text>
-          </View>
-          <View style={{ marginRight: ms(80) }}>
-            <Text
-              style={{
-                color: '#092C4C',
-                fontSize: ms(10),
-                fontFamily: 'Montserrat-Regular',
-                paddingBottom: ms(5),
-              }}>
-              Destination
-            </Text>
-            <Text
-              style={{
-                color: '#092C4C',
-                fontFamily: 'Montserrat-SemiBold',
-                fontSize: ms(14),
-              }}>
-              Surabaya - Jakarta{' '}
-            </Text>
-          </View>
-        </View>
-        <Divider />
-        <TouchableOpacity
-          style={styles.buttonBookingDetail}
-          onPress={onBookingDetail}>
-          <Image
-            style={{resizeMode: 'contain', height: 60}}
-            source={bookingTicket}
-          />
-        </TouchableOpacity>
-      </View>
-    </View>
+
+          {
+            e.order_type === 'OneWay' ? null :
+              <View style={styles.ticketContaint}>
+                <View style={styles.orderID}>
+                  <Text
+                    style={{
+                      color: '#092C4C',
+                      fontFamily: 'Montserrat-SemiBold',
+                    }}>
+                    Return Ticket
+                  </Text>
+                  <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
+                    {e.ticket}
+                  </Text>
+                </View>
+                <Divider />
+                <View style={styles.paymentContainer}>
+                  <View
+                    style={
+                      e.return_status_ticket
+                        ? styles.successWrapper
+                        : styles.pendingWrapper
+                    }>
+                    <Text style={styles.fontButton}>
+                      Status Ticket:{' '}
+                      {e.return_status_ticket ? 'Success' : 'Waiting Check In'}
+                    </Text>
+                  </View>
+                </View>
+                <Divider />
+                <View style={styles.payAndDestination}>
+                  <View
+                    style={{
+                      marginLeft: ms(90),
+                      marginRight: ms(40),
+                    }}>
+                    <Text
+                      style={{
+                        color: '#092C4C',
+                        fontSize: ms(10),
+                        fontFamily: 'Montserrat-Regular',
+                        paddingBottom: ms(5),
+                      }}>
+                      Return Date
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#092C4C',
+                        fontFamily: 'Montserrat-SemiBold',
+                        fontSize: ms(14),
+                      }}>
+                      {e.return_date}
+                    </Text>
+                  </View>
+                  <View style={{ marginRight: ms(80) }}>
+                    <Text
+                      style={{
+                        color: '#092C4C',
+                        fontSize: ms(10),
+                        fontFamily: 'Montserrat-Regular',
+                        paddingBottom: ms(5),
+                      }}>
+                      Destination
+                    </Text>
+                    <Text
+                      style={{
+                        color: '#092C4C',
+                        fontFamily: 'Montserrat-SemiBold',
+                        fontSize: ms(14),
+                      }}>
+                      {e.return_destination}
+                    </Text>
+                  </View>
+                </View>
+                <Divider />
+                <TouchableOpacity
+                  style={styles.buttonBookingDetail}
+                  onPress={() => onBookingDetail({ orderId: e.order_id })}>
+                  <Image
+                    style={{ resizeMode: 'contain', height: 60 }}
+                    source={bookingTicket}
+                  />
+                </TouchableOpacity>
+              </View>
+          }
+
+          <Divider style={{ marginBottom: ms(50) }} width={ms(5)} />
+        </>
+      ))
+      }
+    </ScrollView >
   );
 };
 

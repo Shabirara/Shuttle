@@ -4,7 +4,7 @@ import axios from 'axios';
 import { setLoading } from '../../../Store/globalAction';
 import { baseUrl } from '../../../Utils/Config';
 import { navigate } from '../../../Utils/Navigate';
-import { setAllBookings, setOnGoing } from './BookingAction';
+import { setAllBookings, setOnGoing, setSelectedTicketData } from './BookingAction';
 
 function* BookingSaga(action) {
     try {
@@ -25,7 +25,7 @@ function* fetchOnGoing(action) {
     try {
         yield put(setLoading(true));
         const res = yield axios.get(
-            `${baseUrl}/payment/show/status?status=pending`,
+            `${baseUrl}/payment/show/status`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
         yield put(setOnGoing(res.data));
@@ -36,7 +36,24 @@ function* fetchOnGoing(action) {
     };
 }
 
+function* fetchSelectedTicketDetail(action) {
+    try {
+        yield put(setLoading(true));
+        const res = yield axios.get(
+            `${baseUrl}/order/ticket?order_id=${action.payload.orderId}`,
+            { headers: { Authorization: `bearer ${action.payload.token}` } },
+        );
+        yield put(setSelectedTicketData(res.data));
+        yield navigate('Detail Stack', { screen: 'Ticket Details' })
+    } catch (error) {
+        console.log(error)
+    } finally {
+        yield put(setLoading(false));
+    };
+}
+
 export function* SagaBookingWorker() {
     yield takeLatest('GET_ALL_BOOKINGS', BookingSaga)
     yield takeLatest('GET_ON_GOING', fetchOnGoing)
+    yield takeLatest('GET_SELECTED_TICKET_DATA', fetchSelectedTicketDetail)
 }
