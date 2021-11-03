@@ -12,6 +12,9 @@ import {
   setBusReviewData,
   setSeatData,
   setOrderId,
+  setPaymentData,
+  setOrderDetail,
+  setTicketDetail,
 } from './HomeAction';
 
 function* SagaOneTrip() {
@@ -106,6 +109,43 @@ function* postOrderData(action) {
   }
 }
 
+function* fetchOrderDetail(action) {
+  try {
+    const res = yield axios.get(
+      `${baseUrl}/order/detail?order_id=${action.payload.orderId}`,
+      { headers: { Authorization: `bearer ${action.payload.token}` } },
+    );
+    yield put(setOrderDetail(res.data.data));
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+function* fetchPaymentData(action) {
+  try {
+    const res = yield axios.get(
+      `${baseUrl}/payment/?order_id=${action.payload.orderId}`,
+      { headers: { Authorization: `bearer ${action.payload.token}` } },
+    );
+    yield put(setPaymentData(res.data));
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+function* fetchTicketDetail(action) {
+  try {
+    const res = yield axios.get(
+      `${baseUrl}/order/ticket?order_id=${action.payload.orderId}`,
+      { headers: { Authorization: `bearer ${action.payload.token}` } },
+    );
+    yield put(setTicketDetail(res.data));
+    yield navigate('Detail Stack', { screen: 'Booking Details' })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export function* SagaHomeWorker() {
   yield takeLatest('GET_SEARCH_LOCATION_DATA', fetchLocationData);
   yield takeLatest('GET_TERMINAL_DATA', fetchTerminalData);
@@ -113,4 +153,7 @@ export function* SagaHomeWorker() {
   yield takeLatest('GET_BUS_REVIEW_DATA', fetchBusReviewData);
   yield takeLatest('GET_SEAT_DATA', fetchSeatData);
   yield takeLatest('POST_ORDER', postOrderData);
+  yield takeLatest('GET_ORDER_DETAIL', fetchOrderDetail)
+  yield takeLatest('GET_PAYMENT_DATA', fetchPaymentData)
+  yield takeLatest('GET_TICKET_DETAIL', fetchTicketDetail)
 }

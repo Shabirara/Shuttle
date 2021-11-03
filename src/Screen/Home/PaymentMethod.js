@@ -1,16 +1,36 @@
-import React, { useState } from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, StyleSheet, Image, TouchableOpacity, FlatList, Linking, ToastAndroid } from 'react-native'
 import { Card, Divider } from 'react-native-elements'
 import { ms } from 'react-native-size-matters'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Modal from "react-native-modal";
+import { useDispatch, useSelector } from 'react-redux'
+import { getOrderDetail, getPaymentData, getTicketDetail } from './Redux/HomeAction'
 
 export default function PaymentMethod(props) {
+    const data = useSelector(state => state.HomeReducer)
+    const token = useSelector(state => state.LoginReducer.access_token.token)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getPaymentData({
+            orderId: data.orderId.orderId,
+            token: token
+        }));
+        dispatch(getOrderDetail({
+            orderId: data.orderId.orderId,
+            token: token
+        }))
+    }, [])
+
     const [banks, setBanks] = useState([
         { name: 'BCA', imgUri: require('../../Assets/Images/bca.png'), selected: false },
         { name: 'Mandiri', imgUri: require('../../Assets/Images/mandiri.png'), selected: false },
         { name: 'BNI', imgUri: require('../../Assets/Images/bni.png'), selected: false }
     ])
+
+    const redirect = true
 
     const [isVisible, setIsVisible] = useState(false);
 
@@ -19,7 +39,13 @@ export default function PaymentMethod(props) {
     const listIndex = [0, 1, 2]
 
     const onBook = () => {
-        props.navigation.navigate('Payment Details')
+        ToastAndroid.show(data.paymentData.message, ToastAndroid.SHORT);
+        dispatch(getTicketDetail({
+            orderId: data.orderId.orderId,
+            token: token
+        }))
+        Linking.openURL(`${data.paymentData.data.redirect_url}`)
+        console.log(data.paymentData.data.redirect_url)
     }
 
     const toggleModal = () => {
@@ -29,54 +55,60 @@ export default function PaymentMethod(props) {
     return (
         <View style={{ flex: 1 }}>
             <View style={styles.ijo}>
-                <View>
+                <View style={{ width: '50%' }}>
                     <Text style={styles.fontJudul}>Amount to Pay</Text>
-                    <Text style={styles.fontBiru}>IDR 450.000</Text>
+                    <Text style={styles.fontBiru}>IDR {data?.orderDetail?.price_detail?.total}</Text>
                     <Text style={styles.fontJudul}>Order ID</Text>
-                    <Text style={styles.fontBiru}>BDTR2108187</Text>
+                    <Text style={styles.fontBiru}>{data?.orderId?.orderId}</Text>
                 </View>
                 <View style={{ width: '40%' }}>
                     <Text style={styles.fontJudul}>Passenger</Text>
-                    <Text style={styles.fontBiru}>1</Text>
+                    <Text style={styles.fontBiru}>{data?.orderDetail?.total_passenger}</Text>
                     <Text style={styles.fontJudul}>Order Date</Text>
-                    <Text style={styles.fontBiru}>Fri, 20 Aug 2021</Text>
+                    <Text style={styles.fontBiru}>{data?.orderDetail?.orderDate}</Text>
                 </View>
             </View>
             <Card containerStyle={styles.card}>
                 <Text style={[styles.fontJudul, { padding: ms(30) }]}>Transfer Virtual Account</Text>
                 <Card.Divider width={ms(2)} />
-                {banks.map((e, i) => {
-                    return (
-                        <TouchableOpacity
-                            style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: ms(20), width: '100%' }}
-                            onPress={() => {
-                                const newIndex = [...listIndex];
-                                newIndex.splice(i, 1)
-                                setBanks((prevState) => {
-                                    prevState[i].selected = !prevState[i].selected;
-                                    newIndex.map((item, index) => {
-                                        return prevState[item].selected = false;
-                                    })
-                                    return [...prevState]
-                                });
-                                setBookActive(true);
-                            }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={e.imgUri} style={{ width: ms(40), height: ms(30), resizeMode: 'contain', margin: ms(15) }} />
-                                <Text style={styles.fontCard}>{e.name} Virtual Account</Text>
-                            </View>
+                {redirect ?
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: ms(20), width: '100%' }}
+                    >
+                        <Text style={styles.fontCard}>Please check your order details and click Book to continue.</Text>
+                    </View> :
+                    banks.map((e, i) => {
+                        return (
+                            <TouchableOpacity
+                                style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: ms(20), width: '100%' }}
+                                onPress={() => {
+                                    const newIndex = [...listIndex];
+                                    newIndex.splice(i, 1)
+                                    setBanks((prevState) => {
+                                        prevState[i].selected = !prevState[i].selected;
+                                        newIndex.map((item, index) => {
+                                            return prevState[item].selected = false;
+                                        })
+                                        return [...prevState]
+                                    });
+                                    setBookActive(true);
+                                }}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Image source={e.imgUri} style={{ width: ms(40), height: ms(30), resizeMode: 'contain', margin: ms(15) }} />
+                                    <Text style={styles.fontCard}>{e.name} Virtual Account</Text>
+                                </View>
 
-                            <MaterialCommunityIcons
-                                name={e.selected ? 'record-circle-outline' : 'circle-outline'}
-                                color="#0F5996"
-                                size={ms(20)}
-                            />
-                        </TouchableOpacity>
-                    )
-                })}
+                                <MaterialCommunityIcons
+                                    name={e.selected ? 'record-circle-outline' : 'circle-outline'}
+                                    color="#0F5996"
+                                    size={ms(20)}
+                                />
+                            </TouchableOpacity>
+                        )
+                    })
+                }
             </Card>
             <Card containerStyle={styles.book}>
-                {bookActive ?
+                {redirect ?
                     <TouchableOpacity onPress={toggleModal} style={styles.next}>
                         <Text style={styles.fontButton}>Book</Text>
                     </TouchableOpacity> :

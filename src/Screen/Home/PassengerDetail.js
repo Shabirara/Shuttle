@@ -35,17 +35,17 @@ export default function PassengerDetail(props) {
     const onPayment = () => {
         dispatch(postOrder({
             "departure_date": departureDate,
-            "return_date": oneWay ? '' : returnDateNum,
+            "return_date": oneWay ? [] : returnDateNum,
             "fullname": userName,
             "email": userEmail,
             "age": userAge,
             "phone": userPhone,
             "departure_seat": departureSeat,
-            "return_seat": oneWay ? '' : returnSeat,
+            "return_seat": oneWay ? [] : returnSeat,
             "passenger": passengerNum,
             "order_type": oneWay ? "OneWay" : 'RoundTrip',
             "departure_bus_id": data?.busDepartureId,
-            "return_bus_id": oneWay ? '' : data?.busArrivalId,
+            "return_bus_id": oneWay ? [] : data?.busArrivalId,
             token: token
         }))
     }
