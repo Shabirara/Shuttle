@@ -2,13 +2,18 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { Card, Divider } from 'react-native-elements'
 import { ms } from 'react-native-size-matters'
+import { useSelector } from 'react-redux'
+import moment from "moment";
 
 export default function BookingDetails(props) {
-    const [paid, setPaid] = useState(false)
-    const [expired, setExpired] = useState(false)
+    const data = useSelector(state => { return state.HomeReducer.paymentDetail })
+    const HomeRedux = useSelector(state => { return state.HomeReducer })
+    const returnDate = moment(HomeRedux?.returnDate).format('ddd, DD MMM YYYY')
+    console.log(data)
+    const orderDate = moment(data?.order_date).format('ddd, DD MMM YYYY')
 
     const onPayment = () => {
-        props.navigation.navigate('Payment Details')
+        props.navigation.navigate('Bottom Tab', { screen: 'My Booking' })
     }
 
     return (
@@ -19,91 +24,105 @@ export default function BookingDetails(props) {
                         style={{ height: ms(30), width: ms(30), margin: ms(20) }} />
                     <View>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <Text style={styles.fontMedium}>Jakarta</Text>
-                            <Image source={require('../../Assets/Images/carbon_repeat.png')}
-                                style={{ margin: ms(10) }} />
-                            <Text style={styles.fontMedium}>Surabaya</Text>
+                            <Text style={styles.fontMedium}>{data?.departure_shuttle[1]}</Text>
+                            {HomeRedux?.isOneWay ?
+                                <Text style={styles.fontMedium}> ➜ </Text> :
+                                <Image source={require('../../Assets/Images/carbon_repeat.png')}
+                                    style={{ margin: ms(10) }} />
+                            }
+                            <Text style={styles.fontMedium}>{HomeRedux?.arrivalCity}</Text>
                         </View>
                         <View style={{ marginRight: ms(90) }}>
-                            <Text style={styles.fontKecil}>
-                                PT Sinar Jaya Group - Sat, 21 Aug 2021 - 07:00
-                                KYM Trans - Sat, 28 Aug 2021 - 07:00
-                            </Text>
+                            {HomeRedux?.isOneWay ?
+                                <Text style={styles.fontKecil}>
+                                    {`${data?.price_detail?.departure_provider} - ${HomeRedux?.departureDateString} - ${data?.departure_time[0]}`}
+                                </Text> :
+                                <>
+                                    <Text style={[styles.fontKecil]}>
+                                        {`${data?.price_detail?.departure_provider} - ${HomeRedux?.departureDateString} - ${data?.departure_time[0]}
+                                \n${data?.return_bus_provider} - ${returnDate} - ${data?.return_time?.[0]}`}
+                                    </Text>
+                                </>}
                         </View>
                     </View>
                 </View>
                 <Divider orientation='horizontal' width={ms(2)} />
-                <View style={expired ? styles.expiredWrapper : (paid ? styles.successWrapper : styles.pendingWrapper)}>
-                    <Text style={styles.fontButton}>Status Payment: {expired ? 'Expired' : (paid ? 'Success' : 'Pending')}</Text>
+                <View style={data?.payment_status === 'expired' ? styles.expiredWrapper : (data?.payment_status === 'success' ? styles.successWrapper : styles.pendingWrapper)}>
+                    <Text style={styles.fontButton}>Status Payment: {data?.payment_status === 'expired' ? 'Expired' : (data?.payment_status === 'success' ? 'Success' : 'Pending')}</Text>
                 </View>
             </View>
             <Card containerStyle={styles.card}>
                 <Text style={[styles.fontMedium, styles.cardContainer]}>Booking Details</Text>
                 <Divider />
                 <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={{ width: '50%' }}>
+                    <View style={{ width: '45%', justifyContent: 'space-between' }}>
                         <Text style={[styles.contentContainer, styles.fontKecil]}>Order ID</Text>
-                        <Text style={styles.fontMedium}>BDTR2108187</Text>
+                        <Text style={styles.fontMedium}>{data?.order_id}</Text>
                         <Text style={[styles.contentContainer, styles.fontKecil]}>Passenger</Text>
-                        <Text style={styles.fontMedium}>1</Text>
+                        <Text style={styles.fontMedium}>{data?.passengers?.length}</Text>
                     </View>
-                    <View style={{ width: '50%' }}>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>Order Date</Text>
-                        <Text style={styles.fontMedium}>Fri, 20 Aug 2021</Text>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>Due Date Payment</Text>
-                        <Text style={styles.fontMedium}>
-                            Sat, 21 Aug 2021
-                            12:00
-                        </Text>
+                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
+                        <View>
+                            <Text style={[styles.contentContainer, styles.fontKecil]}>Order Date</Text>
+                            <Text style={styles.fontMedium}>{orderDate}</Text>
+                        </View>
+                        <View>
+                            <Text style={[styles.contentContainer, styles.fontKecil]}>Due Date Payment</Text>
+                            <Text style={styles.fontMedium}>{data?.due_date}</Text>
+                        </View>
                     </View>
                 </View>
             </Card>
             <Card containerStyle={styles.card}>
                 <Text style={[styles.fontMedium, styles.cardContainer]}>Passenger Detail</Text>
                 <Divider />
-                <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>Name</Text>
-                        <Text style={styles.fontMedium}>Irham Raziqony</Text>
-                    </View>
-                    <View style={{ flexDirection: 'row', width: '50%' }}>
+                {data?.passengers?.map((e, i) => (
+                    <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
                         <View style={{ width: '50%', justifyContent: 'space-between' }}>
-                            <Text style={[styles.contentContainer, styles.fontKecil]}>Departure Seat</Text>
-                            <Text style={styles.fontMedium}>12</Text>
+                            <Text style={[styles.contentContainer, styles.fontKecil]}>Name</Text>
+                            <Text style={styles.fontMedium}>{e?.fullname}</Text>
                         </View>
-                        <View style={{ width: '50%', justifyContent: 'space-between' }}>
-                            <Text style={[styles.contentContainer, styles.fontKecil]}>Return Seat</Text>
-                            <Text style={styles.fontMedium}>16</Text>
+                        <View style={{ flexDirection: 'row', width: '50%' }}>
+                            <View style={{ justifyContent: 'space-between', flexShrink: 1 }}>
+                                <Text style={[styles.contentContainer, styles.fontKecil]}>Departure Seat</Text>
+                                <Text style={styles.fontMedium}>{e?.departure_seat}</Text>
+                            </View>
+                            {HomeRedux.isOneWay ? null :
+                                <View style={{ justifyContent: 'space-between', flexShrink: 1 }}>
+                                    <Text style={[styles.contentContainer, styles.fontKecil]}>Return Seat</Text>
+                                    <Text style={styles.fontMedium}>{e?.return_seat}</Text>
+                                </View>
+                            }
                         </View>
                     </View>
-                </View>
+                ))}
+
             </Card>
             <Card containerStyle={styles.card}>
                 <View style={styles.cardContainer}>
                     <Text style={styles.fontMedium}>Total Price</Text>
-                    <Text style={styles.fontMedium}>IDR 450.000</Text>
+                    <Text style={styles.fontMedium}>IDR {data?.price_detail?.total_price}</Text>
                 </View>
                 <Divider />
-                <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>PT Sinar Jaya Group (1x)</Text>
-                        <Text style={styles.fontMedium}>IDR 300.000</Text>
+                <View style={[styles.cardContainer, { flexShrink: 1, flexDirection: 'row', justifyContent: 'space-between' }]}>
+                    <View style={{ justifyContent: 'space-between' }}>
+                        <Text style={[styles.contentContainer, styles.fontKecil]}>PT Sinar Jaya Group ({data?.passengers?.length}x)</Text>
+                        <Text style={styles.fontMedium}>IDR {data.price_detail?.departure_price}</Text>
                     </View>
-                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>KYM Trans (1x)</Text>
-                        <Text style={styles.fontMedium}>IDR 150.000</Text>
-                    </View>
+                    {HomeRedux?.isOneWay ? null :
+                        <View style={{ justifyContent: 'space-between' }}>
+                            <Text style={[styles.contentContainer, styles.fontKecil]}>KYM Trans ({data?.passengers?.length}x)</Text>
+                            <Text style={styles.fontMedium}>IDR {data.price_detail?.return_price}</Text>
+                        </View>
+                    }
                 </View>
             </Card>
-            {expired ? null : (paid ? null :
-                <Card containerStyle={styles.card}>
-                    <TouchableOpacity onPress={onPayment} style={styles.next}>
-                        <Text style={styles.fontButton}>See Payment Instruction</Text>
-                    </TouchableOpacity>
-                </Card>
-            )}
-
-        </ScrollView>
+            <Card containerStyle={styles.card}>
+                <TouchableOpacity onPress={onPayment} style={styles.next}>
+                    <Text style={styles.fontButton}>See My Bookings</Text>
+                </TouchableOpacity>
+            </Card>
+        </ScrollView >
     )
 }
 

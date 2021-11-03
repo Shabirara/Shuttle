@@ -5,7 +5,7 @@ import { ms } from 'react-native-size-matters'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Modal from "react-native-modal";
 import { useDispatch, useSelector } from 'react-redux'
-import { getOrderDetail, getPaymentData, getTicketDetail } from './Redux/HomeAction'
+import { getOrderDetail, getPaymentData, getPaymentDetail, getTicketDetail } from './Redux/HomeAction'
 
 export default function PaymentMethod(props) {
     const data = useSelector(state => state.HomeReducer)
@@ -40,7 +40,7 @@ export default function PaymentMethod(props) {
 
     const onBook = () => {
         ToastAndroid.show(data.paymentData.message, ToastAndroid.SHORT);
-        dispatch(getTicketDetail({
+        dispatch(getPaymentDetail({
             orderId: data.orderId.orderId,
             token: token
         }))

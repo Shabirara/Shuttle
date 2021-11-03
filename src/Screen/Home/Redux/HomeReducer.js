@@ -40,6 +40,7 @@ const initialState = {
   postOrder: {},
   orderDetail: {},
   paymentData: {},
+  paymentDetail: {},
   ticketDetail: {}
 };
 
@@ -268,6 +269,13 @@ export default function HomeReducer(state = initialState, action) {
       return {
         ...state,
         orderDetail: action.payload
+      }
+    }
+
+    case 'SET_PAYMENT_DETAIL': {
+      return {
+        ...state,
+        paymentDetail: action.payload
       }
     }
 

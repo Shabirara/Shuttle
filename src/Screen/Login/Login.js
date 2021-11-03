@@ -25,19 +25,19 @@ import {setTokenToLoginReducer} from './Redux/LoginAction';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 export default function Login(props) {
-  // const isLogged = useSelector(state => {
-  //   return state.Global.isLogged;
-  // });
-  // isLogged ? props.navigation.navigate('Bottom Tab') : null;
+  const isLogged = useSelector(state => {
+    return state.Global.isLogged;
+  });
+  isLogged ? props.navigation.navigate('Bottom Tab') : null;
 
-  // const fromBusDetails = useSelector(state => {
-  //   return state.HomeReducer.fromBusDetails;
-  // });
-  // const onLogin = () => {
-  //   fromBusDetails
-  //     ? props.navigation.navigate('Detail Stack', {screen: 'Bus Details'})
-  //     : props.navigation.navigate('Bottom Tab');
-  // };
+  const fromBusDetails = useSelector(state => {
+    return state.HomeReducer.fromBusDetails;
+  });
+  const onLogin = () => {
+    fromBusDetails
+      ? props.navigation.navigate('Detail Stack', {screen: 'Bus Details'})
+      : props.navigation.navigate('Bottom Tab');
+  };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');

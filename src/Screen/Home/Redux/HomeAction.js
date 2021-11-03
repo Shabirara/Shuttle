@@ -293,6 +293,20 @@ export const setPaymentData = (payload) => {
     }
 }
 
+export const getPaymentDetail = (payload) => {
+    return {
+        type: 'GET_PAYMENT_DETAIL',
+        payload
+    }
+}
+
+export const setPaymentDetail = (payload) => {
+    return {
+        type: 'SET_PAYMENT_DETAIL',
+        payload
+    }
+}
+
 export const getTicketDetail = (payload) => {
     return {
         type: 'GET_TICKET_DETAIL',
