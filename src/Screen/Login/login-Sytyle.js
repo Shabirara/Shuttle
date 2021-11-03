@@ -1,17 +1,17 @@
-import { StyleSheet } from 'react-native';
-import { ms } from 'react-native-size-matters';
+import {StyleSheet} from 'react-native';
+import {ms} from 'react-native-size-matters';
 
 export default StyleSheet.create({
   logoContainer: {
     justifyContent: 'center',
     paddingTop: ms(10),
-    paddingBottom: ms(6),
     alignItems: 'center',
   },
   mainContainer: {
     flex: 1,
     backgroundColor: '#E5E5E5',
     paddingHorizontal: ms(16),
+    paddingTop: ms(42),
   },
   subContainer: {
     flex: 1,
@@ -19,6 +19,7 @@ export default StyleSheet.create({
     paddingHorizontal: ms(16),
     borderRadius: ms(12),
     paddingBottom: ms(20),
+    marginTop: ms(28),
   },
   intoContainer: {
     paddingVertical: ms(17),
@@ -60,7 +61,7 @@ export default StyleSheet.create({
     paddingBottom: ms(4),
     fontFamily: 'Montserrat-Regular',
     fontSize: ms(10),
-    color: '#ABB3BB'
+    color: '#ABB3BB',
   },
   forgotText: {
     color: 'red',
@@ -141,5 +142,6 @@ export default StyleSheet.create({
     alignSelf: 'center',
     paddingTop: ms(12),
     marginBottom: ms(20),
+    textDecorationLine: 'underLine',
   },
 });

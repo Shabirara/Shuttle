@@ -25,9 +25,9 @@ import {setTokenToLoginReducer} from './Redux/LoginAction';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 export default function Login(props) {
-  const onLogin = () => {
-    props.navigation.navigate('Bottom Tab');
-  };
+  // const onLogin = () => {
+  //   props.navigation.navigate('Bottom Tab');
+  // };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -48,6 +48,7 @@ export default function Login(props) {
   const actionLogin = () => {
     console.log(userEmail, userPassword);
     dispatch(PostLogin({email: userEmail, password: userPassword}));
+    props.navigation.navigate('Bottom Tab');
   };
 
   async function onGoogleButtonPress() {
@@ -68,6 +69,10 @@ export default function Login(props) {
       console.log(error);
     }
   }
+
+  // onePressed() {
+  //   alert('Success')
+  // }
 
   return (
     <ScrollView>
@@ -90,9 +95,10 @@ export default function Login(props) {
             </View>
           </View>
           <View>
-            <TextInput
+            <Input
               placeholder="Enter your email"
-              style={styles.inputEmail}
+              containerStyle={styles.inputEmail}
+              inputContainerStyle={styles.borderLess}
               onChangeText={text => {
                 setUserEmail(text);
               }}
@@ -119,7 +125,11 @@ export default function Login(props) {
           <View style={styles.checkBox}>
             <View style={styles.rememberMeBox}>
               <View>
-                <CheckBox containerStyle={styles.checkStyle} />
+                <CheckBox
+                  checked={false}
+                  onPress={() => this.onePressed()}
+                  containerStyle={styles.checkStyle}
+                />
               </View>
               <Text style={styles.rememberText}>Remember me</Text>
             </View>
