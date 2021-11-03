@@ -15,6 +15,7 @@ import axios from 'axios';
 import styles from './profile-Style';
 import { ScrollView } from 'react-native-gesture-handler';
 import { setIsLogged } from '../../Store/globalAction';
+import { setTokenToLoginReducer } from '../Login/Redux/LoginAction';
 
 export default function Profile(props) {
   const dispatch = useDispatch()
@@ -36,6 +37,7 @@ export default function Profile(props) {
 
   const onLogin = () => {
     dispatch(setIsLogged(false))
+    dispatch(setTokenToLoginReducer(''))
     props.navigation.navigate('Login');
   };
 

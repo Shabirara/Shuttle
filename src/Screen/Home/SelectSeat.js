@@ -1,53 +1,38 @@
+import moment from 'moment';
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native'
 import { Card, Divider } from 'react-native-elements';
 import { ms } from 'react-native-size-matters';
+import { useDispatch, useSelector } from 'react-redux';
+import { setIsReturn, setSelectedSeat, setSelectedSeatReturn } from './Redux/HomeAction';
 
 const SelectSeat = (props) => {
-    const [row, setRow] = useState([
-        { selected: false, booked: false, id: 1 },
-        { selected: false, booked: false, id: 2 },
-        { selected: false, booked: false, id: 3 },
-        { selected: false, booked: false, id: 4 },
-        { selected: false, booked: false, id: 5 },
-        { selected: false, booked: false, id: 6 },
-        { selected: false, booked: false, id: 7 },
-        { selected: false, booked: true, id: 8 },
-        { selected: false, booked: false, id: 9 },
-        { selected: false, booked: false, id: 10 },
-        { selected: false, booked: false, id: 11 },
-        { selected: false, booked: false, id: 12 },
-        { selected: false, booked: false, id: 13 },
-        { selected: false, booked: false, id: 14 },
-        { selected: false, booked: false, id: 15 },
-        { selected: false, booked: false, id: 16 },
-        { selected: false, booked: false, id: 17 },
-        { selected: false, booked: false, id: 18 },
-        { selected: false, booked: false, id: 19 },
-        { selected: false, booked: false, id: 20 },
-        { selected: false, booked: true, id: 21 },
-        { selected: false, booked: true, id: 22 },
-        { selected: false, booked: false, id: 23 },
-        { selected: false, booked: false, id: 24 },
-        { selected: false, booked: true, id: 25 },
-        { selected: false, booked: false, id: 26 },
-        { selected: false, booked: false, id: 27 },
-        { selected: false, booked: true, id: 28 },
-        { selected: false, booked: false, id: 29 },
-        { selected: false, booked: false, id: 30 },
-        { selected: false, booked: false, id: 31 },
-        { selected: false, booked: false, id: 32 },
-        { selected: false, booked: false, id: 33 },
-        { selected: false, booked: false, id: 34 },
-        { selected: false, booked: false, id: 35 },
-        { selected: false, booked: false, id: 36 },
-        { selected: false, booked: false, id: 37 },
-        { selected: false, booked: true, id: 38 },
-        { selected: false, booked: true, id: 39 },
-        { selected: false, booked: true, id: 40 },
-    ])
+    const seatData = useSelector(state => {
+        return state.HomeReducer.seatData;
+    });
+    const isReturn = useSelector(state => {
+        return state.HomeReducer.isReturn
+    })
+    const oneWay = useSelector(state => { return state.HomeReducer.isOneWay })
+    const homeReducer = useSelector(state => { return state.HomeReducer })
+
+    const [seatDataRow, setSeatDataRow] = useState(seatData)
+    const [count, setCount] = useState(homeReducer?.passengerNum)
+    const selected = [];
+    const filtered = seatDataRow.filter((e, i) => {
+        if (e === 1) {
+            selected.push(i + 1);
+        }
+    });
+    const dispatch = useDispatch()
+
     const onPassengerDetail = () => {
-        props.navigation.navigate('Passenger Detail')
+        isReturn ? dispatch(setSelectedSeatReturn(selected)) &&
+            dispatch(setIsReturn(false)) &&
+            props.navigation.navigate('Passenger Detail') :
+            dispatch(setSelectedSeat(selected)) && oneWay ? props.navigation.navigate('Passenger Detail') :
+                dispatch(setIsReturn(true)) && props.navigation.navigate('Search Result')
+        console.log(`${isReturn} = isReturn`)
     }
 
     return (
@@ -73,16 +58,20 @@ const SelectSeat = (props) => {
                     <Image source={require('../../Assets/Images/healthicons_truck-driver-outline.png')} style={{ marginHorizontal: ms(5) }} />
                 </View>
                 <View style={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center', marginBottom: ms(10) }}>
-                    {row.map((e, i) => {
+                    {seatDataRow.map((e, i) => {
                         return (
                             <>
                                 <TouchableOpacity onPress={() => {
-                                    setRow((prevState) => {
-                                        prevState[i].selected = !prevState[i].selected;
+                                    setSeatDataRow((prevState) => {
+                                        prevState[i] === 0 ? prevState[i] = 1 :
+                                            prevState[i] === 1 ? prevState[i] = 0 :
+                                                prevState[i];
                                         return [...prevState]
-                                    })
+                                    });
                                 }}
-                                    style={[e.booked === true ? styles.boxBooked : e.selected === true ? styles.boxSelected : styles.boxAvailable, { marginHorizontal: ms(10), marginBottom: ms(10) }]}
+                                    disabled={count === 0 ? true : false}
+                                    style={[e !== 0 && e !== 1 ? styles.boxBooked :
+                                        e === 1 ? styles.boxSelected : styles.boxAvailable, { marginHorizontal: ms(10), marginBottom: ms(10) }]}
                                 />
                                 {i === 1 || (i - 1) % 4 === 0 ? <Divider orientation='vertical' style={{ marginHorizontal: ms(20) }} width={ms(2)} /> : null}
                             </>
@@ -92,7 +81,7 @@ const SelectSeat = (props) => {
             </View>
             <Card containerStyle={styles.card}>
                 <TouchableOpacity onPress={onPassengerDetail} style={styles.next}>
-                    <Text style={styles.fontButton}>Fill Passenger Detail</Text>
+                    <Text style={styles.fontButton}>{oneWay || isReturn ? 'Fill Passenger Detail' : 'Search Return Bus'}</Text>
                 </TouchableOpacity>
             </Card>
         </ScrollView>

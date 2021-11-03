@@ -16,7 +16,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
 // redux
-import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setIsOneWay } from '../Home/Redux/HomeAction'
+import { getSearchLocationData, getTerminalData, setDepartureCity, setDepartureDateNum, setDepartureDateReducer, setDepartureDateString, setIsOneWay, setIsReturn, setPassengerNum } from '../Home/Redux/HomeAction'
 import { useDispatch, useSelector } from 'react-redux'
 
 // others
@@ -44,8 +44,9 @@ const OneWay = props => {
 
   const [dateVisible, setDateVisible] = useState(false);
   const [datePicked, setDatePicked] = useState("")
-  const [departureDate, setDepartureDate] = useState("")
+  const [departureDate, setDepartureDate] = useState('')
   const [dateShorted, setDateShorted] = useState('')
+  const [dateShortYear, setDateShortYear] = useState('')
 
   useEffect(() => {
     dispatch(getTerminalData());
@@ -58,9 +59,11 @@ const OneWay = props => {
   const handleDate = (date) => {
     const datestring = moment(date).format("dddd, DD MMM YYYY")
     const dateshort = moment(date).format('ddd, DD MMM')
+    const dateshortyear = moment(date).format('ddd, DD MMM YYYY')
     const datenum = moment(date).format('YYYY-MM-DD')
     setDatePicked(datestring);
-    setDateShorted(dateshort)
+    setDateShorted(dateshort);
+    setDateShortYear(dateshortyear);
     setDepartureDate(datenum);
     setDateVisible(false);
   }
@@ -77,7 +80,11 @@ const OneWay = props => {
       r_time: ""
     }));
     dispatch(setDepartureDateReducer(dateShorted))
+    dispatch(setDepartureDateNum(departureDate))
+    dispatch(setDepartureDateString(dateShortYear))
     dispatch(setIsOneWay(true))
+    dispatch(setPassengerNum(passengerValue))
+    dispatch(setIsReturn(false))
   };
 
   const passenger = [1, 2, 3, 4];

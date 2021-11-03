@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   FlatList,
   Image,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { Button, CheckBox, Divider } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -17,26 +18,67 @@ import Modal from 'react-native-modal';
 import OneWay from './OneWay';
 import RoundTrip from './RoundTrip';
 import { useSelector, useDispatch } from 'react-redux';
-import { getBusDetailsData, getBusReviewData } from './Redux/HomeAction';
+import {
+  getBusDetailsData,
+  getBusReviewData,
+  setBusDepartureId,
+  setBusProviderName,
+  setBusProviderNameReturn,
+  setBusReturnId,
+} from './Redux/HomeAction';
+import moment from 'moment';
 
 export default function SearchResult(props) {
   const searchResultList = useSelector(state => {
     return state.HomeReducer.searchResultBus;
   });
   console.log(searchResultList, 'searchResultList');
+  const dataReturn = useSelector(state => {
+    return state.HomeReducer.searchResultReturn;
+  });
+  const isReturn = useSelector(state => {
+    return state.HomeReducer.isReturn;
+  });
+  const departureCity = useSelector(state => {
+    return state.HomeReducer.departureCity;
+  });
+  const arrivalCity = useSelector(state => {
+    return state.HomeReducer.arrivalCity;
+  });
+  const departureDate = useSelector(state => {
+    return state.HomeReducer.departureDateString;
+  });
+  const returnDateRaw = useSelector(state => {
+    return state.HomeReducer.returnDate;
+  });
+  const returnDate = moment(returnDateRaw).format('ddd, DD MMM YYYY');
+  const isOneWay = useSelector(state => {
+    return state.HomeReducer.isOneWay;
+  });
 
   const [isChangeVisible, setChangeVisible] = useState(false);
   const [isSortVisible, setSortVisible] = useState(false);
   const [isFilterVisible, setFilterVisible] = useState(false);
   const [activeCheck, setActiveCheck] = useState(0);
-  const [busDetailsId, setBusDetailsId] = useState("");
+  const [busDetailsId, setBusDetailsId] = useState('');
+  const [provider, setProvider] = useState('');
+
+  const [active, setActive] = useState(isOneWay ? 0 : 1);
 
   const dispatch = useDispatch();
 
   const onBusDetails = () => {
-    console.log(busDetailsId)
-    dispatch(getBusDetailsData({ id: busDetailsId }))
-    dispatch(getBusReviewData(busDetailsId))
+    console.log(busDetailsId);
+    console.log(provider, 'PROVIDER');
+    if (isReturn) {
+      dispatch(setBusReturnId(busDetailsId));
+      dispatch(setBusProviderNameReturn(provider));
+    } else {
+      dispatch(setBusDepartureId(busDetailsId));
+      dispatch(setBusProviderName(provider));
+    }
+    dispatch(getBusDetailsData({ id: busDetailsId }));
+    dispatch(getBusReviewData(busDetailsId));
   };
   const toggleChangeModal = () => {
     setChangeVisible(!isChangeVisible);
@@ -47,8 +89,6 @@ export default function SearchResult(props) {
   const toggleFilterModal = () => {
     setFilterVisible(!isFilterVisible);
   };
-
-  const [active, setActive] = useState(0);
   const dataTab = [
     {
       title: 'One Way',
@@ -57,6 +97,36 @@ export default function SearchResult(props) {
       title: 'Round Trip',
     },
   ];
+
+  const checklist = [
+    'Lowest price',
+    'Earliest departure time',
+    'Earliest arrival time',
+    'Shortest duration',
+  ];
+
+  const [filterDeparture, setFilterDeparture] = useState([
+    { title: '00:00 - 16:00', active: false },
+    { title: '06:00 - 12:00', active: false },
+    { title: '12:00 - 18:00', active: false },
+    { title: '18:00 - 00:00', active: false },
+  ]);
+  const [filterArrival, setFilterArrival] = useState([
+    { title: '00:00 - 16:00', active: false },
+    { title: '06:00 - 12:00', active: false },
+    { title: '12:00 - 18:00', active: false },
+    { title: '18:00 - 00:00', active: false },
+  ]);
+  const [busVendor, setBusVendor] = useState([
+    { title: 'KYM Trans', active: false },
+    { title: 'PT Sumber Bahagia', active: false },
+    { title: 'DAMRI', active: false },
+    { title: 'Harapan Jaya', active: false },
+    { title: 'KYM Trans', active: false },
+    { title: 'PT Sumber Bahagia', active: false },
+    { title: 'Harapan Jaya', active: false },
+  ]);
+
   const Item = ({
     bus,
     type,
@@ -69,16 +139,20 @@ export default function SearchResult(props) {
     terminalEnd,
     id
   }) => (
-    <TouchableOpacity style={styles.item}
-      onPress={setBusDetailsId(id), onBusDetails}>
+    <TouchableOpacity
+      style={styles.item}
+      onPress={() => {
+        setBusDetailsId(id);
+        setProvider(bus);
+        onBusDetails();
+      }}>
       <View
         style={{
           alignItems: 'center',
           marginRight: ms(10),
           justifyContent: 'space-evenly',
           height: ms(125),
-        }}
-      >
+        }}>
         <Image
           source={require('../../Assets/Images/bx_bx-bus.png')}
           style={{ height: ms(40), width: ms(40) }}
@@ -154,24 +228,18 @@ export default function SearchResult(props) {
               marginTop: ms(7),
               justifyContent: 'space-between',
               height: ms(60),
-            }}
-          >
+            }}>
             <Text style={styles.type}>{terminalStart}</Text>
             <Text style={styles.type}>{terminalEnd}</Text>
           </View>
         </View>
       </View>
-    </TouchableOpacity >
+    </TouchableOpacity>
   );
-  const checklist = [
-    'Lowest price',
-    'Earliest departure time',
-    'Earliest arrival time',
-    'Shortest duration',
-  ];
 
   const renderItem = ({ item }) => (
     <Item
+      id={item.busId}
       bus={item.BusProvider}
       type={'Executive'}
       price={item.price}
@@ -181,31 +249,8 @@ export default function SearchResult(props) {
       hourEnd={item.arrivalTime}
       terminalStart={item.departure_shuttle}
       terminalEnd={item.arrivalShuttle}
-      id={item.busId}
     />
   );
-
-  const [filterDeparture, setFilterDeparture] = useState([
-    { title: '00:00 - 16:00', active: false },
-    { title: '06:00 - 12:00', active: false },
-    { title: '12:00 - 18:00', active: false },
-    { title: '18:00 - 00:00', active: false },
-  ]);
-  const [filterArrival, setFilterArrival] = useState([
-    { title: '00:00 - 16:00', active: false },
-    { title: '06:00 - 12:00', active: false },
-    { title: '12:00 - 18:00', active: false },
-    { title: '18:00 - 00:00', active: false },
-  ]);
-  const [busVendor, setBusVendor] = useState([
-    { title: 'KYM Trans', active: false },
-    { title: 'PT Sumber Bahagia', active: false },
-    { title: 'DAMRI', active: false },
-    { title: 'Harapan Jaya', active: false },
-    { title: 'KYM Trans', active: false },
-    { title: 'PT Sumber Bahagia', active: false },
-    { title: 'Harapan Jaya', active: false },
-  ]);
 
   return (
     <>
@@ -442,14 +487,27 @@ export default function SearchResult(props) {
 
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.jalurTanggal}>
-          <Text style={styles.jalur}>Jakarta ➜ Surabaya</Text>
-          <Text style={styles.tanggal}>Sat, 9 Okt 2021</Text>
-          <Button
-            title="Change"
-            onPress={toggleChangeModal}
-            titleStyle={styles.change}
-            buttonStyle={styles.buttonChange}
-          />
+          <Text style={styles.jalur}>
+            {isReturn ? arrivalCity : departureCity} ➜{' '}
+            {isReturn ? departureCity : arrivalCity}
+          </Text>
+          <Text style={styles.tanggal}>
+            {isReturn ? returnDate : departureDate}
+          </Text>
+          {isReturn ? (
+            <View style={styles.buttonChange}>
+              <Text style={[styles.change, { alignSelf: 'center' }]}>
+                Return Trip
+              </Text>
+            </View>
+          ) : (
+            <Button
+              title="Change"
+              onPress={toggleChangeModal}
+              titleStyle={styles.change}
+              buttonStyle={styles.buttonChange}
+            />
+          )}
         </View>
 
         <View style={styles.floatings}>
@@ -478,7 +536,7 @@ export default function SearchResult(props) {
         </View>
 
         <FlatList
-          data={searchResultList}
+          data={isReturn ? dataReturn : searchResultList}
           renderItem={renderItem}
           keyExtractor={item => item.busId}
         />
