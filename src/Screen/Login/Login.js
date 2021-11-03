@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import {Image, CheckBox, Input, Button} from 'react-native-elements';
+import { Image, CheckBox, Input, Button } from 'react-native-elements';
 import styles from './login-Sytyle';
 import logoShuttle from '../../Assets/Images/shuttle-logo.png';
 import inToShuttle from '../../Assets/Images/Group-179.png';
@@ -16,28 +16,28 @@ import orOptional from '../../Assets/Images/orOptional.png';
 import facebook from '../../Assets/Images/facebook.png';
 import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
-import {setLoading} from '../Store/globalAction';
-import {useDispatch, useSelector} from 'react-redux';
-import {PostLogin} from './Redux/LoginAction';
-import {setTokenToRegisterReducer} from '../Register/Redux/RegisterAction';
-import {setTokenToLoginReducer} from './Redux/LoginAction';
+import { setLoading } from '../Store/globalAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { PostLogin } from './Redux/LoginAction';
+import { setTokenToRegisterReducer } from '../Register/Redux/RegisterAction';
+import { setTokenToLoginReducer } from './Redux/LoginAction';
 
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function Login(props) {
-  // const isLogged = useSelector(state => {
-  //   return state.Global.isLogged;
-  // });
-  // isLogged ? props.navigation.navigate('Bottom Tab') : null;
+  const isLogged = useSelector(state => {
+    return state.Global.isLogged;
+  });
+  isLogged ? props.navigation.navigate('Bottom Tab') : null;
 
-  // const fromBusDetails = useSelector(state => {
-  //   return state.HomeReducer.fromBusDetails;
-  // });
-  // const onLogin = () => {
-  //   fromBusDetails
-  //     ? props.navigation.navigate('Detail Stack', {screen: 'Bus Details'})
-  //     : props.navigation.navigate('Bottom Tab');
-  // };
+  const fromBusDetails = useSelector(state => {
+    return state.HomeReducer.fromBusDetails;
+  });
+  const onLogin = () => {
+    fromBusDetails
+      ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' })
+      : props.navigation.navigate('Bottom Tab');
+  };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
@@ -57,7 +57,7 @@ export default function Login(props) {
 
   const actionLogin = () => {
     console.log(userEmail, userPassword);
-    dispatch(PostLogin({email: userEmail, password: userPassword}));
+    dispatch(PostLogin({ email: userEmail, password: userPassword }));
   };
 
   async function onGoogleButtonPress() {
@@ -77,9 +77,9 @@ export default function Login(props) {
     }
   }
 
-  // onePressed() {
-  //   alert('Success')
-  // }
+  const onePressed = () => {
+    alert('Success')
+  }
 
   return (
     <ScrollView>
@@ -134,7 +134,7 @@ export default function Login(props) {
               <View>
                 <CheckBox
                   checked={false}
-                  onPress={() => this.onePressed()}
+                  onPress={() => onePressed()}
                   containerStyle={styles.checkStyle}
                 />
               </View>
