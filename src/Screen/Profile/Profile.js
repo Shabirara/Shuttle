@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -7,9 +7,6 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Input, Image, Avatar, Accessory, Button, Divider, Card } from 'react-native-elements';
-// import {createStackNavigator, createAppContainer} from 'react-navigation';
-// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-// import editprofile from './../../Assets/Images/profile.png';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import styles from './profile-Style';
@@ -25,12 +22,15 @@ export default function Profile(props) {
   const token = useSelector(state => state.LoginReducer.access_token.token)
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getProfileData({ token: token }))
+    const edit = props.navigation.addListener('focus', () => {
+      dispatch(getProfileData({ token: token }))
+    });
+    return edit
   }, [])
-  const data = useSelector(state => { return state.ProfileReducer.profileData })
-  const googleLogged = useSelector(state => { return state.Global.googleLogged })
-  console.log(data, 'Profile Data')
 
+  const data = useSelector(state => { return state.ProfileReducer.profileData })
+
+  const googleLogged = useSelector(state => { return state.Global.googleLogged })
   const onLogin = async () => {
     try {
       dispatch(setLoading(true))
