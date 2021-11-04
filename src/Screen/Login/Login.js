@@ -31,16 +31,14 @@ export default function Login(props) {
   const fromBusDetails = useSelector(state => {
     return state.HomeReducer.fromBusDetails
   })
-  isLogged && fromBusDetails ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' }) : props.navigation.navigate('Bottom Tab');
+  if (isLogged && fromBusDetails === false) {
+    props.navigation.navigate('Bottom Tab');
+  }
 
-  const onLogin = () => {
-    fromBusDetails
-      ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' })
-      : props.navigation.navigate('Bottom Tab');
-  };
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
+
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
   };

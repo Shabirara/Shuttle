@@ -57,6 +57,7 @@ export default function BusDetails(props) {
   };
 
   const onSelectSeat = () => {
+    dispatch(setFromBusDetails(false))
     if (isReturn) {
       dispatch(setDepartureCityReturn(detailData.departure_city))
       dispatch(setArrivalCityReturn(detailData.destination_city))
