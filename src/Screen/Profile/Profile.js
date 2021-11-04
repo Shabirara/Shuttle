@@ -14,10 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import styles from './profile-Style';
 import { ScrollView } from 'react-native-gesture-handler';
-import { setIsLogged } from '../../Store/globalAction';
+import { setIsLogged, setLoading } from '../../Store/globalAction';
 import { setTokenToLoginReducer } from '../Login/Redux/LoginAction';
 import { getProfileData } from './Redux/ProfileAction';
 import { ms } from 'react-native-size-matters';
+
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function Profile(props) {
   const token = useSelector(state => state.LoginReducer.access_token.token)
@@ -28,10 +30,19 @@ export default function Profile(props) {
   const data = useSelector(state => { return state.ProfileReducer.profileData })
   console.log(data, 'Profile Data')
 
-  const onLogin = () => {
-    dispatch(setIsLogged(false))
-    dispatch(setTokenToLoginReducer(''))
-    props.navigation.navigate('Login');
+  const onLogin = async () => {
+    try {
+      dispatch(setLoading(true))
+      await GoogleSignin.revokeAccess();
+      await GoogleSignin.signOut();
+      dispatch(setIsLogged(false))
+      dispatch(setTokenToLoginReducer(''))
+      props.navigation.navigate('Login');
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(setLoading(false))
+    }
   };
 
   const editProf = () => {
