@@ -168,14 +168,6 @@ export default function Login(props) {
                 source={google}
               />
             </TouchableOpacity>
-
-            <TouchableOpacity style={styles.facebookContainer}>
-              <Image
-                resizeMode="contain"
-                style={styles.medIcon}
-                source={facebook}
-              />
-            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.haveNoSignUpContainer}>
