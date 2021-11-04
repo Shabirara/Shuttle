@@ -55,9 +55,15 @@ export default function Login(props) {
 
   const dispatch = useDispatch();
 
-  const actionLogin = () => {
-    console.log(userEmail, userPassword);
-    dispatch(PostLogin({ email: userEmail, password: userPassword }));
+  const actionLogin = async () => {
+    try {
+      dispatch(PostLogin({ email: userEmail, password: userPassword }));
+      fromBusDetails
+        ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' })
+        : props.navigation.navigate('Bottom Tab');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   async function onGoogleButtonPress() {

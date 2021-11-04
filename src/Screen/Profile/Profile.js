@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import styles from './profile-Style';
 import { ScrollView } from 'react-native-gesture-handler';
-import { setIsLogged, setLoading } from '../../Store/globalAction';
+import { setGoogleLogged, setIsLogged, setLoading } from '../../Store/globalAction';
 import { setTokenToLoginReducer } from '../Login/Redux/LoginAction';
 import { getProfileData } from './Redux/ProfileAction';
 import { ms } from 'react-native-size-matters';
@@ -28,13 +28,17 @@ export default function Profile(props) {
     dispatch(getProfileData({ token: token }))
   }, [])
   const data = useSelector(state => { return state.ProfileReducer.profileData })
+  const googleLogged = useSelector(state => { return state.Global.googleLogged })
   console.log(data, 'Profile Data')
 
   const onLogin = async () => {
     try {
       dispatch(setLoading(true))
-      await GoogleSignin.revokeAccess();
-      await GoogleSignin.signOut();
+      if (googleLogged) {
+        await GoogleSignin.revokeAccess();
+        await GoogleSignin.signOut();
+        dispatch(setGoogleLogged(false))
+      }
       dispatch(setIsLogged(false))
       dispatch(setTokenToLoginReducer(''))
       props.navigation.navigate('Login');

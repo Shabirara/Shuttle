@@ -4,7 +4,8 @@ const initialState = {
     language: 'en',
     theme: 'dark',
     allData: [],
-    isLogged: false
+    isLogged: false,
+    googleLogged: false
 }
 
 export default function GlobalReducer(state = initialState, action) {
@@ -23,6 +24,11 @@ export default function GlobalReducer(state = initialState, action) {
             return {
                 ...state,
                 isLogged: action.payload
+            }
+        case 'SET_GOOGLE_LOGGED':
+            return {
+                ...state,
+                googleLogged: action.payload
             }
         default:
             return state;

@@ -4,7 +4,7 @@ import { setTokenToLoginReducer, PostLogin, setErrorLogin } from './LoginAction'
 import { navigate } from '../../../Utils/Navigate';
 import { baseUrl } from '../../../Utils/Config';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsLogged, setLoading } from '../../../Store/globalAction';
+import { setGoogleLogged, setIsLogged, setLoading } from '../../../Store/globalAction';
 import { ToastAndroid } from 'react-native';
 
 function* SagaLogin(action) {
@@ -23,7 +23,6 @@ function* SagaLogin(action) {
     if (res.status === 200) {
       yield put(setTokenToLoginReducer(res.data));
       yield put(setIsLogged(true))
-      yield navigate('Bottom Tab');
     }
   } catch (error) {
     console.log(error, 'Error Login');
@@ -60,7 +59,7 @@ function* SagaLoginGoogle(action) {
     if (res.status === 200) {
       yield put(setTokenToLoginReducer(res.data));
       yield put(setIsLogged(true))
-      yield navigate('Bottom Tab');
+      yield put(setGoogleLogged(true))
     }
 
     console.log(action.payload, 'Login Google');

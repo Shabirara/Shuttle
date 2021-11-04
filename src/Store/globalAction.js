@@ -12,3 +12,10 @@ export const setIsLogged = (payload) => {
         payload: payload
     }
 }
+
+export const setGoogleLogged = (payload) => {
+    return {
+        type: 'SET_GOOGLE_LOGGED',
+        payload: payload
+    }
+}
