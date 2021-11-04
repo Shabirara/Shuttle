@@ -27,10 +27,16 @@ import { setIsOneWay } from '../Home/Redux/HomeAction';
 export default function MyBooking(props) {
   const token = useSelector(state => state.LoginReducer.access_token.token);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(getAllBookings({ token: token }));
-    dispatch(getOnGoing({ token: token }))
-  }, []);
+    const ticket = props.navigation.addListener('focus', () => {
+      dispatch(getAllBookings({ token: token }))
+    });
+    const going = props.navigation.addListener('focus', () => {
+      dispatch(getOnGoing({ token: token }))
+    })
+    return ticket, going
+  }, [])
 
   const [active, setActive] = useState(0);
 
@@ -87,9 +93,6 @@ const OnGoingBooking = props => {
   const ongoing = useSelector(state => { return state.BookingReducer.onGoing.data })
   const token = useSelector(state => state.LoginReducer.access_token.token)
 
-  const [paid, setPaid] = useState(false);
-  const [expired, setExpired] = useState(false);
-  const navigation = useNavigation();
   const dispatch = useDispatch()
 
   const onBookingDetail = (orderId, oneWay) => {
