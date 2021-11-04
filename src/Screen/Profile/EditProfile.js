@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ToastAndroid } from 'react-native';
 import { Card, Input } from 'react-native-elements';
 import styles from './editProfile-Style';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -37,11 +37,29 @@ export default function EditProfile() {
     setSelectedDate(moment(date).format('DD MMMM YYYY'));
   };
 
-  const onLogin = () => {
-    dispatch(patchProfile({
-      phone: phone,
-      token: token
-    }))
+  const onLogin = async () => {
+    try {
+      await dispatch(patchProfile({
+        phone: phone,
+        token: token
+      }))
+      ToastAndroid.showWithGravityAndOffset(
+        'Profile Saved!',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        200,
+      );
+    } catch (error) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Error',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        200,
+      );
+    }
+
   };
 
   return (
