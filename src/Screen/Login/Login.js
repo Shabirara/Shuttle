@@ -28,11 +28,11 @@ export default function Login(props) {
   const isLogged = useSelector(state => {
     return state.Global.isLogged;
   });
-  isLogged ? props.navigation.navigate('Bottom Tab') : null;
-
   const fromBusDetails = useSelector(state => {
-    return state.HomeReducer.fromBusDetails;
-  });
+    return state.HomeReducer.fromBusDetails
+  })
+  isLogged && fromBusDetails ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' }) : props.navigation.navigate('Bottom Tab');
+
   const onLogin = () => {
     fromBusDetails
       ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' })
