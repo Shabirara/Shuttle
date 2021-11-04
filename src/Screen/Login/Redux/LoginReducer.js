@@ -32,7 +32,6 @@ export const LoginReducer = (state = InitialState, action) => {
         access_token: action.payload,
       };
     case 'LOGIN_ERROR':
-      console.log('masuk tidak');
       return {
         ...state,
         isError: true,

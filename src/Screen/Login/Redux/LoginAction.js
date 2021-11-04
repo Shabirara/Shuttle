@@ -32,3 +32,10 @@ export const setErrorLogin = payload => {
     payload,
   };
 };
+
+export const PostLoginGoogle = payload => {
+  return {
+    type: 'POST_LOGIN_GOOGLE',
+    payload
+  }
+}

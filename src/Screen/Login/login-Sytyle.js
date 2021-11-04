@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {ms} from 'react-native-size-matters';
+import { StyleSheet } from 'react-native';
+import { ms } from 'react-native-size-matters';
 
 export default StyleSheet.create({
   logoContainer: {
@@ -127,6 +127,7 @@ export default StyleSheet.create({
     paddingBottom: ms(20),
   },
   haveNoAccountText: {
+    color: '#0F5996',
     paddingRight: ms(4),
   },
   signUp: {
@@ -138,10 +139,10 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   skipText: {
-    color: 'blue',
+    color: '#0F5996',
     alignSelf: 'center',
     paddingTop: ms(12),
     marginBottom: ms(20),
-    textDecorationLine: 'underLine-LineThrough',
+    textDecorationLine: 'underline',
   },
 });

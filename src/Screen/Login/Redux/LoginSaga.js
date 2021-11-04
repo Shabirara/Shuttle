@@ -4,12 +4,12 @@ import { setTokenToLoginReducer, PostLogin, setErrorLogin } from './LoginAction'
 import { navigate } from '../../../Utils/Navigate';
 import { baseUrl } from '../../../Utils/Config';
 import { useDispatch, useSelector } from 'react-redux';
-import { setIsLogged } from '../../../Store/globalAction';
+import { setIsLogged, setLoading } from '../../../Store/globalAction';
 import { ToastAndroid } from 'react-native';
 
 function* SagaLogin(action) {
   try {
-    console.log(action.payload, 'berhasil');
+    yield put(setLoading(true));
 
     const options = {
       headers: { 'content-type': 'application/json' },
@@ -19,7 +19,43 @@ function* SagaLogin(action) {
       action.payload,
       options,
     );
-    console.log(res, 'res');
+
+    if (res.status === 200) {
+      yield put(setTokenToLoginReducer(res.data));
+      yield put(setIsLogged(true))
+      yield navigate('Bottom Tab');
+    }
+  } catch (error) {
+    console.log(error, 'Error Login');
+    yield put(setErrorLogin());
+    ToastAndroid.showWithGravityAndOffset(
+      'Email or Password is incorrect',
+      ToastAndroid.LONG,
+      ToastAndroid.BOTTOM,
+      25,
+      200,
+    );
+  } finally {
+    yield put(setLoading(false));
+  }
+}
+
+function* SagaLoginGoogle(action) {
+  try {
+    yield put(setLoading(true));
+
+    const options = {
+      headers: { 'content-type': 'application/json' },
+    };
+    const res = yield axios.post(
+      `${baseUrl}/user/auth`,
+      {},
+      {
+        params: {
+          token: action.payload
+        }
+      }
+    );
 
     if (res.status === 200) {
       yield put(setTokenToLoginReducer(res.data));
@@ -27,20 +63,23 @@ function* SagaLogin(action) {
       yield navigate('Bottom Tab');
     }
 
-    console.log(action.payload, 'Login from saga');
+    console.log(action.payload, 'Login Google');
   } catch (error) {
-    console.log(error, 'Error Login');
+    console.log(error, 'Error Login Google');
     yield put(setErrorLogin());
     ToastAndroid.showWithGravityAndOffset(
-      'Email or Password is Incorrect',
+      'Login with Google failed',
       ToastAndroid.LONG,
       ToastAndroid.BOTTOM,
       25,
       200,
     );
+  } finally {
+    yield put(setLoading(false));
   }
 }
 
 export function* SagaLoginWorker() {
   yield takeLatest('POST_LOGIN', SagaLogin);
+  yield takeLatest('POST_LOGIN_GOOGLE', SagaLoginGoogle)
 }

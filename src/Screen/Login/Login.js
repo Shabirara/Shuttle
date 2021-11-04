@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -8,7 +8,7 @@ import {
   ToastAndroid,
 } from 'react-native';
 
-import {Image, CheckBox, Input, Button, Card} from 'react-native-elements';
+import { Image, CheckBox, Input, Button, Card } from 'react-native-elements';
 import styles from './login-Sytyle';
 import logoShuttle from '../../Assets/Images/shuttle-logo.png';
 import inToShuttle from '../../Assets/Images/Group-179.png';
@@ -16,13 +16,13 @@ import orOptional from '../../Assets/Images/orOptional.png';
 import facebook from '../../Assets/Images/facebook.png';
 import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
-import {setLoading} from '../Store/globalAction';
-import {useDispatch, useSelector} from 'react-redux';
-import {PostLogin} from './Redux/LoginAction';
-import {setTokenToRegisterReducer} from '../Register/Redux/RegisterAction';
-import {setTokenToLoginReducer} from './Redux/LoginAction';
+import { setLoading } from '../Store/globalAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { PostLogin, PostLoginGoogle } from './Redux/LoginAction';
+import { setTokenToRegisterReducer } from '../Register/Redux/RegisterAction';
+import { setTokenToLoginReducer } from './Redux/LoginAction';
 
-import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default function Login(props) {
   const isLogged = useSelector(state => {
@@ -35,7 +35,7 @@ export default function Login(props) {
   });
   const onLogin = () => {
     fromBusDetails
-      ? props.navigation.navigate('Detail Stack', {screen: 'Bus Details'})
+      ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' })
       : props.navigation.navigate('Bottom Tab');
   };
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -57,7 +57,7 @@ export default function Login(props) {
 
   const actionLogin = () => {
     console.log(userEmail, userPassword);
-    dispatch(PostLogin({email: userEmail, password: userPassword}));
+    dispatch(PostLogin({ email: userEmail, password: userPassword }));
   };
 
   async function onGoogleButtonPress() {
@@ -72,6 +72,7 @@ export default function Login(props) {
       console.log('reached google sign in');
       const userInfo = await GoogleSignin.signIn();
       console.log(userInfo);
+      dispatch(PostLoginGoogle(userInfo.idToken))
     } catch (error) {
       console.log(error);
     }
