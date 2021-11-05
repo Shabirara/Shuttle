@@ -8,7 +8,6 @@ import { setAllBookings, setOnGoing, setSelectedTicketData } from './BookingActi
 
 function* BookingSaga(action) {
     try {
-        yield put(setLoading(true));
         const res = yield axios.get(
             `${baseUrl}/order/e-ticket`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
@@ -16,14 +15,11 @@ function* BookingSaga(action) {
         yield put(setAllBookings(res.data));
     } catch (error) {
         console.log(error)
-    } finally {
-        yield put(setLoading(false));
-    };
+    }
 }
 
 function* fetchOnGoing(action) {
     try {
-        yield put(setLoading(true));
         const res = yield axios.get(
             `${baseUrl}/payment/show/status`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
@@ -31,9 +27,7 @@ function* fetchOnGoing(action) {
         yield put(setOnGoing(res.data));
     } catch (error) {
         console.log(error)
-    } finally {
-        yield put(setLoading(false));
-    };
+    }
 }
 
 function* fetchSelectedTicketDetail(action) {

@@ -42,7 +42,7 @@ export default function MyBooking(props) {
     const interval = setInterval(() => {
       dispatch(getAllBookings({ token: token }));
       dispatch(getOnGoing({ token: token }));
-    }, 5000)
+    }, 60000)
     return () => {
       clearInterval(interval)
     }
