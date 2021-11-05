@@ -46,8 +46,28 @@ function* fetchSelectedTicketDetail(action) {
     };
 }
 
+function* sagaPostReview(action) {
+    try {
+        yield put(setLoading(true));
+        const res = yield axios.get(
+            `${baseUrl}/order/review/`, action.payload,
+            {
+                headers: {
+                    Authorization: `bearer ${action.payload.token}`,
+                    'content-type': 'application/json'
+                }
+            },
+        );
+    } catch (error) {
+        console.log(error)
+    } finally {
+        yield put(setLoading(false));
+    };
+}
+
 export function* SagaBookingWorker() {
     yield takeLatest('GET_ALL_BOOKINGS', BookingSaga)
     yield takeLatest('GET_ON_GOING', fetchOnGoing)
     yield takeLatest('GET_SELECTED_TICKET_DATA', fetchSelectedTicketDetail)
+    yield takeLatest('POST_REVIEW', sagaPostReview)
 }

@@ -4,12 +4,14 @@ import { Divider, Card, Input } from 'react-native-elements'
 import { ms } from 'react-native-size-matters'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { postReview } from './Redux/BookingAction'
 
 export default function TicketDetails() {
     const depart = useSelector(state => { return state.BookingReducer.selectedTicketData.departure })
     const returns = useSelector(state => { return state.BookingReducer.selectedTicketData.return })
     const isReturn = useSelector(state => { return state.HomeReducer.isReturn })
+    const token = useSelector(state => { return state.LoginReducer.access_token.token })
 
     const [checkedIn, setCheckedIn] = useState(false)
     const [expired, setExpired] = useState(false)
@@ -18,8 +20,39 @@ export default function TicketDetails() {
     const [pressed2, setPressed2] = useState(false)
     const [pressed3, setPressed3] = useState(false)
     const [pressed4, setPressed4] = useState(false)
+    const [review, setReview] = useState('')
+    const [stars, setStars] = useState(5)
 
     const config = isReturn ? returns[0] : depart[0]
+    const dispatch = useDispatch()
+
+    const onReview = async () => {
+        try {
+            if (pressed4) {
+                setStars(5)
+            } else if (pressed3) {
+                setStars(4)
+            } else if (pressed2) {
+                setStars(3)
+            } else if (pressed1) {
+                setStars(2)
+            } else if (pressed) {
+                setStars(1)
+            } else {
+                setStars(0)
+            }
+
+            dispatch(postReview({
+                "order_id": config.order_id,
+                "order_detail_id": config.departure.passenger_detail[0].id,
+                "rating": stars,
+                "review": review,
+                token: token
+            }))
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         <ScrollView>
@@ -54,11 +87,11 @@ export default function TicketDetails() {
                 </View>
                 <Divider />
                 <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={{ width: '45%', justifyContent: 'space-between' }}>
+                    <View style={{ width: '45%', justifyContent: 'flex-start' }}>
                         <Text style={[styles.contentContainer, styles.fontKecil]}>Order ID</Text>
                         <Text style={styles.fontMedium}>{config.order_id}</Text>
                     </View>
-                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
+                    <View style={{ width: '50%', justifyContent: 'flex-start' }}>
                         <Text style={[styles.contentContainer, styles.fontKecil]}>Ticket Number</Text>
                         <Text style={styles.fontMedium}>{config.ticket_number}</Text>
                     </View>
@@ -68,16 +101,16 @@ export default function TicketDetails() {
                 <View style={styles.cardContainer}>
                     <Text style={styles.fontMedium}>Passenger Detail</Text>
                 </View>
-                {config?.departure?.passenger_detail.map((e, i) => {
+                {config?.departure?.passenger_detail?.map((e, i) => {
                     return (
                         <>
                             <Divider />
                             <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                                <View style={{ width: '50%', justifyContent: 'space-between' }}>
+                                <View style={{ width: '50%', justifyContent: 'flex-start' }}>
                                     <Text style={[styles.contentContainer, styles.fontKecil]}>Name</Text>
                                     <Text style={styles.fontMedium}>{e.fullname}</Text>
                                 </View>
-                                <View style={{ width: '50%', justifyContent: 'space-between' }}>
+                                <View style={{ width: '45%', justifyContent: 'flex-start' }}>
                                     <Text style={[styles.contentContainer, styles.fontKecil]}>Seat Number</Text>
                                     <Text style={styles.fontMedium}>{isReturn ? e.return_seat : e.departure_seat}</Text>
                                 </View>
@@ -289,12 +322,13 @@ export default function TicketDetails() {
                     </View>
                     <Divider />
                     <Input placeholder='Input Review here' multiline={true} numberOfLines={5}
-                        inputStyle={[styles.abuMedium, styles.input]}
+                        inputStyle={[styles.mediumGelap, styles.input]}
                         inputContainerStyle={{ borderBottomWidth: 0, marginBottom: 0 }}
+                        onChangeText={(text) => setReview(text)}
                     />
                     <Divider />
                     <View style={{ paddingTop: ms(15) }}>
-                        <TouchableOpacity style={styles.next}>
+                        <TouchableOpacity style={styles.next} onPress={onReview}>
                             <Text style={styles.fontButton}>Submit</Text>
                         </TouchableOpacity>
                     </View>
@@ -388,6 +422,12 @@ const styles = StyleSheet.create({
         fontFamily: 'Montserrat-Regular',
         fontSize: ms(12),
         color: '#ABB3BB',
+        paddingTop: ms(5),
+    },
+    mediumGelap: {
+        fontFamily: 'Montserrat-Regular',
+        fontSize: ms(12),
+        color: '#092C4C',
         paddingTop: ms(5),
     },
     columnCenter: {

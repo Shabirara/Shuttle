@@ -53,3 +53,10 @@ export const setSelectedTicketData = (payload) => {
         payload
     }
 }
+
+export const postReview = (payload) => {
+    return {
+        type: 'POST_REVIEW',
+        payload
+    }
+}
