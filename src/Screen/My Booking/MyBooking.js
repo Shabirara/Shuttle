@@ -38,6 +38,16 @@ export default function MyBooking(props) {
     return ticket, going
   }, [])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      dispatch(getAllBookings({ token: token }));
+      dispatch(getOnGoing({ token: token }));
+    }, 5000)
+    return () => {
+      clearInterval(interval)
+    }
+  }, [])
+
   const [active, setActive] = useState(0);
 
   const dataTab = [
@@ -90,7 +100,11 @@ export default function MyBooking(props) {
 }
 
 const OnGoingBooking = props => {
-  const ongoing = useSelector(state => { return state.BookingReducer.onGoing.data })
+  const ongoing = useSelector(state => {
+    console.log(state.BookingReducer.onGoing.data)
+    return state.BookingReducer.onGoing.data
+  })
+
   const token = useSelector(state => state.LoginReducer.access_token.token)
 
   const dispatch = useDispatch()
@@ -106,8 +120,8 @@ const OnGoingBooking = props => {
   return (
     <ScrollView style={{ marginBottom: ms(170) }}>
       {
-        ongoing.map((e, i) => (
-          <View>
+        ongoing.reverse().map((e, i) => (
+          <View key={`key-ongoing-${i}`}>
             <View style={styles.ticketContaint}>
               <View style={styles.orderID}>
                 <Text
@@ -118,7 +132,7 @@ const OnGoingBooking = props => {
                   Order ID
                 </Text>
                 <View style={{ width: ms(160) }}>
-                  <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold', flexShrink: 1 }}>
+                  <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold', flexShrink: 1 }} numberOfLines={1}>
                     {e.order_id}
                   </Text>
                 </View>
@@ -225,8 +239,8 @@ const ETicket = props => {
     // </View>
     // -- End Of No Ticket --
     <ScrollView style={{ marginBottom: ms(170) }}>
-      {tickets.map((e, i) => (
-        <>
+      {tickets.reverse().map((e, i) => (
+        <View key={`key-tickets-${i}`}>
           <View style={styles.ticketContaint}>
             <View style={styles.orderID}>
               <Text
@@ -396,7 +410,7 @@ const ETicket = props => {
           }
 
           < Divider style={{ marginBottom: ms(50) }} width={ms(5)} />
-        </>
+        </View>
       ))
       }
     </ScrollView >
