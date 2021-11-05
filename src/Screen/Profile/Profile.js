@@ -5,12 +5,15 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert,
 } from 'react-native';
 import { Input, Image, Avatar, Accessory, Button, Divider, Card } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import styles from './profile-Style';
 import { ScrollView } from 'react-native-gesture-handler';
+import ImagePicker, { launchImageLibrary } from 'react-native-image-picker';
+
 import { setGoogleLogged, setIsLogged, setLoading } from '../../Store/globalAction';
 import { setTokenToLoginReducer } from '../Login/Redux/LoginAction';
 import { getProfileData } from './Redux/ProfileAction';
@@ -29,8 +32,10 @@ export default function Profile(props) {
   }, [])
 
   const data = useSelector(state => { return state.ProfileReducer.profileData })
-
   const googleLogged = useSelector(state => { return state.Global.googleLogged })
+
+  const [imageSource, setImageSource] = useState(data.profile_picture);
+
   const onLogin = async () => {
     try {
       dispatch(setLoading(true))
@@ -49,6 +54,33 @@ export default function Profile(props) {
     }
   };
 
+  function selectImage() {
+    const options = {
+      title: 'You can choose one image',
+      maxWidth: 256,
+      maxHeight: 256,
+      storageOptions: {
+        skipBackup: true
+      },
+      includeBase64: true
+    }
+
+    launchImageLibrary(options, response => {
+      console.log(response)
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+        Alert.alert('You did not select any image');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        setImageSource(response.assets[0].uri)
+        console.log(response.assets[0].base64)
+      }
+    })
+  }
+
   const editProf = () => {
     props.navigation.navigate('Detail Stack', { screen: 'Edit Profile' });
   };
@@ -60,16 +92,16 @@ export default function Profile(props) {
   return (
     <ScrollView>
       <View style={styles.mainContainer}>
-        <View style={styles.avatarContainer}>
+        <TouchableOpacity style={styles.avatarContainer} onPress={selectImage}>
           <Avatar
             containerStyle={{ marginBottom: 20, marginTop: 20 }}
             size="xlarge"
             rounded
             source={{
-              uri: `${data.profile_picture}`
+              uri: `${imageSource}`
             }}
           />
-        </View>
+        </TouchableOpacity>
 
         <View style={styles.namaUser}>
           <Text style={styles.textNama}>{data.fullname}</Text>
