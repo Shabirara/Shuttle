@@ -4,7 +4,17 @@ import { SagaLoginWorker } from '../Screen/Login/Redux/LoginSaga';
 import { SagaRegisterWorker } from '../Screen/Register/Redux/RegisterSaga';
 import { SagaProfileWorker } from '../Screen/Profile/Redux/ProfileSaga';
 import { SagaBookingWorker } from '../Screen/My Booking/Redux/BookingSaga';
+import { SagaNotificationWorker } from '../Screen/Notification/Redux/NotificationSaga';
 
 export function* allSagas() {
-  yield all([SagaHomeWorker(), SagaLoginWorker(), SagaRegisterWorker(), SagaProfileWorker(), SagaBookingWorker()]);
+  yield all(
+    [
+      SagaHomeWorker(),
+      SagaLoginWorker(),
+      SagaRegisterWorker(),
+      SagaProfileWorker(),
+      SagaBookingWorker(),
+      SagaNotificationWorker()
+    ]
+  );
 }

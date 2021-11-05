@@ -1,52 +1,77 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image} from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import ReactNativeModal from 'react-native-modal';
 import Info from '../../Assets/Images/Info.png';
-import {ms} from 'react-native-size-matters';
+import { ms } from 'react-native-size-matters';
+import { getAllNotifications } from './Redux/NotificationAction';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import moment from 'moment';
 
 export default function Notification() {
+  const token = useSelector(state => { return state.LoginReducer.access_token.token })
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllNotifications({ token: token }))
+  }, [])
+
+  const data = useSelector(state => { return state.NotificationReducer.allNotifications.data })
+
+
   return (
-    <View>
-      <View
-        style={{
-          backgroundColor: '#CBFFCA',
-          flexDirection: 'row',
-          paddingLeft: ms(20),
-          paddingRight: '14%',
-          paddingTop: ms(20),
-        }}>
-        <View style={styles.infoIcon}>
-          <Image source={Info} />
-        </View>
-        <View>
-          <Text style={styles.NotificationText1}>Booking Success!</Text>
-          <Text style={styles.NotificationText2}>
-            New booking success and now waiting for your payment
-          </Text>
-          <Text style={styles.dateTimeText}>3 hours ago</Text>
-        </View>
-      </View>
-      <View
-        style={{
-          backgroundColor: '#FFFFFF',
-          flexDirection: 'row',
-          paddingLeft: ms(20),
-          paddingRight: '14%',
-          paddingTop: ms(20),
-        }}>
-        <View style={styles.infoIcon}>
-          <Image source={Info} />
-        </View>
-        <View>
-          <Text style={styles.NotificationText1}>Payment Success!</Text>
-          <Text style={styles.NotificationText2}>
-            Your payment success and know you're ready to experience journey
-            with us!
-          </Text>
-          <Text style={styles.dateTimeText}>fri,20 Aug 2021 10:31</Text>
-        </View>
-      </View>
-    </View>
+    <ScrollView>
+      {data?.data.reverse().map((e, i) => {
+        const time = moment(data?.data[i].createdAt).fromNow();
+        return (
+          <View>
+            {
+              e.title === "Booking" ?
+                <View
+                  style={{
+                    backgroundColor: i === 0 ? '#CBFFCA' : '#FFFFFF',
+                    flexDirection: 'row',
+                    paddingLeft: ms(20),
+                    paddingRight: '14%',
+                    paddingTop: ms(20),
+                  }}>
+                  <View style={styles.infoIcon}>
+                    <Image source={Info} />
+                  </View>
+                  <View style={{ flexShrink: 1 }}>
+                    <Text style={styles.NotificationText1}>Booking Success!</Text>
+                    <Text style={styles.NotificationText2}>
+                      New booking success and now is waiting for your payment.
+                    </Text>
+                    <Text style={styles.dateTimeText}>{time}</Text>
+                  </View>
+                </View> :
+                <View
+                  style={{
+                    backgroundColor: i === 0 ? '#CBFFCA' : '#FFFFFF',
+                    flexDirection: 'row',
+                    paddingLeft: ms(20),
+                    paddingRight: '14%',
+                    paddingTop: ms(20),
+                  }}>
+                  <View style={styles.infoIcon}>
+                    <Image source={Info} />
+                  </View>
+                  <View style={{ flexShrink: 1 }}>
+                    <Text style={styles.NotificationText1}>Payment Success!</Text>
+                    <Text style={styles.NotificationText2}>
+                      Your payment is successful and now you're ready to experience the journey
+                      with us!
+                    </Text>
+                    <Text style={styles.dateTimeText}>{time}</Text>
+                  </View>
+                </View>
+            }
+          </View>
+        )
+      }
+      )
+      }
+    </ScrollView >
   );
 }
 

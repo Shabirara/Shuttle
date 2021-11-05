@@ -5,6 +5,7 @@ import GlobalReducer from './globalReducer';
 import HomeReducer from '../Screen/Home/Redux/HomeReducer';
 import ProfileReducer from '../Screen/Profile/Redux/ProfileReducer';
 import BookingReducer from '../Screen/My Booking/Redux/BookingReducer';
+import NotificationReducer from '../Screen/Notification/Redux/NotificationReducer';
 
 export const allReducers = combineReducers({
   Global: GlobalReducer,
@@ -12,5 +13,6 @@ export const allReducers = combineReducers({
   LoginReducer,
   RegisterReducer,
   ProfileReducer,
-  BookingReducer
+  BookingReducer,
+  NotificationReducer,
 });
