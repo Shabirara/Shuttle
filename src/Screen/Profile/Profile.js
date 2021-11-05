@@ -39,6 +39,13 @@ export default function Profile(props) {
   const onLogin = async () => {
     try {
       dispatch(setLoading(true))
+      await GoogleSignin.hasPlayServices();
+      await GoogleSignin.configure({
+        offlineAccess: true,
+        webClientId:
+          '573103940805-nutqthgajbhumvu392a2t3kth6r9ia9o.apps.googleusercontent.com',
+        scopes: ['https://www.googleapis.com/auth/userinfo.profile'],
+      });
       if (googleLogged) {
         await GoogleSignin.revokeAccess();
         await GoogleSignin.signOut();
