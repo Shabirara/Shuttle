@@ -267,39 +267,38 @@ export default function TicketDetails() {
                     }
                 </View>
             </Card>
-            {
-                expired ? null : (checkedIn ?
-                    <Card containerStyle={styles.card}>
-                        <View style={styles.cardContainer}>
-                            <Text style={styles.fontMedium}>Give Rating & Review</Text>
+            {config?.departure?.ticket_status ?
+                <Card containerStyle={styles.card}>
+                    <View style={styles.cardContainer}>
+                        <Text style={styles.fontMedium}>Give Rating & Review</Text>
+                    </View>
+                    <Divider />
+                    <View style={[styles.cardContainer, { justifyContent: 'center' }]}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: ms(250) }}>
+                            <FontAwesome name={pressed ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                onPress={() => { setPressed(!pressed); setPressed1(false); setPressed2(false); setPressed3(false); setPressed4(false) }} />
+                            <FontAwesome name={pressed1 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                onPress={() => { setPressed(true); setPressed1(!pressed1), setPressed2(false); setPressed3(false); setPressed4(false) }} />
+                            <FontAwesome name={pressed2 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                onPress={() => { setPressed(true); setPressed1(true); setPressed2(!pressed2); setPressed3(false); setPressed4(false) }} />
+                            <FontAwesome name={pressed3 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                onPress={() => { setPressed(true); setPressed1(true); setPressed2(true); setPressed3(!pressed3); setPressed4(false) }} />
+                            <FontAwesome name={pressed4 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
+                                onPress={() => { setPressed(true); setPressed1(true); setPressed2(true); setPressed3(true); setPressed4(!pressed4) }} />
                         </View>
-                        <Divider />
-                        <View style={[styles.cardContainer, { justifyContent: 'center' }]}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: ms(250) }}>
-                                <FontAwesome name={pressed ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                    onPress={() => { setPressed(!pressed); setPressed1(false); setPressed2(false); setPressed3(false); setPressed4(false) }} />
-                                <FontAwesome name={pressed1 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                    onPress={() => { setPressed(true); setPressed1(!pressed1), setPressed2(false); setPressed3(false); setPressed4(false) }} />
-                                <FontAwesome name={pressed2 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                    onPress={() => { setPressed(true); setPressed1(true); setPressed2(!pressed2); setPressed3(false); setPressed4(false) }} />
-                                <FontAwesome name={pressed3 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                    onPress={() => { setPressed(true); setPressed1(true); setPressed2(true); setPressed3(!pressed3); setPressed4(false) }} />
-                                <FontAwesome name={pressed4 ? "star" : "star-o"} color="#0F5996" size={ms(17)}
-                                    onPress={() => { setPressed(true); setPressed1(true); setPressed2(true); setPressed3(true); setPressed4(!pressed4) }} />
-                            </View>
-                        </View>
-                        <Divider />
-                        <Input placeholder='Input Review here' multiline={true} numberOfLines={5}
-                            inputStyle={[styles.abuMedium, styles.input]}
-                            inputContainerStyle={{ borderBottomWidth: 0, marginBottom: 0 }}
-                        />
-                        <Divider />
-                        <View style={{ paddingTop: ms(15) }}>
-                            <TouchableOpacity style={styles.next}>
-                                <Text style={styles.fontButton}>Submit</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </Card> : null)
+                    </View>
+                    <Divider />
+                    <Input placeholder='Input Review here' multiline={true} numberOfLines={5}
+                        inputStyle={[styles.abuMedium, styles.input]}
+                        inputContainerStyle={{ borderBottomWidth: 0, marginBottom: 0 }}
+                    />
+                    <Divider />
+                    <View style={{ paddingTop: ms(15) }}>
+                        <TouchableOpacity style={styles.next}>
+                            <Text style={styles.fontButton}>Submit</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Card> : null
             }
         </ScrollView >
     )
