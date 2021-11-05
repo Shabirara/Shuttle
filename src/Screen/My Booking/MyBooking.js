@@ -101,7 +101,6 @@ export default function MyBooking(props) {
 
 const OnGoingBooking = props => {
   const ongoing = useSelector(state => {
-    console.log(state.BookingReducer.onGoing.data)
     return state.BookingReducer.onGoing.data
   })
 
@@ -109,11 +108,12 @@ const OnGoingBooking = props => {
 
   const dispatch = useDispatch()
 
-  const onBookingDetail = (orderId, oneWay) => {
-    dispatch(setIsOneWay(oneWay === 'OneWay' ? true : false))
+  const onBookingDetail = (data) => {
+    console.log(data.oneWay)
+    dispatch(setIsOneWay(data.oneWay === 'OneWay' ? true : false))
 
     dispatch(getPaymentDetail({
-      orderId: orderId.orderId,
+      orderId: data.orderId,
       token: token
     }))
   };
@@ -250,7 +250,7 @@ const ETicket = props => {
                 }}>
                 Departure Ticket
               </Text>
-              <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
+              <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold', width: ms(160) }} numberOfLines={1}>
                 {e.ticket}
               </Text>
             </View>
@@ -409,7 +409,7 @@ const ETicket = props => {
               </View>
           }
 
-          < Divider style={{ marginBottom: ms(50) }} width={ms(5)} />
+          <Divider style={{ marginBottom: ms(50) }} width={ms(5)} />
         </View>
       ))
       }

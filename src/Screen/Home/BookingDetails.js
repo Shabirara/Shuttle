@@ -16,6 +16,8 @@ export default function BookingDetails(props) {
         props.navigation.navigate('Bottom Tab', { screen: 'My Booking' })
     }
 
+    console.log(HomeRedux?.isOneWay)
+
     return (
         <ScrollView>
             <View style={styles.ijo}>
@@ -37,12 +39,11 @@ export default function BookingDetails(props) {
                                 <Text style={styles.fontKecil}>
                                     {`${data?.price_detail?.departure_provider} - ${HomeRedux?.departureDateString} - ${data?.departure_time[0]}`}
                                 </Text> :
-                                <>
-                                    <Text style={[styles.fontKecil]}>
-                                        {`${data?.price_detail?.departure_provider} - ${HomeRedux?.departureDateString} - ${data?.departure_time[0]}
+                                <Text style={[styles.fontKecil]}>
+                                    {`${data?.price_detail?.departure_provider} - ${HomeRedux?.departureDateString} - ${data?.departure_time[0]}
                                 \n${data?.return_bus_provider} - ${returnDate} - ${data?.return_time?.[0]}`}
-                                    </Text>
-                                </>}
+                                </Text>
+                            }
                         </View>
                     </View>
                 </View>
@@ -54,19 +55,24 @@ export default function BookingDetails(props) {
             <Card containerStyle={styles.card}>
                 <Text style={[styles.fontMedium, styles.cardContainer]}>Booking Details</Text>
                 <Divider />
-                <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
-                    <View style={{ width: '45%', justifyContent: 'space-between' }}>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>Order ID</Text>
-                        <Text style={styles.fontMedium}>{data?.order_id}</Text>
-                        <Text style={[styles.contentContainer, styles.fontKecil]}>Passenger</Text>
-                        <Text style={styles.fontMedium}>{data?.passengers?.length}</Text>
-                    </View>
-                    <View style={{ width: '50%', justifyContent: 'space-between' }}>
-                        <View>
+                <View style={[styles.cardContainer, { flexDirection: 'column', justifyContent: 'space-between' }]}>
+                    <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                        <View style={{ width: '45%' }}>
+                            <Text style={[styles.contentContainer, styles.fontKecil]}>Order ID</Text>
+                            <Text style={styles.fontMedium}>{data?.order_id}</Text>
+                        </View>
+                        <View style={{ width: '50%' }}>
                             <Text style={[styles.contentContainer, styles.fontKecil]}>Order Date</Text>
                             <Text style={styles.fontMedium}>{orderDate}</Text>
                         </View>
-                        <View>
+
+                    </View>
+                    <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+                        <View style={{ width: '45%' }}>
+                            <Text style={[styles.contentContainer, styles.fontKecil]}>Passenger</Text>
+                            <Text style={styles.fontMedium}>{data?.passengers?.length}</Text>
+                        </View>
+                        <View style={{ width: '50%' }}>
                             <Text style={[styles.contentContainer, styles.fontKecil]}>Due Date Payment</Text>
                             <Text style={styles.fontMedium}>{data?.due_date}</Text>
                         </View>
