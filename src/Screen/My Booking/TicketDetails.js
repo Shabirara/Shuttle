@@ -12,6 +12,8 @@ export default function TicketDetails() {
     const returns = useSelector(state => { return state.BookingReducer.selectedTicketData.return })
     const isReturn = useSelector(state => { return state.HomeReducer.isReturn })
     const token = useSelector(state => { return state.LoginReducer.access_token.token })
+    const reviewData = useSelector(state => { return state.BookingReducer.reviewId.data[0] })
+    console.log(reviewData)
 
     const [checkedIn, setCheckedIn] = useState(false)
     const [expired, setExpired] = useState(false)
@@ -43,8 +45,8 @@ export default function TicketDetails() {
             }
 
             dispatch(postReview({
-                "order_id": config.order_id,
-                "order_detail_id": config.departure.passenger_detail[0].id,
+                "order_id": reviewData.order_id,
+                "order_detail_id": reviewData.id,
                 "rating": stars,
                 "review": review,
                 token: token
@@ -300,7 +302,7 @@ export default function TicketDetails() {
                     }
                 </View>
             </Card>
-            {config?.departure?.ticket_status ?
+            {config?.departure?.ticket_status && !reviewData.UserReview ?
                 <Card containerStyle={styles.card}>
                     <View style={styles.cardContainer}>
                         <Text style={styles.fontMedium}>Give Rating & Review</Text>

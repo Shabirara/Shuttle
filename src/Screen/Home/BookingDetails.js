@@ -9,7 +9,6 @@ export default function BookingDetails(props) {
     const data = useSelector(state => { return state.HomeReducer.paymentDetail })
     const HomeRedux = useSelector(state => { return state.HomeReducer })
     const returnDate = moment(HomeRedux?.returnDate).format('ddd, DD MMM YYYY')
-    console.log(data)
     const orderDate = moment(data?.order_date).format('ddd, DD MMM YYYY')
 
     const onPayment = () => {

@@ -4,7 +4,7 @@ import axios from 'axios';
 import { setLoading } from '../../../Store/globalAction';
 import { baseUrl } from '../../../Utils/Config';
 import { navigate } from '../../../Utils/Navigate';
-import { setAllBookings, setOnGoing, setSelectedTicketData } from './BookingAction';
+import { setAllBookings, setOnGoing, setReviewId, setSelectedTicketData } from './BookingAction';
 
 function* BookingSaga(action) {
     try {
@@ -46,6 +46,21 @@ function* fetchSelectedTicketDetail(action) {
     };
 }
 
+function* fetchReviewId(action) {
+    try {
+        yield put(setLoading(true));
+        const res = yield axios.get(
+            `${baseUrl}/order/review`,
+            { headers: { Authorization: `bearer ${action.payload.token}` } },
+        );
+        yield put(setReviewId(res.data));
+    } catch (error) {
+        console.log(error)
+    } finally {
+        yield put(setLoading(false));
+    };
+}
+
 function* sagaPostReview(action) {
     try {
         yield put(setLoading(true));
@@ -53,8 +68,7 @@ function* sagaPostReview(action) {
             `${baseUrl}/order/review/`, action.payload,
             {
                 headers: {
-                    Authorization: `bearer ${action.payload.token}`,
-                    'content-type': 'application/json'
+                    Authorization: `bearer ${action.payload.token}`
                 }
             },
         );
@@ -69,5 +83,6 @@ export function* SagaBookingWorker() {
     yield takeLatest('GET_ALL_BOOKINGS', BookingSaga)
     yield takeLatest('GET_ON_GOING', fetchOnGoing)
     yield takeLatest('GET_SELECTED_TICKET_DATA', fetchSelectedTicketDetail)
+    yield takeLatest('GET_REVIEW_ID', fetchReviewId)
     yield takeLatest('POST_REVIEW', sagaPostReview)
 }

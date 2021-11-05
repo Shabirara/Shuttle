@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  ToastAndroid,
 } from 'react-native';
 import { Input, Image, Avatar, Accessory, Button, Divider, Card } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +17,7 @@ import ImagePicker, { launchImageLibrary } from 'react-native-image-picker';
 
 import { setGoogleLogged, setIsLogged, setLoading } from '../../Store/globalAction';
 import { setTokenToLoginReducer } from '../Login/Redux/LoginAction';
-import { getProfileData } from './Redux/ProfileAction';
+import { getProfileData, postProfilePicture } from './Redux/ProfileAction';
 import { ms } from 'react-native-size-matters';
 
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -75,15 +76,27 @@ export default function Profile(props) {
     launchImageLibrary(options, response => {
       console.log(response)
       if (response.didCancel) {
-        console.log('User cancelled photo picker');
-        Alert.alert('You did not select any image');
+        ToastAndroid.showWithGravityAndOffset(
+          'You did not select any image',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          200,
+        );
       } else if (response.error) {
         console.log('ImagePicker Error: ', response.error);
+        ToastAndroid.showWithGravityAndOffset(
+          'Sorry, there is a technical error.',
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM,
+          25,
+          200,
+        );
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         setImageSource(response.assets[0].uri)
-        console.log(response.assets[0].base64)
+        dispatch(postProfilePicture({ pic: response.assets[0].base64, token: token }))
       }
     })
   }

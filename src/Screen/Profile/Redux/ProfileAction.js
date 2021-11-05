@@ -25,3 +25,10 @@ export const patchPassword = (payload) => {
         payload
     }
 }
+
+export const postProfilePicture = (payload) => {
+    return {
+        type: 'POST_PROFILE_PICTURE',
+        payload
+    }
+}

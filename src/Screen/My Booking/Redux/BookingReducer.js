@@ -2,7 +2,8 @@ const initialState = {
     allBookings: {},
     ticketData: {},
     onGoing: {},
-    selectedTicketData: {}
+    selectedTicketData: {},
+    reviewId: {}
 }
 
 export default function BookingReducer(state = initialState, action) {
@@ -28,6 +29,13 @@ export default function BookingReducer(state = initialState, action) {
                 ...state,
                 selectedTicketData: action.payload
             }
+
+        case 'SET_REVIEW_ID':
+            return {
+                ...state,
+                reviewId: action.payload
+            }
+
         default:
             return state
     }

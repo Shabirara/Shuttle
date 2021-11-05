@@ -20,7 +20,7 @@ import bookingTicket from '../../Assets/Images/BookingTicket.png';
 import { Icon } from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllBookings, getOnGoing, getSelectedTicketData } from './Redux/BookingAction';
+import { getAllBookings, getOnGoing, getReviewId, getSelectedTicketData } from './Redux/BookingAction';
 import { getPaymentDetail, setIsReturn } from '../Home/Redux/HomeAction';
 import { setIsOneWay } from '../Home/Redux/HomeAction';
 
@@ -111,7 +111,6 @@ const OnGoingBooking = props => {
   const onBookingDetail = (data) => {
     console.log(data.oneWay)
     dispatch(setIsOneWay(data.oneWay === 'OneWay' ? true : false))
-
     dispatch(getPaymentDetail({
       orderId: data.orderId,
       token: token
@@ -217,16 +216,12 @@ const ETicket = props => {
   const tickets = useSelector(state => { return state.BookingReducer.allBookings.data })
   const token = useSelector(state => state.LoginReducer.access_token.token)
 
-  const [paidR, setPaidR] = useState(false);
-  const [expiredR, setExpiredR] = useState(true);
-  const [paid, setPaid] = useState(false);
-  const [expired, setExpired] = useState(false);
-
   const navigation = useNavigation();
   const dispatch = useDispatch()
 
   const onBookingDetail = (data) => {
     dispatch(setIsReturn(data.isReturn))
+    dispatch(getReviewId({ token: token }))
     dispatch(getSelectedTicketData({
       orderId: data.orderId,
       token: token

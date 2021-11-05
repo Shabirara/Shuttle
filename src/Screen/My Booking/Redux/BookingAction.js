@@ -54,6 +54,20 @@ export const setSelectedTicketData = (payload) => {
     }
 }
 
+export const getReviewId = (payload) => {
+    return {
+        type: 'GET_REVIEW_ID',
+        payload
+    }
+}
+
+export const setReviewId = (payload) => {
+    return {
+        type: 'SET_REVIEW_ID',
+        payload
+    }
+}
+
 export const postReview = (payload) => {
     return {
         type: 'POST_REVIEW',
