@@ -18,6 +18,8 @@ const SelectSeat = (props) => {
 
     const [seatDataRow, setSeatDataRow] = useState(seatData)
     const [count, setCount] = useState(homeReducer?.passengerNum)
+
+    console.log(count)
     const selected = [];
     const filtered = seatDataRow.filter((e, i) => {
         if (e === 1) {
@@ -62,6 +64,19 @@ const SelectSeat = (props) => {
                         return (
                             <>
                                 <TouchableOpacity onPress={() => {
+                                    if (e === 0) {
+                                        setCount((prevState) => {
+                                            return prevState - 1
+                                        })
+                                        console.log(count)
+                                    } else if (e === 1) {
+                                        setCount((prevState) => {
+                                            return prevState + 1
+                                        })
+                                        console.log(count)
+                                    } else {
+                                        return null
+                                    }
                                     setSeatDataRow((prevState) => {
                                         prevState[i] === 0 ? prevState[i] = 1 :
                                             prevState[i] === 1 ? prevState[i] = 0 :
@@ -69,7 +84,7 @@ const SelectSeat = (props) => {
                                         return [...prevState]
                                     });
                                 }}
-                                    disabled={count === 0 ? true : false}
+                                    disabled={count < 1 && e === 0 ? true : false}
                                     style={[e !== 0 && e !== 1 ? styles.boxBooked :
                                         e === 1 ? styles.boxSelected : styles.boxAvailable, { marginHorizontal: ms(10), marginBottom: ms(10) }]}
                                 />

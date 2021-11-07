@@ -17,6 +17,7 @@ import {
   setTicketDetail,
   setPaymentDetail
 } from './HomeAction';
+import { ToastAndroid } from 'react-native';
 
 function* SagaOneTrip() {
   console.log('OneTrip');
@@ -118,7 +119,25 @@ function* postOrderData(action) {
     const res = yield axios.post(`${baseUrl}/order`, action.payload, { headers: { Authorization: `bearer ${action.payload.token}` } })
     yield put(setOrderId(res.data))
     yield navigate('Detail Stack', { screen: 'Payment Method' })
+    if (res.status === 200) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Order made!',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        200,
+      )
+    };
   } catch (error) {
+    if (res.status === 200) {
+      ToastAndroid.showWithGravityAndOffset(
+        'Error, please check your input.',
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM,
+        25,
+        200,
+      )
+    };
     console.log(error)
   } finally {
     yield put(setLoading(false));
