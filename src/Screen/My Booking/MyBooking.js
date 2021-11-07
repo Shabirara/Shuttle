@@ -257,12 +257,12 @@ const ETicket = props => {
                 <View style={styles.paymentContainer}>
                   <View
                     style={
-                      e.departure_status_ticket ? styles.successWrapper
+                      e.departure_status_ticket === "success" ? styles.successWrapper
                         : styles.pendingWrapper
                     }>
                     <Text style={styles.fontButton}>
                       Status Ticket:{' '}
-                      {e.departure_status_ticket ? 'Success' : 'Waiting Check In'}
+                      {e.departure_status_ticket === "success" ? 'Success' : 'Waiting Check In'}
                     </Text>
                   </View>
                 </View>
@@ -341,13 +341,13 @@ const ETicket = props => {
                     <View style={styles.paymentContainer}>
                       <View
                         style={
-                          e.return_status_ticket
+                          e.return_ticket_status === "success"
                             ? styles.successWrapper
                             : styles.pendingWrapper
                         }>
                         <Text style={styles.fontButton}>
                           Status Ticket:{' '}
-                          {e.return_status_ticket ? 'Success' : 'Waiting Check In'}
+                          {e.return_ticket_status === "success" ? 'Success' : 'Waiting Check In'}
                         </Text>
                       </View>
                     </View>

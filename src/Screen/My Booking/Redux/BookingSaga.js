@@ -5,6 +5,7 @@ import { setLoading } from '../../../Store/globalAction';
 import { baseUrl } from '../../../Utils/Config';
 import { navigate } from '../../../Utils/Navigate';
 import { setAllBookings, setOnGoing, setReviewId, setSelectedTicketData } from './BookingAction';
+import { ToastAndroid } from 'react-native';
 
 function* BookingSaga(action) {
     try {
@@ -62,7 +63,7 @@ function* fetchReviewId(action) {
             `${baseUrl}/order/review`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
-        yield put(setReviewId(res));
+        yield put(setReviewId(res.data));
     } catch (error) {
         console.log(error)
     } finally {
@@ -96,16 +97,15 @@ function* sagaPostReview(action) {
                 200,
             );
             fetchSelectedTicketDetail
-        } else {
-            ToastAndroid.showWithGravityAndOffset(
-                'Sorry, review failed. Please try again later.',
-                ToastAndroid.LONG,
-                ToastAndroid.BOTTOM,
-                25,
-                200,
-            );
         }
     } catch (error) {
+        ToastAndroid.showWithGravityAndOffset(
+            'Sorry, review failed. Please try again later.',
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM,
+            25,
+            200,
+        );
         console.log(error)
     } finally {
         yield put(setLoading(false));

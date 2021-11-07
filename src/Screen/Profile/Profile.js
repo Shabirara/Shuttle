@@ -115,17 +115,6 @@ export default function Profile(props) {
   return (
     <ScrollView>
       {isLogged ?
-        <Card containerStyle={[styles.inputContainer, { marginTop: '50%' }]}>
-          <View style={styles.editProfile}>
-            <Text style={styles.textEdit}>You are not logged in!</Text>
-          </View>
-          <View style={styles.signOutContainer}>
-            <TouchableOpacity style={styles.buttonUp} onPress={onLogin}>
-              <Text style={styles.signUpText}>Sign In</Text>
-            </TouchableOpacity>
-          </View>
-        </Card>
-        :
         <View style={styles.mainContainer}>
           <TouchableOpacity style={styles.avatarContainer} onPress={selectImage}>
             <Avatar
@@ -176,7 +165,17 @@ export default function Profile(props) {
               <Text style={styles.signUpText}>Sign Out</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> :
+        <Card containerStyle={[styles.inputContainer, { marginTop: '50%' }]}>
+          <View style={styles.editProfile}>
+            <Text style={styles.textEdit}>You are not logged in!</Text>
+          </View>
+          <View style={styles.signOutContainer}>
+            <TouchableOpacity style={styles.buttonUp} onPress={onLogin}>
+              <Text style={styles.signUpText}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
+        </Card>
       }
     </ScrollView >
   );

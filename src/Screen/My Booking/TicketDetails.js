@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Image, ActivityIndicator, TouchableOpacity, ToastAndroid } from 'react-native'
 import { Divider, Card, Input } from 'react-native-elements'
 import { ms } from 'react-native-size-matters'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -22,10 +22,12 @@ export default function TicketDetails() {
     const [pressed2, setPressed2] = useState(false)
     const [pressed3, setPressed3] = useState(false)
     const [pressed4, setPressed4] = useState(false)
+    const [showReview, setShowReview] = useState(true)
     const [review, setReview] = useState('')
     const [stars, setStars] = useState(5)
 
     const config = isReturn ? returns[0] : depart[0]
+    const reviewConfig = isReturn ? reviewReturn : reviewData
     const dispatch = useDispatch()
 
     const onReview = async () => {
@@ -51,7 +53,19 @@ export default function TicketDetails() {
                 "review": review,
                 token: token
             }))
+            dispatch(getPaymentDetail({
+                orderId: reviewConfig.orderId,
+                token: token
+            }))
+            setShowReview(false)
         } catch (err) {
+            ToastAndroid.showWithGravityAndOffset(
+                'Sorry, review failed. Please try again later.',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                200,
+            );
             console.log(err)
         }
     }
@@ -302,7 +316,7 @@ export default function TicketDetails() {
                     }
                 </View>
             </Card>
-            {config?.departure?.ticket_status && !reviewData?.UserReview ?
+            {config?.departure?.ticket_status && !reviewData?.UserReview && showReview ?
                 <Card containerStyle={styles.card}>
                     <View style={styles.cardContainer}>
                         <Text style={styles.fontMedium}>Give Rating & Review</Text>
