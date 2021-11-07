@@ -12,8 +12,11 @@ function* getAllNotificationsData(action) {
             `${baseUrl}/notification`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
-        yield put(setAllNotifications(res));
+        if (res.status === 200) {
+            yield put(setAllNotifications(res));
+        }
     } catch (error) {
+        yield put(setAllNotifications({}))
         console.log(error)
     } finally {
         yield put(setLoading(false));

@@ -33,7 +33,9 @@ export default function Profile(props) {
   }, [])
 
   const data = useSelector(state => { return state.ProfileReducer.profileData })
+  const isLogged = useSelector(state => { return state.ProfileReducer.isLogged })
   const googleLogged = useSelector(state => { return state.Global.googleLogged })
+  console.log(data)
 
   const [imageSource, setImageSource] = useState(data.profile_picture);
 
@@ -95,8 +97,9 @@ export default function Profile(props) {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        setImageSource(response.assets[0].uri)
-        dispatch(postProfilePicture({ pic: response.assets[0].base64, token: token }))
+        dispatch(postProfilePicture({ 'image': response.assets[0].base64, token: token }))
+        dispatch(getProfileData({ token: token }))
+        setImageSource(data.profile_picture)
       }
     })
   }
@@ -111,57 +114,70 @@ export default function Profile(props) {
 
   return (
     <ScrollView>
-      <View style={styles.mainContainer}>
-        <TouchableOpacity style={styles.avatarContainer} onPress={selectImage}>
-          <Avatar
-            containerStyle={{ marginBottom: 20, marginTop: 20 }}
-            size="xlarge"
-            rounded
-            source={{
-              uri: `${imageSource}`
-            }}
-          />
-        </TouchableOpacity>
-
-        <View style={styles.namaUser}>
-          <Text style={styles.textNama}>{data.fullname}</Text>
-        </View>
-
-        <View style={styles.telpDanUserContainer}>
-          {data.phone ?
-            <>
-              <View>
-                <Text style={styles.textNormal}>{data.phone}</Text>
-              </View>
-
-              <View style={styles.titikAsingContainer}>
-                <Text style={[styles.textNormal, { fontSize: ms(20) }]}>•</Text>
-              </View>
-            </> : null
-          }
-
-          {data.email ?
-            <View>
-              <Text style={styles.textNormal}>{data.email}</Text>
-            </View> : null
-          }
-        </View>
-        <Card containerStyle={styles.inputContainer}>
-          <TouchableOpacity style={styles.editProfile} onPress={editProf}>
-            <Text style={styles.textEdit}>Edit Profile</Text>
-          </TouchableOpacity>
-          <Divider />
-          <TouchableOpacity style={styles.editProfile} onPress={editPassword}>
-            <Text style={styles.textEdit}>Change Password</Text>
-          </TouchableOpacity>
+      {isLogged ?
+        <Card containerStyle={[styles.inputContainer, { marginTop: '50%' }]}>
+          <View style={styles.editProfile}>
+            <Text style={styles.textEdit}>You are not logged in!</Text>
+          </View>
+          <View style={styles.signOutContainer}>
+            <TouchableOpacity style={styles.buttonUp} onPress={onLogin}>
+              <Text style={styles.signUpText}>Sign In</Text>
+            </TouchableOpacity>
+          </View>
         </Card>
-
-        <View style={styles.signOutContainer}>
-          <TouchableOpacity style={styles.buttonUp} onPress={onLogin}>
-            <Text style={styles.signUpText}>Sign Out</Text>
+        :
+        <View style={styles.mainContainer}>
+          <TouchableOpacity style={styles.avatarContainer} onPress={selectImage}>
+            <Avatar
+              containerStyle={{ marginBottom: 20, marginTop: 20 }}
+              size="xlarge"
+              rounded
+              source={{
+                uri: `${imageSource}`
+              }}
+            />
           </TouchableOpacity>
+
+          <View style={styles.namaUser}>
+            <Text style={styles.textNama}>{data.fullname}</Text>
+          </View>
+
+          <View style={styles.telpDanUserContainer}>
+            {data.phone ?
+              <>
+                <View>
+                  <Text style={styles.textNormal}>{data.phone}</Text>
+                </View>
+
+                <View style={styles.titikAsingContainer}>
+                  <Text style={[styles.textNormal, { fontSize: ms(20) }]}>•</Text>
+                </View>
+              </> : null
+            }
+
+            {data.email ?
+              <View>
+                <Text style={styles.textNormal}>{data.email}</Text>
+              </View> : null
+            }
+          </View>
+          <Card containerStyle={styles.inputContainer}>
+            <TouchableOpacity style={styles.editProfile} onPress={editProf}>
+              <Text style={styles.textEdit}>Edit Profile</Text>
+            </TouchableOpacity>
+            <Divider />
+            <TouchableOpacity style={styles.editProfile} onPress={editPassword}>
+              <Text style={styles.textEdit}>Change Password</Text>
+            </TouchableOpacity>
+          </Card>
+
+          <View style={styles.signOutContainer}>
+            <TouchableOpacity style={styles.buttonUp} onPress={onLogin}>
+              <Text style={styles.signUpText}>Sign Out</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      }
     </ScrollView >
   );
 }

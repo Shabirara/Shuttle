@@ -38,15 +38,15 @@ export default function MyBooking(props) {
     return ticket, going
   }, [])
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(getAllBookings({ token: token }));
-      dispatch(getOnGoing({ token: token }));
-    }, 60000)
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     dispatch(getAllBookings({ token: token }));
+  //     dispatch(getOnGoing({ token: token }));
+  //   }, 60000)
+  //   return () => {
+  //     clearInterval(interval)
+  //   }
+  // }, [])
 
   const [active, setActive] = useState(0);
 
@@ -77,7 +77,8 @@ export default function MyBooking(props) {
                   height: hp(6),
                   flex: ms(1),
                   alignItems: 'center',
-                }}>
+                }}
+                key={`key-mybooking-${i}`}>
                 <Text
                   style={{ color: '#0F5996', fontFamily: 'Montserrat-Medium' }}>
                   {e.title}
@@ -119,7 +120,7 @@ const OnGoingBooking = props => {
   return (
     <ScrollView style={{ marginBottom: ms(170) }}>
       {
-        ongoing.reverse().map((e, i) => (
+        ongoing?.reverse().map((e, i) => (
           <View key={`key-ongoing-${i}`}>
             <View style={styles.ticketContaint}>
               <View style={styles.orderID}>
@@ -213,8 +214,9 @@ const OnGoingBooking = props => {
 };
 
 const ETicket = props => {
-  const tickets = useSelector(state => { return state.BookingReducer.allBookings.data })
+  const tickets = useSelector(state => { return state.BookingReducer.allBookings?.data })
   const token = useSelector(state => state.LoginReducer.access_token.token)
+  console.log(tickets)
 
   const navigation = useNavigation();
   const dispatch = useDispatch()
@@ -228,98 +230,16 @@ const ETicket = props => {
     }))
   };
   return (
-    // -- No Ticket --
-    // <View style={styles.noTicketContaint}>
-    //   <Image source={noTicket} />
-    // </View>
-    // -- End Of No Ticket --
-    <ScrollView style={{ marginBottom: ms(170) }}>
-      {tickets.reverse().map((e, i) => (
-        <View key={`key-tickets-${i}`}>
-          <View style={styles.ticketContaint}>
-            <View style={styles.orderID}>
-              <Text
-                style={{
-                  color: '#092C4C',
-                  fontFamily: 'Montserrat-SemiBold',
-                }}>
-                Departure Ticket
-              </Text>
-              <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold', width: ms(160) }} numberOfLines={1}>
-                {e.ticket}
-              </Text>
-            </View>
-            <Divider />
-            <View style={styles.paymentContainer}>
-              <View
-                style={
-                  e.departure_status_ticket ? styles.successWrapper
-                    : styles.pendingWrapper
-                }>
-                <Text style={styles.fontButton}>
-                  Status Ticket:{' '}
-                  {e.departure_status_ticket ? 'Success' : 'Waiting Check In'}
-                </Text>
-              </View>
-            </View>
-            <Divider />
-            <View style={styles.payAndDestination}>
-              <View
-                style={{
-                  marginLeft: ms(90),
-                  marginRight: ms(40),
-                }}>
-                <Text
-                  style={{
-                    color: '#092C4C',
-                    fontSize: ms(10),
-                    fontFamily: 'Montserrat-Regular',
-                    paddingBottom: ms(5),
-                  }}>
-                  Departure Date
-                </Text>
-                <Text
-                  style={{
-                    color: '#092C4C',
-                    fontFamily: 'Montserrat-SemiBold',
-                    fontSize: ms(14),
-                  }}>
-                  {e.departure_date}
-                </Text>
-              </View>
-              <View style={{ marginRight: ms(80) }}>
-                <Text
-                  style={{
-                    color: '#092C4C',
-                    fontSize: ms(10),
-                    fontFamily: 'Montserrat-Regular',
-                    paddingBottom: ms(5),
-                  }}>
-                  Destination
-                </Text>
-                <Text
-                  style={{
-                    color: '#092C4C',
-                    fontFamily: 'Montserrat-SemiBold',
-                    fontSize: ms(14),
-                  }}>
-                  {e.departure_destination}
-                </Text>
-              </View>
-            </View>
-            <Divider />
-            <TouchableOpacity
-              style={styles.buttonBookingDetail}
-              onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: false })}>
-              <Image
-                style={{ resizeMode: 'contain', height: 60 }}
-                source={bookingTicket}
-              />
-            </TouchableOpacity>
-          </View>
+    <View style={{ flex: 1 }}>
+      {tickets?.length === 0 ?
+        <View style={styles.noTicketContaint}>
+          <Image source={noTicket} />
+        </View> :
 
-          {
-            e.order_type === 'OneWay' ? null :
+
+        <ScrollView style={{ marginBottom: ms(170) }}>
+          {tickets?.reverse().map((e, i) => (
+            <View key={`key-tickets-${i}`}>
               <View style={styles.ticketContaint}>
                 <View style={styles.orderID}>
                   <Text
@@ -327,9 +247,9 @@ const ETicket = props => {
                       color: '#092C4C',
                       fontFamily: 'Montserrat-SemiBold',
                     }}>
-                    Return Ticket
+                    Departure Ticket
                   </Text>
-                  <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
+                  <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold', width: ms(160) }} numberOfLines={1}>
                     {e.ticket}
                   </Text>
                 </View>
@@ -337,13 +257,12 @@ const ETicket = props => {
                 <View style={styles.paymentContainer}>
                   <View
                     style={
-                      e.return_status_ticket
-                        ? styles.successWrapper
+                      e.departure_status_ticket ? styles.successWrapper
                         : styles.pendingWrapper
                     }>
                     <Text style={styles.fontButton}>
                       Status Ticket:{' '}
-                      {e.return_status_ticket ? 'Success' : 'Waiting Check In'}
+                      {e.departure_status_ticket ? 'Success' : 'Waiting Check In'}
                     </Text>
                   </View>
                 </View>
@@ -361,7 +280,7 @@ const ETicket = props => {
                         fontFamily: 'Montserrat-Regular',
                         paddingBottom: ms(5),
                       }}>
-                      Return Date
+                      Departure Date
                     </Text>
                     <Text
                       style={{
@@ -369,7 +288,7 @@ const ETicket = props => {
                         fontFamily: 'Montserrat-SemiBold',
                         fontSize: ms(14),
                       }}>
-                      {e.return_date}
+                      {e.departure_date}
                     </Text>
                   </View>
                   <View style={{ marginRight: ms(80) }}>
@@ -388,27 +307,114 @@ const ETicket = props => {
                         fontFamily: 'Montserrat-SemiBold',
                         fontSize: ms(14),
                       }}>
-                      {e.return_destination}
+                      {e.departure_destination}
                     </Text>
                   </View>
                 </View>
                 <Divider />
                 <TouchableOpacity
                   style={styles.buttonBookingDetail}
-                  onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: true })}>
+                  onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: false })}>
                   <Image
                     style={{ resizeMode: 'contain', height: 60 }}
                     source={bookingTicket}
                   />
                 </TouchableOpacity>
               </View>
-          }
 
-          <Divider style={{ marginBottom: ms(50) }} width={ms(5)} />
-        </View>
-      ))
+              {
+                e.order_type === 'OneWay' ? null :
+                  <View style={styles.ticketContaint}>
+                    <View style={styles.orderID}>
+                      <Text
+                        style={{
+                          color: '#092C4C',
+                          fontFamily: 'Montserrat-SemiBold',
+                        }}>
+                        Return Ticket
+                      </Text>
+                      <Text style={{ color: '#092C4C', fontFamily: 'Montserrat-SemiBold' }}>
+                        {e.ticket}
+                      </Text>
+                    </View>
+                    <Divider />
+                    <View style={styles.paymentContainer}>
+                      <View
+                        style={
+                          e.return_status_ticket
+                            ? styles.successWrapper
+                            : styles.pendingWrapper
+                        }>
+                        <Text style={styles.fontButton}>
+                          Status Ticket:{' '}
+                          {e.return_status_ticket ? 'Success' : 'Waiting Check In'}
+                        </Text>
+                      </View>
+                    </View>
+                    <Divider />
+                    <View style={styles.payAndDestination}>
+                      <View
+                        style={{
+                          marginLeft: ms(90),
+                          marginRight: ms(40),
+                        }}>
+                        <Text
+                          style={{
+                            color: '#092C4C',
+                            fontSize: ms(10),
+                            fontFamily: 'Montserrat-Regular',
+                            paddingBottom: ms(5),
+                          }}>
+                          Return Date
+                        </Text>
+                        <Text
+                          style={{
+                            color: '#092C4C',
+                            fontFamily: 'Montserrat-SemiBold',
+                            fontSize: ms(14),
+                          }}>
+                          {e.return_date}
+                        </Text>
+                      </View>
+                      <View style={{ marginRight: ms(80) }}>
+                        <Text
+                          style={{
+                            color: '#092C4C',
+                            fontSize: ms(10),
+                            fontFamily: 'Montserrat-Regular',
+                            paddingBottom: ms(5),
+                          }}>
+                          Destination
+                        </Text>
+                        <Text
+                          style={{
+                            color: '#092C4C',
+                            fontFamily: 'Montserrat-SemiBold',
+                            fontSize: ms(14),
+                          }}>
+                          {e.return_destination}
+                        </Text>
+                      </View>
+                    </View>
+                    <Divider />
+                    <TouchableOpacity
+                      style={styles.buttonBookingDetail}
+                      onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: true })}>
+                      <Image
+                        style={{ resizeMode: 'contain', height: 60 }}
+                        source={bookingTicket}
+                      />
+                    </TouchableOpacity>
+                  </View>
+              }
+
+              <Divider style={{ marginBottom: ms(50) }} width={ms(5)} />
+            </View>
+          ))
+          }
+        </ScrollView >
       }
-    </ScrollView >
+    </View>
   );
 };
 

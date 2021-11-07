@@ -18,11 +18,12 @@ import google from '../../Assets/Images/google.png';
 import Feather from 'react-native-vector-icons/Feather';
 import { setLoading } from '../Store/globalAction';
 import { useDispatch, useSelector } from 'react-redux';
-import { PostLogin, PostLoginGoogle } from './Redux/LoginAction';
+import { PostLogin, PostLoginGoogle, setEmailToLoginReducer, setPasswordToLoginReducer } from './Redux/LoginAction';
 import { setTokenToRegisterReducer } from '../Register/Redux/RegisterAction';
 import { setTokenToLoginReducer } from './Redux/LoginAction';
 
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { LoginReducer } from './Redux/LoginReducer';
 
 export default function Login(props) {
   const isLogged = useSelector(state => {
@@ -31,13 +32,25 @@ export default function Login(props) {
   const fromBusDetails = useSelector(state => {
     return state.HomeReducer.fromBusDetails
   })
-  if (isLogged && fromBusDetails === false) {
+  const loginData = useSelector(state => { return state.LoginReducer })
+
+  if (isLogged && !fromBusDetails) {
     props.navigation.navigate('Bottom Tab');
+  } else if (isLogged && fromBusDetails) {
+    props.navigation.navigate('Detail Stack', { screen: 'Bus Details' });
+  } else {
+    null
   }
 
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
+  const [userEmail, setUserEmail] = useState(LoginReducer.email);
+  const [userPassword, setUserPassword] = useState(LoginReducer.password);
+  const [checked, toggleChecked] = useState(false);
+
+  const rememberUser = () => {
+    setEmailToLoginReducer(userEmail)
+    setPasswordToLoginReducer(userPassword)
+  }
 
   const showPassword = () => {
     setIsShowPassword(!isShowPassword);
@@ -56,9 +69,6 @@ export default function Login(props) {
   const actionLogin = async () => {
     try {
       dispatch(PostLogin({ email: userEmail, password: userPassword }));
-      fromBusDetails
-        ? props.navigation.navigate('Detail Stack', { screen: 'Bus Details' })
-        : props.navigation.navigate('Bottom Tab');
     } catch (error) {
       console.log(error);
     }
@@ -81,8 +91,6 @@ export default function Login(props) {
       console.log(error);
     }
   }
-
-  const [checked, toggleChecked] = useState(false);
 
   return (
     <ScrollView>
@@ -112,6 +120,7 @@ export default function Login(props) {
               onChangeText={text => {
                 setUserEmail(text);
               }}
+              defaultValue={userEmail}
             />
             <View style={styles.eyeOff}>
               <Input
@@ -129,6 +138,7 @@ export default function Login(props) {
                     />
                   </TouchableOpacity>
                 }
+                defaultValue={userPassword}
               />
             </View>
           </View>

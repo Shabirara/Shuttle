@@ -8,11 +8,13 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
 
-export default function Notification() {
+export default function Notification(props) {
   const token = useSelector(state => { return state.LoginReducer.access_token.token })
   const dispatch = useDispatch()
   useEffect(() => {
-    dispatch(getAllNotifications({ token: token }))
+    const ticket = props.navigation.addListener('focus', () => {
+      dispatch(getAllNotifications({ token: token }))
+    });
   }, [])
 
   const data = useSelector(state => { return state.NotificationReducer.allNotifications.data })
@@ -23,7 +25,7 @@ export default function Notification() {
       {data?.data.reverse().map((e, i) => {
         const time = moment(data?.data[i].createdAt).fromNow();
         return (
-          <View>
+          <View key={`key-notif-${i}`}>
             {
               e.title === "Booking" ?
                 <View

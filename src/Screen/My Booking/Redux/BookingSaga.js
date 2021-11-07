@@ -12,8 +12,11 @@ function* BookingSaga(action) {
             `${baseUrl}/order/e-ticket`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
-        yield put(setAllBookings(res.data));
+        if (res.status === 200) {
+            yield put(setAllBookings(res.data));
+        }
     } catch (error) {
+        yield put(setAllBookings({}))
         console.log(error)
     }
 }
@@ -24,8 +27,11 @@ function* fetchOnGoing(action) {
             `${baseUrl}/payment/show/status`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
-        yield put(setOnGoing(res.data));
+        if (res.status === 200) {
+            yield put(setOnGoing(res.data));
+        }
     } catch (error) {
+        yield put(setOnGoing({}))
         console.log(error)
     }
 }
@@ -37,9 +43,12 @@ function* fetchSelectedTicketDetail(action) {
             `${baseUrl}/order/ticket?order_id=${action.payload.orderId}`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
-        yield put(setSelectedTicketData(res.data));
-        yield navigate('Detail Stack', { screen: 'Ticket Details' })
+        if (res.status === 200) {
+            yield put(setSelectedTicketData(res.data));
+            yield navigate('Detail Stack', { screen: 'Ticket Details' })
+        }
     } catch (error) {
+        yield put(setSelectedTicketData({}))
         console.log(error)
     } finally {
         yield put(setLoading(false));
@@ -53,7 +62,7 @@ function* fetchReviewId(action) {
             `${baseUrl}/order/review`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
-        yield put(setReviewId(res.data));
+        yield put(setReviewId(res));
     } catch (error) {
         console.log(error)
     } finally {
@@ -64,14 +73,38 @@ function* fetchReviewId(action) {
 function* sagaPostReview(action) {
     try {
         yield put(setLoading(true));
-        const res = yield axios.get(
-            `${baseUrl}/order/review/`, action.payload,
+        const res = yield axios.post(
+            `${baseUrl}/review/`, {
+            "order_id": action.payload.order_id,
+            "order_detail_id": action.payload.order_detail_id,
+            "rating": action.payload.rating,
+            "review": action.payload.review
+        },
             {
                 headers: {
-                    Authorization: `bearer ${action.payload.token}`
+                    Authorization: `bearer ${action.payload.token}`,
+                    'content-type': 'application/json'
                 }
             },
         );
+        if (res.status === 200) {
+            ToastAndroid.showWithGravityAndOffset(
+                'Thank you for your review!',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                200,
+            );
+            fetchSelectedTicketDetail
+        } else {
+            ToastAndroid.showWithGravityAndOffset(
+                'Sorry, review failed. Please try again later.',
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM,
+                25,
+                200,
+            );
+        }
     } catch (error) {
         console.log(error)
     } finally {

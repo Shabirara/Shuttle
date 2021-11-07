@@ -329,7 +329,7 @@ export default function BusDetails(props) {
             <FlatList
               data={reviewData.allReview.length > 2 ? reviewData.allReview.splice(0, 2) : reviewData.allReview}
               renderItem={renderReview}
-              keyExtractor={item => item.id}
+              keyExtractor={item => `key-busdetail-${item.id}`}
               ItemSeparatorComponent={Divider}
             />
           </View>

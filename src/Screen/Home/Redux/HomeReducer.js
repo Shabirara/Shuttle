@@ -37,6 +37,9 @@ const initialState = {
   departureTimeReturn: '',
   arrivalTimeReturn: '',
 
+  terminalStartName: '',
+  terminalEndName: '',
+
   postOrder: {},
   orderDetail: {},
   paymentData: {},
@@ -220,6 +223,20 @@ export default function HomeReducer(state = initialState, action) {
       return {
         ...state,
         arrivalCityReturn: action.payload
+      }
+    }
+
+    case 'SET_TERMINAL_START_NAME': {
+      return {
+        ...state,
+        terminalStartName: action.payload
+      }
+    }
+
+    case 'SET_TERMINAL_END_NAME': {
+      return {
+        ...state,
+        terminalEndName: action.payload
       }
     }
 

@@ -216,6 +216,20 @@ export const setArrivalCityReturn = (payload) => {
     }
 }
 
+export const setTerminalStartName = (payload) => {
+    return {
+        type: 'SET_TERMINAL_START_NAME',
+        payload
+    }
+}
+
+export const setTerminalEndName = (payload) => {
+    return {
+        type: 'SET_TERMINAL_END_NAME',
+        payload
+    }
+}
+
 export const setDepartureTime = (payload) => {
     return {
         type: 'SET_DEPARTURE_TIME',

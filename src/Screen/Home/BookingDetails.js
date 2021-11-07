@@ -82,7 +82,7 @@ export default function BookingDetails(props) {
                 <Text style={[styles.fontMedium, styles.cardContainer]}>Passenger Detail</Text>
                 <Divider />
                 {data?.passengers?.map((e, i) => (
-                    <View style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
+                    <View key={`key-bookingdetailpassenger-${i}`} style={[styles.cardContainer, { flexDirection: 'row', justifyContent: 'space-between' }]}>
                         <View style={{ width: '50%', justifyContent: 'space-between' }}>
                             <Text style={[styles.contentContainer, styles.fontKecil]}>Name</Text>
                             <Text style={styles.fontMedium}>{e?.fullname}</Text>

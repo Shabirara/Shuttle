@@ -33,7 +33,7 @@ export default function AllPhotos() {
     const [indexGambar, setIndexGambar] = useState(0)
     const CarouselCardItem = ({ item, index }) => {
         return (
-            <TouchableOpacity key={index} onPress={() => setIndexGambar(index)} style={index === indexGambar ? { borderColor: 'white', borderWidth: ms(1) } : null}>
+            <TouchableOpacity key={`key-busphotos-${index}`} onPress={() => setIndexGambar(index)} style={index === indexGambar ? { borderColor: 'white', borderWidth: ms(1) } : null}>
                 <Image
                     source={{ uri: item.imgUrl }}
                     style={styles.image}

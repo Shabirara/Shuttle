@@ -302,7 +302,7 @@ export default function TicketDetails() {
                     }
                 </View>
             </Card>
-            {config?.departure?.ticket_status && !reviewData.UserReview ?
+            {config?.departure?.ticket_status && !reviewData?.UserReview ?
                 <Card containerStyle={styles.card}>
                     <View style={styles.cardContainer}>
                         <Text style={styles.fontMedium}>Give Rating & Review</Text>
@@ -323,7 +323,7 @@ export default function TicketDetails() {
                         </View>
                     </View>
                     <Divider />
-                    <Input placeholder='Input Review here' multiline={true} numberOfLines={5}
+                    <Input placeholder='Input Review here' multiline={true} numberOfLines={5} maxLength={255}
                         inputStyle={[styles.mediumGelap, styles.input]}
                         inputContainerStyle={{ borderBottomWidth: 0, marginBottom: 0 }}
                         onChangeText={(text) => setReview(text)}

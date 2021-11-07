@@ -504,7 +504,7 @@ export default function SearchResult(props) {
           )}
         </View>
 
-        <View style={styles.floatings}>
+        {/* <View style={styles.floatings}>
           <View style={styles.button}>
             <TouchableOpacity
               style={styles.touchable}
@@ -527,7 +527,7 @@ export default function SearchResult(props) {
               <Text style={styles.sort}>Filter</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
 
         <FlatList
           data={isReturn ? dataReturn : searchResultList}

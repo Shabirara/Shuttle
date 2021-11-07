@@ -16,7 +16,18 @@ function* SagaProfile(action) {
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
         yield put(setProfileData(res.data.data));
+        if (res.status === 200) {
+            yield put(setProfileData(res.data.data));
+        }
     } catch (error) {
+        ToastAndroid.showWithGravityAndOffset(
+            'Cannot get profile data at the moment.',
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM,
+            25,
+            200,
+        );
+        yield put(setProfileData({}));
         console.log(error)
     } finally {
         yield put(setLoading(false));
@@ -67,11 +78,12 @@ function* PostProfilePictureSaga(action) {
         };
         const res = yield axios.post(
             `${baseUrl}/user/updatePicture`,
-            action.payload.pic,
+            action.payload,
             options,
         );
 
         if (res.status === 200) {
+            SagaProfile()
             ToastAndroid.showWithGravityAndOffset(
                 'Profile Picture Updated!',
                 ToastAndroid.LONG,

@@ -26,7 +26,7 @@ function* SagaLogin(action) {
     }
   } catch (error) {
     console.log(error, 'Error Login');
-    yield put(setErrorLogin());
+    yield put(setIsLogged(false));
     ToastAndroid.showWithGravityAndOffset(
       'Email or Password is incorrect',
       ToastAndroid.LONG,

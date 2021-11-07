@@ -16,7 +16,7 @@ import EvilIcons from 'react-native-vector-icons/EvilIcons';
 import Feather from 'react-native-vector-icons/Feather';
 
 // redux
-import { getSearchLocationData, getTerminalData, setDepartureCity, setDepartureDateNum, setDepartureDateReducer, setDepartureDateString, setIsOneWay, setIsReturn, setPassengerNum } from '../Home/Redux/HomeAction'
+import { getSearchLocationData, getTerminalData, setArrivalCity, setDepartureCity, setDepartureDateNum, setDepartureDateReducer, setDepartureDateString, setIsOneWay, setIsReturn, setPassengerNum, setTerminalArrivalId, setTerminalDepartureId, setTerminalEndName, setTerminalStartName } from '../Home/Redux/HomeAction'
 import { useDispatch, useSelector } from 'react-redux'
 
 // others
@@ -33,24 +33,27 @@ const OneWay = props => {
   const terminalData = useSelector(state => {
     return state.HomeReducer.terminalData;
   });
+  const data = useSelector(state => { return state.HomeReducer })
 
   const [pressed, setPressed] = useState(false);
   const [pressedA, setPressedA] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
   const [searchResultA, setSearchResultA] = useState([]);
-  const [valueSearch, setValueSearch] = useState('');
-  const [valueSearchA, setValueSearchA] = useState('');
-  const [terminalStartId, setTerminalStartId] = useState('');
-  const [terminalEndId, setTerminalEndId] = useState('');
+  const [valueSearch, setValueSearch] = useState(data.terminalStartName);
+  const [valueSearchA, setValueSearchA] = useState(data.terminalEndName);
+  const [terminalStartId, setTerminalStartId] = useState(data.terminalDepartureId);
+  const [terminalEndId, setTerminalEndId] = useState(data.terminalArrivalId);
+  const [cityStart, setCityStart] = useState(data.departureCity)
+  const [cityEnd, setCityEnd] = useState(data.arrivalCity)
 
   const [showPassenger, setShowPassenger] = useState(false);
-  const [passengerValue, setPassengerValue] = useState(1);
+  const [passengerValue, setPassengerValue] = useState(data?.passengerNum);
 
   const [dateVisible, setDateVisible] = useState(false);
-  const [datePicked, setDatePicked] = useState("")
-  const [departureDate, setDepartureDate] = useState('')
+  const [datePicked, setDatePicked] = useState(data?.departureDateString)
+  const [departureDate, setDepartureDate] = useState(data?.departureDateNum)
   const [dateShorted, setDateShorted] = useState('')
-  const [dateShortYear, setDateShortYear] = useState('')
+  const [dateShortYear, setDateShortYear] = useState(data?.departureDateString)
 
 
   const toggleDate = () => {
@@ -86,6 +89,12 @@ const OneWay = props => {
     dispatch(setIsOneWay(true))
     dispatch(setPassengerNum(passengerValue))
     dispatch(setIsReturn(false))
+    dispatch(setTerminalStartName(valueSearch))
+    dispatch(setTerminalEndName(valueSearchA))
+    dispatch(setTerminalDepartureId(terminalStartId))
+    dispatch(setTerminalArrivalId(terminalEndId))
+    dispatch(setDepartureCity(cityStart))
+    dispatch(setArrivalCity(cityEnd))
   };
 
   const passenger = [1, 2, 3, 4];
@@ -167,6 +176,7 @@ const OneWay = props => {
                     setValueSearch(e.shuttle_name);
                     setPressed(false);
                     setTerminalStartId(e.id);
+                    setCityStart(e.city)
                   }}
                   style={styles.searchResult}>
                   <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
@@ -178,6 +188,7 @@ const OneWay = props => {
                     setValueSearch(e.shuttle_name);
                     setPressed(false);
                     setTerminalStartId(e.id);
+                    setCityStart(e.city)
                   }}
                   style={styles.searchResult}>
                   <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
@@ -194,7 +205,9 @@ const OneWay = props => {
             setValueSearch(valueSearchA);
             setValueSearchA(valueSearch);
             setTerminalStartId(terminalEndId);
-            setTerminalEndId(terminalStartId)
+            setTerminalEndId(terminalStartId);
+            setCityStart(cityEnd)
+            setCityEnd(cityStart)
           }}>
           <Image source={require('../../Assets/Images/switchValue.png')} />
         </TouchableOpacity>
@@ -248,6 +261,7 @@ const OneWay = props => {
                     setValueSearchA(e.shuttle_name);
                     setPressedA(false);
                     setTerminalEndId(e.id);
+                    setCityEnd(e.city)
                   }}
                   style={styles.searchResult}>
                   <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
@@ -259,6 +273,7 @@ const OneWay = props => {
                     setValueSearchA(e.shuttle_name);
                     setPressedA(false);
                     setTerminalEndId(e.id);
+                    setCityEnd(e.city)
                   }}
                   style={styles.searchResult}>
                   <Text style={styles.fontKecil}>{e.shuttle_name}</Text>

@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, ScrollView} from 'react-native';
-import {Image, Button, Input} from 'react-native-elements';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { Image, Button, Input } from 'react-native-elements';
 import styles from './register-Style';
 import logoShuttle from '../../Assets/Images/shuttle-logo.png';
 import signup from '../../Assets/Images/signup.png';
@@ -11,8 +11,8 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import moment from 'moment';
-import {useDispatch} from 'react-redux';
-import {PostRegister} from './Redux/RegisterAction';
+import { useDispatch } from 'react-redux';
+import { PostRegister } from './Redux/RegisterAction';
 
 export default function Login(props) {
   const onLogin = () => {
@@ -58,10 +58,9 @@ export default function Login(props) {
         email: userEmail,
         birthday: userBirthDay,
         password: userPassword,
-        roles: 'bus_provider',
+        roles: 'user',
       }),
     );
-    // props.navigation.navigate('Login');
   };
 
   return (
@@ -94,9 +93,6 @@ export default function Login(props) {
               }}
             />
             <Input
-              onChangeText={text => {
-                setUserBirthDay(text);
-              }}
               placeholder="Search your birthday"
               containerStyle={styles.inputEmail}
               onPressIn={showDatePicker}
