@@ -223,7 +223,7 @@ const ETicket = props => {
 
   const onBookingDetail = (data) => {
     dispatch(setIsReturn(data.isReturn))
-    dispatch(getReviewId({ token: token }))
+    dispatch(getReviewId({ token: token, orderDetailId: data.orderDetailId }))
     dispatch(getSelectedTicketData({
       orderId: data.orderId,
       token: token
@@ -231,7 +231,7 @@ const ETicket = props => {
   };
   return (
     <View style={{ flex: 1 }}>
-      {tickets?.length === 0 ?
+      {tickets?.length === 0 || !tickets ?
         <View style={styles.noTicketContaint}>
           <Image source={noTicket} />
         </View> :
@@ -314,7 +314,7 @@ const ETicket = props => {
                 <Divider />
                 <TouchableOpacity
                   style={styles.buttonBookingDetail}
-                  onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: false })}>
+                  onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: false, orderDetailId: e.departure_order_detail_id })}>
                   <Image
                     style={{ resizeMode: 'contain', height: 60 }}
                     source={bookingTicket}
@@ -399,7 +399,7 @@ const ETicket = props => {
                     <Divider />
                     <TouchableOpacity
                       style={styles.buttonBookingDetail}
-                      onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: true })}>
+                      onPress={() => onBookingDetail({ orderId: e.order_id, isReturn: true, orderDetailId: e.return_order_detail_id })}>
                       <Image
                         style={{ resizeMode: 'contain', height: 60 }}
                         source={bookingTicket}

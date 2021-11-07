@@ -33,7 +33,7 @@ export default function Profile(props) {
   }, [])
 
   const data = useSelector(state => { return state.ProfileReducer.profileData })
-  const isLogged = useSelector(state => { return state.ProfileReducer.isLogged })
+  const isLogged = useSelector(state => { return state.Global.isLogged })
   const googleLogged = useSelector(state => { return state.Global.googleLogged })
   console.log(data)
 

@@ -27,7 +27,6 @@ export default function TicketDetails() {
     const [stars, setStars] = useState(5)
 
     const config = isReturn ? returns[0] : depart[0]
-    const reviewConfig = isReturn ? reviewReturn : reviewData
     const dispatch = useDispatch()
 
     const onReview = async () => {
@@ -51,10 +50,6 @@ export default function TicketDetails() {
                 "order_detail_id": reviewData.id,
                 "rating": stars,
                 "review": review,
-                token: token
-            }))
-            dispatch(getPaymentDetail({
-                orderId: reviewConfig.orderId,
                 token: token
             }))
             setShowReview(false)

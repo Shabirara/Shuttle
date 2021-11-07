@@ -60,7 +60,7 @@ function* fetchReviewId(action) {
     try {
         yield put(setLoading(true));
         const res = yield axios.get(
-            `${baseUrl}/order/review`,
+            `${baseUrl}/order/review/?order_detail_id=${action.payload.orderDetailId}`,
             { headers: { Authorization: `bearer ${action.payload.token}` } },
         );
         yield put(setReviewId(res.data));
