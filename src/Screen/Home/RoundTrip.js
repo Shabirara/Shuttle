@@ -8,7 +8,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
 
 // redux
-import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setArrivalDateReducer, setIsOneWay, setTerminalDepartureId, setTerminalArrivalId, setDepartureDateNum, setReturnDate, setPassengerNum, setIsReturn } from '../Home/Redux/HomeAction'
+import { getSearchLocationData, getTerminalData, setDepartureDateReducer, setArrivalDateReducer, setIsOneWay, setTerminalDepartureId, setTerminalArrivalId, setDepartureDateNum, setReturnDate, setPassengerNum, setIsReturn, setDepartureCity, setArrivalCity } from '../Home/Redux/HomeAction'
 import { useDispatch, useSelector } from 'react-redux'
 
 const RoundTrip = (props) => {
@@ -19,28 +19,31 @@ const RoundTrip = (props) => {
     const terminalData = useSelector((state) => {
         return state.HomeReducer.terminalData
     })
+    const data = useSelector(state => { return state.HomeReducer })
 
     const [pressed, setPressed] = useState(false)
     const [pressedA, setPressedA] = useState(false)
     const [searchResult, setSearchResult] = useState([]);
     const [searchResultA, setSearchResultA] = useState([]);
-    const [valueSearch, setValueSearch] = useState("");
-    const [valueSearchA, setValueSearchA] = useState("");
-    const [terminalStartId, setTerminalStartId] = useState("");
-    const [terminalEndId, setTerminalEndId] = useState("");
+    const [valueSearch, setValueSearch] = useState(data?.terminalStartName);
+    const [valueSearchA, setValueSearchA] = useState(data?.terminalEndName);
+    const [terminalStartId, setTerminalStartId] = useState(data?.terminalDepartureId);
+    const [terminalEndId, setTerminalEndId] = useState(data?.terminalArrivalId);
 
     const [showPassenger, setShowPassenger] = useState(false);
-    const [passengerValue, setPassengerValue] = useState(1)
+    const [passengerValue, setPassengerValue] = useState(data?.passengerNum)
+    const [cityStart, setCityStart] = useState(data?.departureCity)
+    const [cityEnd, setCityEnd] = useState(data?.arrivalCity)
 
     const [dateVisible, setDateVisible] = useState(false);
     const [dateVisibleA, setDateVisibleA] = useState(false);
-    const [datePicked, setDatePicked] = useState("")
-    const [datePickedA, setDatePickedA] = useState("")
-    const [departureDate, setDepartureDate] = useState("")
-    const [arrivalDate, setArrivalDate] = useState("")
-    const [dateShorted, setDateShorted] = useState('')
-    const [dateShortedArrival, setDateShortedArrival] = useState('')
-    const [arrivalDateRaw, setArrivalDateRaw] = useState('')
+    const [datePicked, setDatePicked] = useState(data?.departureDateString)
+    const [datePickedA, setDatePickedA] = useState(moment(data?.returnDate).format('dddd, DD MMM YYYY'))
+    const [departureDate, setDepartureDate] = useState(data?.departureDateNum)
+    const [arrivalDate, setArrivalDate] = useState(moment(data?.returnDate).format('YYYY-MM-DD'))
+    const [dateShorted, setDateShorted] = useState(data?.departureDateReducer)
+    const [dateShortedArrival, setDateShortedArrival] = useState(data?.arrivalDate)
+    const [arrivalDateRaw, setArrivalDateRaw] = useState(data?.returnDate)
 
     const toggleDate = () => {
         setDateVisible(!dateVisible)
@@ -82,6 +85,8 @@ const RoundTrip = (props) => {
         dispatch(setReturnDate(arrivalDateRaw))
         dispatch(setPassengerNum(passengerValue))
         dispatch(setIsReturn(false))
+        dispatch(setDepartureCity(cityStart))
+        dispatch(setArrivalCity(cityEnd))
         dispatch(
             getSearchLocationData({
                 departure_shuttle_id: terminalStartId,
@@ -163,6 +168,7 @@ const RoundTrip = (props) => {
                                         setValueSearch(e.shuttle_name);
                                         setTerminalStartId(e.id)
                                         setPressed(false)
+                                        setCityStart(e.city)
                                     }}
                                     style={styles.searchResult}>
                                     <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
@@ -174,6 +180,7 @@ const RoundTrip = (props) => {
                                         setValueSearch(e.shuttle_name);
                                         setTerminalStartId(e.id)
                                         setPressed(false)
+                                        setCityStart(e.city)
                                     }}
                                     style={styles.searchResult}>
                                     <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
@@ -191,6 +198,8 @@ const RoundTrip = (props) => {
                     setValueSearchA(valueSearch)
                     setTerminalStartId(terminalEndId)
                     setTerminalEndId(terminalStartId)
+                    setCityStart(cityEnd)
+                    setCityEnd(cityStart)
                 }}>
                     <Image source={require('../../Assets/Images/switchValue.png')} />
                 </TouchableOpacity>
@@ -231,6 +240,7 @@ const RoundTrip = (props) => {
                                         setValueSearchA(e.shuttle_name);
                                         setPressedA(false)
                                         setTerminalEndId(e.id)
+                                        setCityEnd(e.city)
                                     }}
                                     style={styles.searchResult}>
                                     <Text style={styles.fontKecil}>{e.shuttle_name}</Text>
@@ -242,6 +252,7 @@ const RoundTrip = (props) => {
                                         setValueSearchA(e.shuttle_name);
                                         setPressedA(false)
                                         setTerminalEndId(e.id)
+                                        setCityEnd(e.city)
                                     }}
                                     style={styles.searchResult}>
                                     <Text style={styles.fontKecil}>{e.shuttle_name}</Text>

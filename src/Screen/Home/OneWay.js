@@ -39,12 +39,12 @@ const OneWay = props => {
   const [pressedA, setPressedA] = useState(false);
   const [searchResult, setSearchResult] = useState([]);
   const [searchResultA, setSearchResultA] = useState([]);
-  const [valueSearch, setValueSearch] = useState(data.terminalStartName);
-  const [valueSearchA, setValueSearchA] = useState(data.terminalEndName);
-  const [terminalStartId, setTerminalStartId] = useState(data.terminalDepartureId);
-  const [terminalEndId, setTerminalEndId] = useState(data.terminalArrivalId);
-  const [cityStart, setCityStart] = useState(data.departureCity)
-  const [cityEnd, setCityEnd] = useState(data.arrivalCity)
+  const [valueSearch, setValueSearch] = useState(data?.terminalStartName);
+  const [valueSearchA, setValueSearchA] = useState(data?.terminalEndName);
+  const [terminalStartId, setTerminalStartId] = useState(data?.terminalDepartureId);
+  const [terminalEndId, setTerminalEndId] = useState(data?.terminalArrivalId);
+  const [cityStart, setCityStart] = useState(data?.departureCity)
+  const [cityEnd, setCityEnd] = useState(data?.arrivalCity)
 
   const [showPassenger, setShowPassenger] = useState(false);
   const [passengerValue, setPassengerValue] = useState(data?.passengerNum);
@@ -52,7 +52,7 @@ const OneWay = props => {
   const [dateVisible, setDateVisible] = useState(false);
   const [datePicked, setDatePicked] = useState(data?.departureDateString)
   const [departureDate, setDepartureDate] = useState(data?.departureDateNum)
-  const [dateShorted, setDateShorted] = useState('')
+  const [dateShorted, setDateShorted] = useState(data?.departureDateReducer)
   const [dateShortYear, setDateShortYear] = useState(data?.departureDateString)
 
 
